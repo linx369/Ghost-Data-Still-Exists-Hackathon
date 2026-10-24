@@ -64,14 +64,21 @@ class Auditor:
         for o in self.obs:
             if o.observed_at <= q["audit_at"] and o.identifiers & ids:
                 (by_link if o.attrs.get("_link_only") else by_content).add(o.resource_id)
-        # A catalog link is a claim. If the record itself shows someone else's email, the record wins.
+        # A catalog link can conflict with what the record itself displays (case_63: the profile
+        # shows contact details of nobody in the identity table). Decision (Tom): keep the link, since
+        # it is the only grounded owner and dropping it leaves the case without a valid answer;
+        # the conflict is recorded in the trace.
         for rid in by_link - by_content:
             shown = {i for o in self.by_resource[rid] if not o.attrs.get("_link_only")
                      for i in o.identifiers if "@" in i}
-            if shown and not shown & ids:
+            if not shown or shown & ids:
+                continue
+            other = self.idx.owners(shown)
+            if other:  # the record clearly belongs to another known person: the record wins
                 by_link.discard(rid)
-                if why is not None:
-                    why.append(f"{rid}: catalog link ignored, record shows {sorted(shown)}")
+            if why is not None:
+                why.append(f"{rid}: catalog link {'dropped, record belongs to ' + str(sorted(other)) if other else 'kept'}; "
+                           f"record displays {sorted(shown)}")
         return by_content | by_link
 
     def _linked_systems(self, cases: list[dict]) -> dict[str, set[str]]:

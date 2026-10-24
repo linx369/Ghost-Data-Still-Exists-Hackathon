@@ -77,7 +77,8 @@ main.py       ──► output.csv, trace, usage_report.md
   survived the deletion run (the sample answers never cite pre-request evidence: 0/75). Older sightings
   still link identities.
 - **Claims are not proof.** Workflow statuses, worker results and catalog links are claims. State comes
-  from records; when a record shows a different person than a catalog link claims, the record wins.
+  from records. Catalog links establish ownership; if the linked record displays another *known*
+  person it is dropped, otherwise it is kept and the conflict is written to the trace (case_63, Tom's call).
 - **Replication drift.** Same-time conflicting readings resolve to the riskier one (a replica holding the
   row beats a primary that lost it).
 - **Account linking ladder.** (1) evidence ties the account to the person; (2) the worker deleted it in the

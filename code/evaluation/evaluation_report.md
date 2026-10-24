@@ -66,7 +66,7 @@ asserts the engine's **exact** output. No model calls (intent is injected), so t
   contains exactly **10** `privacy_intake … classified request as non-deletion` events.
 - **Contract:** 518 rows, sorted, valid JSON, consecutive step numbers, only allowed operations/states,
   no finding without evidence, no `COMPLETE` verification without evidence, no evidence captured after
-  `audit_at` (checked by script before packaging).
+  `audit_at` — `python code/evaluation/validate.py`: 518 rows, 0 problems.
 - **Reproducibility:** a run from an *empty* cache (fresh model calls) reproduced the previous
   `output.csv` exactly (518/518 rows, step F1 1.000 against it); `--offline` replay is byte-identical.
 
@@ -81,7 +81,7 @@ asserts the engine's **exact** output. No model calls (intent is injected), so t
 | 5 | Re-running the vision extraction relabelled a support PDF from attachment to message. | F1 0.973 → 0.950 (case_07). | Policy category of a support-held PDF is now decided by code, not by the model's label. |
 | 6 | A February sighting of a file leaked into a September audit. | case_07 regression; gold cites pre-request evidence 0/75 times. | Only observations after `requested_at` set a resource's state; older ones still link identities. |
 | 7 | Log lines inside files captured after `audit_at` (case_09's audit record). | Gold still uses those resources. | Two clocks: a fact is *known* if it happened by `audit_at`; a file is *citable* only if captured by `audit_at`. |
-| 8 | Data-catalog link events (test-only puzzle cases) tie screenshots/PDFs to people via aliases (file names, statement numbers). | Without them, ~12 test cases had no linked evidence. | Parsed as identity-only links; the vision step returns aliases. A link is ignored if the record itself shows a different person's email (case_63). |
+| 8 | Data-catalog link events (test-only puzzle cases) tie screenshots/PDFs to people via aliases (file names, statement numbers). | Without them, ~12 test cases had no linked evidence. | Parsed as identity-only links; the vision step returns aliases. case_63: the linked profile displays a person who is in no identity record. Tom's decision: keep the link (equal cost either way, and dropping it leaves the case with no contract-valid answer, unlike every other puzzle case); the link is dropped only if the record shows another *known* person. |
 | 9 | Hashes inside `correlation_key`, uppercase emails, legal holds named `legal_service`. | Missed links on case_12; wrong `system_id` on 7 test cases. | Normalized. |
 | 10 | Custom case 8 failed: `COMPLETE` account check with no citable evidence. | Contract requires evidence on every COMPLETE verification. | Fallback citation: account-scoped snapshot → case's main evidence → the worker's deletion activity id. |
 
@@ -92,4 +92,4 @@ asserts the engine's **exact** output. No model calls (intent is injected), so t
   test-set sanity signals rather than tuned per case.
 - About 130 test accounts rely on the flagged fallback tie-break; those account steps may be wrong.
 - Already-anonymized analytics profiles (no identifiers) are under-reported in `COMPLETE` cases.
-- case_63 depends on a judgement call (catalog link vs. contradicting screenshot).
+- case_63 depends on a judgement call (catalog link vs. contradicting screenshot), decided by Tom.
