@@ -6,8 +6,11 @@ Evidence ladder, strongest first:
                 account is not owned by anyone else, and the worker's result agrees with the
                 workflow's reported_status (COMPLETE<->SUCCESS, PARTIALLY_COMPLETE<->PARTIAL,
                 NOT_STARTED<->FAILED); solved jointly for all cases so one account = one case
-  3. fallback - remaining ties: the most recently requested case takes the earliest event.
-                This is a heuristic with weak support (2 sample groups) and is flagged.
+     + signature - if several candidates remain, keep the ones whose deletion time fits the
+                timing grid of this person's other worker actions (timing.py; learned from
+                directly evidenced links, validated leave-one-out)
+  3. fallback - remaining ties: the most recently requested case takes the earliest event
+                (4/4 sample batches). Flagged in the trace.
 """
 from __future__ import annotations
 
@@ -15,6 +18,8 @@ import csv
 from collections import defaultdict
 from datetime import datetime, timedelta
 from pathlib import Path
+
+from .timing import TimingModel
 
 COMPAT = {"COMPLETE": "SUCCESS", "PARTIALLY_COMPLETE": "PARTIAL", "NOT_STARTED": "FAILED"}
 
@@ -26,8 +31,15 @@ def ts(s: str) -> datetime:
 class AccountLinker:
     def __init__(self, dataset: Path, owners: dict[str, set[str]], cases: list[dict], users_of: dict[str, list[str]]):
         with open(dataset / "system_activity.csv", encoding="utf-8") as f:
-            self.deletes = [a for a in csv.DictReader(f)
-                            if a["event_type"] == "DELETE_RECORD" and a["target_system"] == "account_service"]
+            acts = list(csv.DictReader(f))
+        self.deletes = [a for a in acts if a["event_type"] == "DELETE_RECORD" and a["target_system"] == "account_service"]
+        worker = [a for a in acts if a["source_system"] == "deletion_worker" and a["target_system"] != "account_service"]
+        self.timing = TimingModel(self.deletes, worker, owners)
+        actions_of_user: dict[str, list[dict]] = defaultdict(list)  # worker actions on resources a user owns
+        for a in worker:
+            for u in owners.get(a["resource_id"], ()):
+                actions_of_user[u].append(a)
+        self.signature_used: set[str] = set()
         self.result: dict[str, tuple[str | None, str]] = {}
         evt = {a["resource_id"]: a for a in self.deletes}
         cand: dict[str, list[str]] = {}
@@ -48,8 +60,15 @@ class AccountLinker:
                 taken.add(pick)
                 continue
             free = [a for a in window if not owners.get(a["resource_id"])]
-            pref = [a["resource_id"] for a in free if a["reported_result"] == COMPAT.get(q["reported_status"])]
-            cand[cid] = pref or [a["resource_id"] for a in free]
+            pref = [a for a in free if a["reported_result"] == COMPAT.get(q["reported_status"])] or free
+            mine = [x for u in users for x in actions_of_user.get(u, [])]
+            if len(pref) > 1 and mine:
+                scores = {a["resource_id"]: self.timing.score(mine, a["event_time"]) for a in pref}
+                best = max(scores.values())
+                if best > 0:
+                    pref = [a for a in pref if scores[a["resource_id"]] == best]
+                    self.signature_used.add(cid)
+            cand[cid] = [a["resource_id"] for a in pref]
         # joint propagation: a candidate claimed uniquely by one case is removed from others
         changed = True
         while changed:
@@ -60,7 +79,7 @@ class AccountLinker:
                 c2 = [x for x in c if x not in taken]
                 cand[cid] = c2
                 if len(c2) == 1:
-                    self.result[cid] = (c2[0], "window")
+                    self.result[cid] = (c2[0], "window+signature" if cid in self.signature_used else "window")
                     taken.add(c2[0])
                     changed = True
         # fallback tie-break within each group of identical candidate sets
@@ -79,7 +98,7 @@ class AccountLinker:
         by_user = {}
         for q in cases:
             acc, how = self.result.get(q["case_id"], (None, "none"))
-            if acc and how in ("direct", "window"):
+            if acc and how in ("direct", "window", "window+signature"):
                 for u in users_of.get(q["case_id"], []):
                     by_user.setdefault(u, acc)
         for q in cases:
@@ -90,6 +109,9 @@ class AccountLinker:
     def activity_for(self, account_id: str | None) -> str:
         """activity_id of the worker's deletion of this account (last-resort citation)."""
         return next((a["activity_id"] for a in self.deletes if a["resource_id"] == account_id), "")
+
+    def time_of(self, account_id: str) -> str:
+        return next((a["event_time"] for a in self.deletes if a["resource_id"] == account_id), "")
 
     def account_for(self, case_id: str) -> tuple[str | None, str]:
         return self.result[case_id]

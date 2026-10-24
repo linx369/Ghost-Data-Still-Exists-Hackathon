@@ -8,9 +8,11 @@ reported_at. Two observations from the labelled samples make the assignment trac
     anonymization had failed, the profile would still carry identifiers and be linked directly);
   * the worker processes a batch newest request first (4/4 sample batches).
 
-So, per batch: otherwise-COMPLETE cases without an analytics record, newest request first, are
-paired with the batch's unowned ANONYMIZE actions in time order. Samples: 3 right, 2 wrong ids,
-4 still missed (F1 0.973 -> 0.976). Every assignment is labelled in the trace as heuristic.
+So, per batch, otherwise-COMPLETE cases without an analytics record are paired with the batch's
+unowned ANONYMIZE actions. A pair is preferred when the action sits on the worker's timing grid
+relative to that case's account deletion ((delta mod 30 s) in {9..11, 20..22}; timing.py); pairs
+fixed that way are removed and the rest are matched newest request first, in time order.
+Every assignment is labelled in the trace as heuristic.
 """
 from __future__ import annotations
 
@@ -20,6 +22,9 @@ from datetime import timedelta
 from pathlib import Path
 
 from .accounts import ts
+from .timing import HORIZON_S, _ts
+
+COARSE_GRID = {9, 10, 11, 20, 21, 22}
 
 
 class ActivityLinker:
@@ -29,9 +34,19 @@ class ActivityLinker:
                            if a["source_system"] == "deletion_worker" and a["event_type"] == "ANONYMIZE_RECORD"
                            and not owners.get(a["resource_id"])]
         self.assigned: dict[str, tuple[str, str]] = {}
+        self.how: dict[str, str] = {}
 
-    def assign(self, cases: list[dict], needs_profile: dict[str, bool]) -> None:
-        """needs_profile[case_id]: the case is otherwise COMPLETE and has no analytics record."""
+    def assign(self, cases: list[dict], needs_profile: dict[str, bool], account_time: dict[str, str]) -> None:
+        """needs_profile[case_id]: the case is otherwise COMPLETE and has no analytics record.
+        account_time[case_id]: when the worker deleted that case's account (if known)."""
+
+        def on_grid(a, cid):
+            t0 = account_time.get(cid)
+            if not t0:
+                return False
+            d = (_ts(a["event_time"]) - _ts(t0)).total_seconds()
+            return 0 < d < HORIZON_S and int(d) % 30 in COARSE_GRID
+
         batches = defaultdict(list)
         for q in cases:
             batches[q["reported_at"]].append(q)
@@ -42,8 +57,22 @@ class ActivityLinker:
                          key=lambda a: (a["event_time"], a["activity_id"]))
             needy = sorted((q for q in qs if needs_profile.get(q["case_id"])),
                            key=lambda q: (-ts(q["requested_at"]).timestamp(), int(q["case_id"].split("_")[1])))
+            # 1) timing-grid pairs that are unambiguous, repeatedly
+            changed = True
+            while changed:
+                changed = False
+                for q in list(needy):
+                    fits = [a for a in evs if on_grid(a, q["case_id"])]
+                    if len(fits) == 1 and sum(on_grid(fits[0], o["case_id"]) for o in needy) == 1:
+                        self.assigned[q["case_id"]] = (fits[0]["resource_id"], fits[0]["activity_id"])
+                        self.how[q["case_id"]] = "timing-grid"
+                        needy.remove(q)
+                        evs.remove(fits[0])
+                        changed = True
+            # 2) the rest: newest request first, in time order
             for q, a in zip(needy, evs):
                 self.assigned[q["case_id"]] = (a["resource_id"], a["activity_id"])
+                self.how[q["case_id"]] = "batch-order"
 
     def resources_for(self, case_id: str) -> list[tuple[str, str]]:
         return [self.assigned[case_id]] if case_id in self.assigned else []

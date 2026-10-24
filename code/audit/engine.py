@@ -56,7 +56,8 @@ class Auditor:
             first = {q["case_id"]: self.audit(q) for q in cases}
             self.activity.assign(cases, {c: r.status == "COMPLETE" and
                                          not any(s["system_id"] == "analytics_platform" for s in r.steps)
-                                         for c, r in first.items()})
+                                         for c, r in first.items()},
+                                 {c: self.accounts.time_of(a) for c, (a, _) in self.accounts.result.items() if a})
 
     # ------------------------------------------------------------------ helpers
     def _ids(self, cid: str, email: str) -> set[str]:
@@ -113,7 +114,7 @@ class Auditor:
         if acc:
             linked = {r for r in linked if not r.startswith("account_")} | {acc}
         extra = self.activity.resources_for(cid)
-        trace["activity_linked"] = extra
+        trace["activity_linked"] = [[r, a, self.activity.how.get(cid, "")] for r, a in extra]
         linked |= {r for r, _ in extra}
 
         resources: list[ResourceState] = []
