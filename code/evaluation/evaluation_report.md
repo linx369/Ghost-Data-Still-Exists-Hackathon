@@ -14,20 +14,20 @@ The pieces it runs can also be called alone: `python -m pytest code/tests -q`,
 ## 1. Measured results
 
 <!-- VERIFY:START -->
-_Measured by `python code/verify.py` on 2026-10-24 16:15 UTC. Everything between these markers is generated; do not edit by hand._
+_Measured by `python code/verify.py` on 2026-10-24 17:09 UTC. Everything between these markers is generated; do not edit by hand._
 
 **Checks**
 
 | Check | Result | Detail |
 |---|---|---|
-| Unit + stress tests | PASS | 22 passed in 28.59s |
+| Unit + stress tests | PASS | 23 passed in 26.75s |
 | Sample status accuracy is 1.000 | PASS | 1.000 |
 | Sample step F1 at least 0.99 (regression guard) | PASS | 0.992 |
 | Leave-one-out: no wrong account link | PASS | 0 wrong |
+| Leave-one-type-out: shared timing grid never rejects the true account | PASS | 40 correct (unique fit), 4 tie stays |
 | Pipeline reproduces the submitted output.csv byte for byte | PASS | identical |
 | output.csv satisfies the contract | PASS | 518 rows, 0 problems |
 | In-pipeline verification of every answer (contract, grounding, intake cross-check) | PASS | 0 problems |
-| From an empty model cache, output.csv is reproduced | PASS | identical |
 
 **Sample scores (32 labelled cases)**
 
@@ -71,11 +71,11 @@ account link is hidden and re-derived; the timing model is rebuilt without that 
 | `direct-multi` | 1 |  | `unresolved-tie` | 6 |
 | `none` | 3 |  |  |  |
 | `same-user-other-case` | 1 |  |  |  |
-| `unresolved-tie` | 23 |  |  |  |
+| `unresolved-tie` | 16 |  |  |  |
 | `window` | 164 |  |  |  |
-| `window+signature` | 71 |  |  |  |
+| `window+signature` | 78 |  |  |  |
 
-Requests containing at least one uncertain step: **28** (listed in [`uncertainty_report.md`](uncertainty_report.md)).
+Requests containing at least one uncertain step: **21** (listed in [`uncertainty_report.md`](uncertainty_report.md)).
 <!-- VERIFY:END -->
 
 **Remaining errors** (3 missing gold steps, 0 wrong or extra steps; status is never wrong). None is
@@ -95,7 +95,8 @@ recoverable from participant-facing data:
 | v3 | 1.000 | 0.973 | 0.719 | newest-request-first batch order; SQL scope inference; activity linking switched off |
 | v4 | 1.000 | 0.973 | 0.719 | robustness for test-only patterns (catalog links, legal holds, stale evidence) — samples unchanged |
 | v5 | 1.000 | 0.976 | 0.781 | anonymized analytics linked only for otherwise-COMPLETE cases, in batch order |
-| v6 (final) | 1.000 | **0.992** | **0.906** | worker timing signature (learned from direct links) for account ties and anonymized analytics |
+| v6 | 1.000 | **0.992** | **0.906** | worker timing signature (learned from direct links) for account ties and anonymized analytics |
+| v7–v9 (final) | 1.000 | **0.992** | **0.906** | hidden-test reliability: measured windows, grounding, safeguards, shared timing grid — samples byte-identical |
 
 ### Out-of-sample validation of account linking (no labels)
 
@@ -114,6 +115,19 @@ Two further ideas were tested out of sample and **rejected**:
 - *"The worker processes a batch newest request first"* — matched 4/4 sample batches, but on proven
   test pairs it agrees 74 times and disagrees 76 times: chance. It is no longer used as a rule.
 - *Profile-update events at the time of an identity change* — no proven account shows any.
+- *Ordering a tied batch by request date, case number, user number, e-mail, request age, analytics
+  purchase figures or the times of "not found" profile lookups* — all at chance on proven pairs
+  (e.g. case number 27 agree / 26 disagree; analytics figures are shared by unrelated people).
+
+**Shared timing grid (accepted).** All 377 proven worker actions of 11 action types sit on one 30 s grid
+relative to the person's account deletion (residue mod 30 in {9,10,11} for "Policy action completed"
+messages, {20,21,22} for "final result" and check messages; no exception). Tombstone redactions never
+appear next to a directly evidenced account, so the model had no grid for them and 7 tombstone owners
+stayed tied. Scoring an unlearned action type on the shared grid was validated by hiding each action
+type from learning (and the person from the model) on proven links
+(`python code/evaluation/loo_shared_grid.py`): **40 correct, 0 wrong, 4 ties**. It resolves 7 ties:
+4 confirm the earlier pick (case_543, 544, 549, 550) and 3 correct it (case_546, 547, 548; one account
+step each). Samples unchanged.
 
 Requests whose evidence fits several candidates equally are **unresolved ties**. Tom's decision: output a
 deterministic pick, because every deletion case must verify its account, and report it as uncertain. The
@@ -151,6 +165,7 @@ calls (intent is injected); all but the full-run determinism test take milliseco
 | 20 | **Model unavailable** | No answer at all. | Safe default: audit the deletion (and the intake cross-check flags any non-deletion it contradicts). |
 | 21 | **Prompt injection via slot closing** | A request text tries to close its slot and open a new one. | Escaped: exactly one slot. |
 | 22 | **Label that does not fit the system** | A search entry labelled as a security audit record. | Ignored; code decides `SEARCH_INDEX_ENTRY`. |
+| 23 | **Unlearned action type** | A tombstone redaction (a type never seen next to a proven account) fits the shared grid for one candidate account only. | Tie broken, labelled `window+signature` (fails on the previous version). |
 
 ### Sanity checks on the 518 unlabelled requests
 
@@ -184,12 +199,13 @@ calls (intent is injected); all but the full-run determinism test take milliseco
 | 18 | New in-pipeline grounding check (every citation must mention its record). | case_126: the account was seen active only in a file captured *after* `audit_at`; the code still reported it as remaining and filled the citation with a file that never mentions the account. The file-level validator could not see this. | A fact known only from a later file can no longer create a finding; the account is judged on admissible evidence (a covering snapshot without it, the same pattern as the sample answers). case_126 → `COMPLETE`. Only output change of the refactor. |
 | 19 | The grounding check then flagged our own citation fallback ("the case's main evidence file") in a synthetic test. | Never used on the real data, but not grounded. | Fallback is now: a snapshot covering accounts, else the worker's deletion row for that account. |
 | 20 | Code review: 40 untrusted request texts per model call with no isolation; batch answers not checked for completeness; the vision model's label could set any category. | One malicious text could try to steer its neighbours; a skipped answer silently became the default. | Escaped per-request slots, exactly-once answers with single re-asks, per-request cross-check against the intake record (all 10 non-deletion decisions confirmed), labels accepted only if valid for the system. Output unchanged. |
+| 21 | Re-investigation of the 28 uncertain requests (Tom: aim higher, but rigorously). | Tombstone redactions are person-specific worker actions, but no tombstone owner has a proven account, so the timing model had learned no grid for them and ignored them. | Unlearned action types are scored on the grid shared by all 11 learned types (validated leave-one-type-out: 40 correct, 0 wrong). 3 account steps corrected (case_546, 547, 548), 4 earlier picks confirmed; uncertain requests 28 → 21; samples byte-identical. |
 
 ## 4. Limitations and honest caveats
 
 - The 32 samples were used for development; there was no separate hold-out (too few cases). To limit
   over-fitting, every rule is stated as a general principle (time, identity, policy) and checked against
   test-set sanity signals rather than tuned per case.
-- 23 test accounts and 9 anonymized-analytics links are unresolved ties (deterministic pick, ~chance); listed in `uncertainty_report.md`.
-- Already-anonymized analytics profiles carry no identifiers: 111 test links come from the timing grid. The timing signature is a property of how this dataset's worker logs were produced; on real systems I would ask for the worker's batch log instead of inferring it.
+- 16 test accounts and 6 anonymized-analytics links are unresolved ties (deterministic pick, ~chance) in 21 requests; listed in `uncertainty_report.md`. The 16 people have no person-specific worker action; the 6 analytics ties are anonymizations exactly 30 s apart, which no timing grid can separate.
+- Already-anonymized analytics profiles carry no identifiers: 112 test links come from the timing grid. The timing signature is a property of how this dataset's worker logs were produced; on real systems I would ask for the worker's batch log instead of inferring it.
 - case_63 depends on a judgement call (catalog link vs. contradicting screenshot), decided by Tom.

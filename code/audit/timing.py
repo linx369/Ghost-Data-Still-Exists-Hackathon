@@ -10,6 +10,11 @@ whose owner is proven by identifiers), so no labels are used. Leave-one-out chec
 requests: hide a directly evidenced account and recover it from the deletion time window.
 Results are reported in evaluation_report.md. Used only to break ties the evidence leaves open;
 every use is labelled in the trace.
+
+Shared grid: every learned action type sits on one 30 s grid (residue mod 30 in {9,10,11,20,21,22};
+all 377 proven actions of 11 types, no exception). An action type with no learned residues of its
+own (tombstone redactions: their owners' accounts are never directly evidenced) is scored on that
+shared grid. Leave-one-out with each action type hidden from learning: 40 correct, 0 wrong, 4 ties.
 """
 from __future__ import annotations
 
@@ -43,6 +48,7 @@ class TimingModel:
                 if r is not None:
                     seen[self.kind(a)][r] += 1
         self.allowed = {k: {r for r, n in c.items() if n >= MIN_SUPPORT} for k, c in seen.items()}
+        self.universal = {r % 30 for rs in self.allowed.values() for r in rs}  # the shared 30 s grid
 
     @staticmethod
     def kind(a: dict) -> tuple[str, str]:
@@ -50,4 +56,8 @@ class TimingModel:
 
     def score(self, actions: list[dict], t_account: str) -> int:
         """How many of a person's worker actions sit on the learned grid for this account deletion."""
-        return sum(residue(a["event_time"], t_account) in self.allowed.get(self.kind(a), set()) for a in actions)
+        total = 0
+        for a in actions:
+            r, learned = residue(a["event_time"], t_account), self.allowed.get(self.kind(a))
+            total += (r in learned) if learned else (r is not None and r % 30 in self.universal)
+        return total

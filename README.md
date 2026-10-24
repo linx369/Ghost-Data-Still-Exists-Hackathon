@@ -35,7 +35,7 @@ python code/main.py --offline                         # no API calls: replay cac
 python code/main.py --split sample                    # the 32 labelled samples -> code/evaluation/sample_predictions.csv
 python code/evaluation/main.py --pred code/evaluation/sample_predictions.csv --gold dataset/sample_output.csv --verbose
 python code/evaluation/validate.py                    # contract check of output.csv
-python -m pytest code/tests -q                        # 22 custom evaluation, stress and safeguard tests
+python -m pytest code/tests -q                        # 23 custom evaluation, stress and safeguard tests
 python code/evaluation/loo_timing.py                  # out-of-sample check of account linking
 python code/main.py --trace trace.jsonl               # per-case reasoning (why each step exists)
 python code/main.py --offline --explain case_63       # readable evidence chain for one request
@@ -109,10 +109,12 @@ steps, what is uncertain, and the verification result.
   solved jointly so one account = one case; remaining ties are broken by the worker's **timing signature**
   (each request's actions sit on a type-specific grid relative to its account deletion, learned from
   directly evidenced links). Leave-one-out on proven test accounts: 229 recovered, **0 wrong**, 9 unresolved.
-  (3) **Unresolved ties** (23 test accounts): the contract needs an account check, so a deterministic pick
+  All learned action types share one 30 s grid, so an action type with no grid of its own (tombstone
+  redactions) is scored on that shared grid; leave-one-type-out: 40 recovered, **0 wrong**, 4 unresolved.
+  (3) **Unresolved ties** (16 test accounts): the contract needs an account check, so a deterministic pick
   is output and reported as uncertain — never as a fact (Tom's decision).
 - **Transparent uncertainty.** `code/evaluation/uncertainty_report.md` (written by every full run) states
-  how each link was established and lists the 31 requests that contain an uncertain step.
+  how each link was established and lists the 21 requests that contain an uncertain step.
 
 ## Safety and failure handling
 
@@ -147,9 +149,10 @@ Token use and cost: [`code/evaluation/usage_report.md`](code/evaluation/usage_re
 
 ## Known limitations
 
-- Already-anonymized analytics profiles carry no identifier; 111 are linked through the worker's timing
-  grid, 9 are unresolved ties. The timing signature is a property of this dataset's logs.
-- 23 test accounts are unresolved ties (deterministic pick, about chance).
+- Already-anonymized analytics profiles carry no identifier; 112 are linked through the worker's timing
+  grid, 6 are unresolved ties. The timing signature is a property of this dataset's logs.
+- 16 test accounts are unresolved ties (deterministic pick, about chance): those people have no
+  person-specific worker action at all, so nothing in the data separates the candidate accounts.
 - "Newest request first" looked like a rule on the samples (4/4) but is chance out of sample (74 vs 76).
 - No hold-out split: the 32 samples were all used for development.
 

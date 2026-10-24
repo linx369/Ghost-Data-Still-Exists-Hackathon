@@ -11,9 +11,9 @@ deterministically, and the pick is reported here as uncertain rather than presen
 | `direct` | an evidence record ties the account to the person's identifiers | established | 245 |
 | `direct-multi` | several proven accounts; the one the worker processed | established | 1 |
 | `window` | worker deleted it in the measured window, no other owner, result matches the claim | inferred, validated out-of-sample (0 wrong) | 164 |
-| `window+signature` | as above, tie broken by the worker's timing grid | inferred, validated out-of-sample (0 wrong) | 71 |
+| `window+signature` | as above, tie broken by the worker's timing grid | inferred, validated out-of-sample (0 wrong) | 78 |
 | `same-user-other-case` | same person's account from another request | inferred | 1 |
-| `unresolved-tie` | evidence fits several requests equally; deterministic pick | **uncertain (~chance)** | 23 |
+| `unresolved-tie` | evidence fits several requests equally; deterministic pick | **uncertain (~chance)** | 16 |
 | `none` | no account could be linked | missing | 3 |
 
 ## Already-anonymized analytics links
@@ -23,7 +23,7 @@ deterministically, and the pick is reported here as uncertain rather than presen
 | `timing-grid` | unique fit on the worker's timing grid | inferred | 112 |
 | `unresolved-tie` | several requests fit equally; deterministic pick | **uncertain (~chance)** | 6 |
 
-## Requests containing an uncertain step (28)
+## Requests containing an uncertain step (21)
 
 | Request | Uncertain resource(s) |
 |---|---|
@@ -48,10 +48,3 @@ deterministically, and the pick is reported here as uncertain rather than presen
 | case_409 | account_7174 |
 | case_411 | account_2775 |
 | case_412 | account_8985 |
-| case_543 | account_8931 |
-| case_544 | account_7320 |
-| case_546 | account_294 |
-| case_547 | account_7015 |
-| case_548 | account_9155 |
-| case_549 | account_4842 |
-| case_550 | account_7225 |

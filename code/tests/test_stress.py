@@ -107,6 +107,27 @@ def test_timing_signature_breaks_a_tie_only_with_learned_support(tmp_path):
     assert account_of(out["case_2"])["resource_id"] == "account_20"
 
 
+def test_unlearned_action_type_uses_the_shared_grid(tmp_path):
+    """Person 1's tombstone redaction is an action type the model has never learned (no owner of a
+    tombstone has a proven account). It is scored on the grid shared by learned types: 30:10 after
+    account_10 fits (+10 s mod 30), 24:53 after account_20 does not."""
+    users = [person(1), person(2), person(3)]
+    snaps = [{"file_id": "evidence_01", "captured_at": "2026-09-05T00:00:00Z", "data_store": "mixed", "records": [
+        {"resource_id": "tombstone_1", "subject_reference": "user_1", "account_status": "DELETED"},
+        {"resource_id": "support_3", "subject_reference": "user_3", "message_text": "no pii"},
+        {"resource_id": "support_4", "subject_reference": "user_3", "message_text": "no pii"},
+        {"resource_id": "account_30", "customer_reference": "user_3", "account_status": "DELETED"}]}]
+    acts = [act(1, "2026-09-02T10:50:00Z", "account_10"), act(2, "2026-09-02T10:55:17Z", "account_20"),
+            act(3, "2026-09-02T11:20:10Z", "tombstone_1", "REDACT_RECORD", "identity_service"),
+            act(4, "2026-08-01T10:00:00Z", "account_30"),
+            act(5, "2026-08-01T10:30:10Z", "support_3", "REDACT_RECORD", "support_platform"),
+            act(6, "2026-08-01T10:45:10Z", "support_4", "REDACT_RECORD", "support_platform")]
+    ds, _ = build(tmp_path, snaps, activity=acts, users=users)
+    out = audit_all(ds, [req(1), req(2)])
+    assert account_of(out["case_1"]) == {"resource_id": "account_10", "link": "window+signature"}
+    assert account_of(out["case_2"])["resource_id"] == "account_20"
+
+
 def test_malformed_evidence_file_is_skipped_not_fatal(tmp_path):
     good = {"file_id": "evidence_01", "captured_at": "2026-09-05T00:00:00Z", "data_store": "security_service",
             "records": [AUDIT_REC]}

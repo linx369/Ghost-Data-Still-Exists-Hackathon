@@ -28,6 +28,7 @@ ROOT = CODE.parent
 sys.path.insert(0, str(CODE))
 sys.path.insert(0, str(CODE / "evaluation"))
 
+from loo_shared_grid import leave_type_out  # noqa: E402
 from loo_timing import leave_one_out  # noqa: E402
 from validate import validate  # noqa: E402
 
@@ -77,6 +78,10 @@ def main() -> int:
         loo = leave_one_out()
         checks.append(("Leave-one-out: no wrong account link", sum(v for k, v in loo.items() if "WRONG" in k) == 0,
                        f"{sum(v for k, v in loo.items() if 'WRONG' in k)} wrong"))
+        grid = leave_type_out()
+        checks.append(("Leave-one-type-out: shared timing grid never rejects the true account",
+                       sum(v for k, v in grid.items() if "WRONG" in k) == 0,
+                       ", ".join(f"{v} {k}" for k, v in sorted(grid.items()))))
 
         run_pipeline("--offline", "--out", str(tmp / "out.csv"), "--trace", str(tmp / "trace.jsonl"))
         same = (tmp / "out.csv").read_bytes() == (ROOT / "output.csv").read_bytes()
