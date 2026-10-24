@@ -28,6 +28,7 @@ python code/main.py --split sample                    # the 32 labelled samples 
 python code/evaluation/main.py --pred code/evaluation/sample_predictions.csv --gold dataset/sample_output.csv --verbose
 python code/evaluation/validate.py                    # contract check of output.csv
 python -m pytest code/tests -q                        # 8 custom evaluation cases
+python code/evaluation/loo_timing.py                  # out-of-sample check of account linking
 python code/main.py --trace trace.jsonl               # per-case reasoning (why each step exists)
 ```
 
@@ -61,7 +62,8 @@ main.py       ──► output.csv, trace, usage_report.md
 | `audit/intent.py` | Does the request authorize deletion? Batches of 40 distinct texts, any language | **yes**, once per distinct text |
 | `audit/identity.py` | Every identifier a person ever had, from `user_identities.csv` + `user_audit_log.csv` | no |
 | `audit/accounts.py` | Link each case to its account record | no |
-| `audit/activity.py` | Link already-anonymized analytics profiles via the worker's batch (heuristic, labelled) | no |
+| `audit/timing.py` | Learn the worker's per-action timing grid from directly evidenced links | no |
+| `audit/activity.py` | Link already-anonymized analytics profiles via the timing grid / batch order (heuristic, labelled) | no |
 | `audit/interpret.py` | Map ~40 evidence vocabularies (404, rows=0, NOT_FOUND, enabled=false, restore_allowed=0, null PII…) to one state vocabulary | no |
 | `audit/engine.py` | Time rules, linking, state at `audit_at`, citations | no |
 | `audit/policy.py` | Rules → steps and ordering | no |
@@ -85,7 +87,10 @@ main.py       ──► output.csv, trace, usage_report.md
 - **Account linking ladder.** (1) evidence ties the account to the person; (2) the worker deleted it in the
   3 h before `reported_at`, nobody else owns it, and its result matches the workflow claim
   (COMPLETE↔SUCCESS, PARTIALLY_COMPLETE↔PARTIAL, NOT_STARTED↔FAILED), solved jointly so one account = one
-  case; (3) a flagged fallback for true ties. Each case's link type is in the trace.
+  case; remaining ties are broken by the worker's **timing signature** (each request's actions sit on a
+  type-specific grid relative to its account deletion, learned from directly evidenced links; leave-one-out
+  on test accounts: 68 correct, 0 wrong); (3) a flagged fallback for true ties (30 test cases).
+  Each case's link type is in the trace.
 
 ## Safety and failure handling
 
@@ -102,17 +107,18 @@ main.py       ──► output.csv, trace, usage_report.md
 
 ## Results
 
-Samples (32 labelled cases): status accuracy **1.000**, step precision **0.989**, recall **0.964**,
-F1 **0.976**, sequence accuracy **0.781**. Status is never wrong; remaining errors are missing or
-heuristically-linked anonymized analytics and two audit records that no participant file contains.
+Samples (32 labelled cases): status accuracy **1.000**, step precision **1.000**, recall **0.984**,
+F1 **0.992**, sequence accuracy **0.906**. The 3 remaining missing steps reference records that appear in
+no participant-facing file. Account linking is also validated out-of-sample on the unlabelled test set
+(`code/evaluation/loo_timing.py`).
 Details, custom cases, failures and improvements: [`code/evaluation/evaluation_report.md`](code/evaluation/evaluation_report.md).
 Token use and cost: [`code/evaluation/usage_report.md`](code/evaluation/usage_report.md).
 
 ## Known limitations
 
-- Already-anonymized analytics profiles carry no identifier; they are linked through the worker's batch
-  order (`audit/activity.py`), right 3 of 5 times on samples.
-- About 130 test accounts depend on the fallback tie-break.
+- Already-anonymized analytics profiles carry no identifier; they are linked through the worker's timing
+  grid (108 test cases) or batch order (12). The timing signature is a property of this dataset's logs.
+- 30 test accounts still depend on the fallback tie-break.
 - No hold-out split: the 32 samples were all used for development.
 
 ## How AI tools were used

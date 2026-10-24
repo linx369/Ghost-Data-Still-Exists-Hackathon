@@ -6,6 +6,7 @@ All numbers are reproducible:
 python code/main.py --split sample --offline          # -> code/evaluation/sample_predictions.csv
 python code/evaluation/main.py --pred code/evaluation/sample_predictions.csv --gold dataset/sample_output.csv --verbose
 python -m pytest code/tests -q                       # custom evaluation cases
+python code/evaluation/loo_timing.py                 # out-of-sample check of account linking (no labels)
 ```
 
 ## 1. Metrics on the 32 labelled sample cases
@@ -13,26 +14,26 @@ python -m pytest code/tests -q                       # custom evaluation cases
 | Metric | Definition | Score |
 |---|---|---:|
 | **Case-level status accuracy** | `deletion_status` exact match | **1.000** (32/32) |
-| **Step precision** | predicted steps that exactly match a gold step (all fields except `step_no`) | **0.989** (186/188) |
-| **Step recall** | gold steps reproduced exactly | **0.964** (186/193) |
-| **Step F1** | | **0.976** |
-| Step F1 ignoring `evidence_id` | isolates citation errors | 0.976 |
-| **Sequence accuracy** | whole `steps_json` array exactly right, including order and numbering | **0.781** (25/32) |
+| **Step precision** | predicted steps that exactly match a gold step (all fields except `step_no`) | **1.000** (190/190) |
+| **Step recall** | gold steps reproduced exactly | **0.984** (190/193) |
+| **Step F1** | | **0.992** |
+| Step F1 ignoring `evidence_id` | isolates citation errors | 0.992 |
+| **Sequence accuracy** | whole `steps_json` array exactly right, including order and numbering | **0.906** (29/32) |
 
 **Field-level accuracy** (steps aligned by position; a missing step makes every later position in that
 case count as wrong, so this is the strictest view):
 
 | phase | system_id | resource_id | operation | state | evidence_id |
 |---:|---:|---:|---:|---:|---:|
-| 0.974 | 0.927 | 0.917 | 0.927 | 0.927 | 0.969 |
+| 0.984 | 0.959 | 0.959 | 0.959 | 0.959 | 0.979 |
 
-**Remaining errors** (7 missing gold steps, 2 extra predicted steps; status is never wrong):
+**Remaining errors** (3 missing gold steps, 0 wrong or extra steps; status is never wrong). None is
+recoverable from participant-facing data:
 
 | Gold step not reproduced | Count | Cause |
 |---|---:|---|
-| `analytics_platform` `VERIFY_RECORD_ANONYMIZED` | 4 | The analytics profile is already anonymized, so no identifier links it to the person. It is linked heuristically through the deletion worker's batch (§3, experiment 1); 2 of these are a wrong id (the 2 extra steps), 2 are not assigned. |
-| `security_service` `VERIFY_RECORD_PRESENT` | 2 | `audit_record_6645` / `audit_record_5569` do not appear in any participant-facing file (searched all text, logs, SQL, JSON, and the extracted screenshots/PDFs). Not recoverable. |
-| `account_service` `VERIFY_RECORD_ABSENT` | 1 | case_04: hand-written case whose account id appears nowhere in the data. |
+| `security_service` `VERIFY_RECORD_PRESENT` | 2 | `audit_record_6645` / `audit_record_5569` appear in no participant-facing file (searched all text, logs, SQL, JSON and the extracted screenshots/PDFs). |
+| `account_service` `VERIFY_RECORD_ABSENT` | 1 | case_04: hand-written case whose account id appears nowhere in the data (no record, no worker event). |
 
 ### Progression during the build (samples)
 
@@ -42,7 +43,27 @@ case count as wrong, so this is the strictest view):
 | v2 | 1.000 | 0.956 | 0.625 | screenshots/PDFs via Claude vision; "known vs citable" time rule; hashes in lookup keys |
 | v3 | 1.000 | 0.973 | 0.719 | newest-request-first batch order; SQL scope inference; activity linking switched off |
 | v4 | 1.000 | 0.973 | 0.719 | robustness for test-only patterns (catalog links, legal holds, stale evidence) — samples unchanged |
-| v5 (final) | 1.000 | 0.976 | 0.781 | anonymized analytics linked only for otherwise-COMPLETE cases, in batch order |
+| v5 | 1.000 | 0.976 | 0.781 | anonymized analytics linked only for otherwise-COMPLETE cases, in batch order |
+| v6 (final) | 1.000 | **0.992** | **0.906** | worker timing signature (learned from direct links) for account ties and anonymized analytics |
+
+### Out-of-sample validation of account linking (no labels)
+
+The samples are only 32 cases, so the account linker was also validated on the 518 *unlabelled* test
+requests: for every request whose account is directly evidenced, the link is hidden, the timing model
+is rebuilt **without that person's links**, and the account is recovered from the deletion window
+(`python code/evaluation/loo_timing.py`):
+
+| Outcome | Requests |
+|---|---:|
+| Status match alone picks the account — correct | 139 |
+| Timing signature breaks the tie — correct | 68 |
+| **Wrong (either way)** | **0** |
+| Still tied (fallback used) | 6 |
+| Person has no other worker actions to compare (fallback used) | 25 |
+| Account outside the 3 h window | 7 |
+
+On the real run this cut the fallback tie-break from 131 to 30 test accounts, and 108 of 120
+anonymized-analytics links are now decided by the timing grid (12 by batch order).
 
 ## 2. Custom evaluation cases (created by us)
 
@@ -85,12 +106,13 @@ asserts the engine's **exact** output. No model calls (intent is injected), so t
 | 8 | Data-catalog link events (test-only puzzle cases) tie screenshots/PDFs to people via aliases (file names, statement numbers). | Without them, ~12 test cases had no linked evidence. | Parsed as identity-only links; the vision step returns aliases. case_63: the linked profile displays a person who is in no identity record. Tom's decision: keep the link (equal cost either way, and dropping it leaves the case with no contract-valid answer, unlike every other puzzle case); the link is dropped only if the record shows another *known* person. |
 | 9 | Hashes inside `correlation_key`, uppercase emails, legal holds named `legal_service`. | Missed links on case_12; wrong `system_id` on 7 test cases. | Normalized. |
 | 10 | Custom case 8 failed: `COMPLETE` account check with no citable evidence. | Contract requires evidence on every COMPLETE verification. | Fallback citation: account-scoped snapshot → case's main evidence → the worker's deletion activity id. |
+| 11 | Reviewing the 7 imperfect sample sequences (Tom's request): 4 were anonymized-analytics assignments; the other 3 are not recoverable from the data (§1). Found that the worker schedules each request's actions on a fixed grid relative to its account deletion: (Δt mod 60 s) is type-specific (e.g. export deletions 51–52 s, search deletions 21–22 s, restore blocks 9–10 s). | Learned from directly evidenced links only; leave-one-out on test accounts 68 correct / 0 wrong. A first coarse version (mod 30 for every type) broke case_23; per-type sets fixed it. | Adopted for account ties (`timing.py`) and anonymized analytics (coarse grid, since no directly owned *successful* anonymization exists to learn from — the one sample-informed choice). Samples: F1 0.976 → **0.992**, sequence 0.781 → **0.906**, precision 1.000. |
 
 ## 4. Limitations and honest caveats
 
 - The 32 samples were used for development; there was no separate hold-out (too few cases). To limit
   over-fitting, every rule is stated as a general principle (time, identity, policy) and checked against
   test-set sanity signals rather than tuned per case.
-- About 130 test accounts rely on the flagged fallback tie-break; those account steps may be wrong.
-- Already-anonymized analytics profiles (no identifiers) are linked by a batch-order heuristic (121 test cases); on samples it is right 3 times out of 5.
+- 30 test accounts still rely on the flagged fallback tie-break (no other worker actions to compare); those account steps may be wrong.
+- Already-anonymized analytics profiles carry no identifiers: 108 test links come from the timing grid, 12 from batch order. The timing signature is a property of how this dataset's worker logs were produced; on real systems I would ask for the worker's batch log instead of inferring it.
 - case_63 depends on a judgement call (catalog link vs. contradicting screenshot), decided by Tom.
