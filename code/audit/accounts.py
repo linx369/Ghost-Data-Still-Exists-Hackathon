@@ -75,8 +75,17 @@ class AccountLinker:
             for k, acc in zip(order, events):
                 self.result[k] = (acc, "fallback-tiebreak")
                 taken.add(acc)
+        # same person, other request (e.g. an earlier or later audit of the same user)
+        by_user = {}
         for q in cases:
-            self.result.setdefault(q["case_id"], (None, "none"))
+            acc, how = self.result.get(q["case_id"], (None, "none"))
+            if acc and how in ("direct", "window"):
+                for u in users_of.get(q["case_id"], []):
+                    by_user.setdefault(u, acc)
+        for q in cases:
+            if q["case_id"] not in self.result:
+                hit = next((by_user[u] for u in users_of.get(q["case_id"], []) if u in by_user), None)
+                self.result[q["case_id"]] = (hit, "same-user-other-case") if hit else (None, "none")
 
     def account_for(self, case_id: str) -> tuple[str | None, str]:
         return self.result[case_id]

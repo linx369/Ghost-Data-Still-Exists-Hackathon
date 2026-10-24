@@ -18,6 +18,7 @@ sys.path.insert(0, str(Path(__file__).resolve().parent))
 
 from audit.engine import Auditor  # noqa: E402
 from audit.evidence import load_text_evidence  # noqa: E402
+from audit.intent import classify  # noqa: E402
 from audit.llm import LLM, USAGE  # noqa: E402
 from audit.multimodal import load_multimodal_evidence  # noqa: E402
 
@@ -60,7 +61,7 @@ def main() -> None:
     load_env()
     llm = LLM(offline=a.offline)
     observations = load_text_evidence(ds) + load_multimodal_evidence(ds, llm)
-    intents: dict = {}
+    intents = classify(sample + test, llm)
     auditor = Auditor(ds, observations, sample + test, intents)
     results = [auditor.audit(q) for q in cases]
 
