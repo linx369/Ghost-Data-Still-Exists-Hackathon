@@ -1,0 +1,291 @@
+{
+ "model": "claude-fable-5-1",
+ "parsed": {
+  "items": [
+   {
+    "id": 0,
+    "request_type": "DELETION",
+    "authorizes_deletion": true,
+    "language": "en",
+    "reason": "Explicit request to permanently delete account"
+   },
+   {
+    "id": 1,
+    "request_type": "DELETION",
+    "authorizes_deletion": true,
+    "language": "en",
+    "reason": "Explicit request to permanently delete account"
+   },
+   {
+    "id": 2,
+    "request_type": "DELETION",
+    "authorizes_deletion": true,
+    "language": "en",
+    "reason": "Explicit request to permanently delete account"
+   },
+   {
+    "id": 3,
+    "request_type": "DELETION",
+    "authorizes_deletion": true,
+    "language": "en",
+    "reason": "Explicit request to permanently delete account"
+   },
+   {
+    "id": 4,
+    "request_type": "DELETION",
+    "authorizes_deletion": true,
+    "language": "en",
+    "reason": "Explicit request to permanently delete account"
+   },
+   {
+    "id": 5,
+    "request_type": "DELETION",
+    "authorizes_deletion": true,
+    "language": "en",
+    "reason": "Explicit request to permanently delete account"
+   },
+   {
+    "id": 6,
+    "request_type": "DELETION",
+    "authorizes_deletion": true,
+    "language": "en",
+    "reason": "Explicit request to permanently delete account"
+   },
+   {
+    "id": 7,
+    "request_type": "DELETION",
+    "authorizes_deletion": true,
+    "language": "en",
+    "reason": "Explicit request to permanently delete account"
+   },
+   {
+    "id": 8,
+    "request_type": "DELETION",
+    "authorizes_deletion": true,
+    "language": "en",
+    "reason": "Explicit request to permanently delete account"
+   },
+   {
+    "id": 9,
+    "request_type": "DELETION",
+    "authorizes_deletion": true,
+    "language": "en",
+    "reason": "Explicit request to permanently delete account"
+   },
+   {
+    "id": 10,
+    "request_type": "DELETION",
+    "authorizes_deletion": true,
+    "language": "en",
+    "reason": "Explicit request to permanently delete account"
+   },
+   {
+    "id": 11,
+    "request_type": "DELETION",
+    "authorizes_deletion": true,
+    "language": "en",
+    "reason": "Explicit request to permanently delete account"
+   },
+   {
+    "id": 12,
+    "request_type": "DELETION",
+    "authorizes_deletion": true,
+    "language": "en",
+    "reason": "Explicit request to permanently delete account"
+   },
+   {
+    "id": 13,
+    "request_type": "DELETION",
+    "authorizes_deletion": true,
+    "language": "en",
+    "reason": "Explicit request to permanently delete account"
+   },
+   {
+    "id": 14,
+    "request_type": "DELETION",
+    "authorizes_deletion": true,
+    "language": "en",
+    "reason": "Explicit request to permanently delete account"
+   },
+   {
+    "id": 15,
+    "request_type": "DELETION",
+    "authorizes_deletion": true,
+    "language": "en",
+    "reason": "Explicit request to permanently delete account"
+   },
+   {
+    "id": 16,
+    "request_type": "DELETION",
+    "authorizes_deletion": true,
+    "language": "en",
+    "reason": "Explicit request to permanently delete account"
+   },
+   {
+    "id": 17,
+    "request_type": "DELETION",
+    "authorizes_deletion": true,
+    "language": "en",
+    "reason": "Explicit request to permanently delete account"
+   },
+   {
+    "id": 18,
+    "request_type": "DELETION",
+    "authorizes_deletion": true,
+    "language": "en",
+    "reason": "Explicit request to permanently delete account"
+   },
+   {
+    "id": 19,
+    "request_type": "DELETION",
+    "authorizes_deletion": true,
+    "language": "en",
+    "reason": "Explicit request to permanently delete account"
+   },
+   {
+    "id": 20,
+    "request_type": "DELETION",
+    "authorizes_deletion": true,
+    "language": "en",
+    "reason": "Explicit request to permanently delete account"
+   },
+   {
+    "id": 21,
+    "request_type": "DELETION",
+    "authorizes_deletion": true,
+    "language": "en",
+    "reason": "Explicit request to permanently delete account"
+   },
+   {
+    "id": 22,
+    "request_type": "DELETION",
+    "authorizes_deletion": true,
+    "language": "en",
+    "reason": "Explicit request to permanently delete account"
+   },
+   {
+    "id": 23,
+    "request_type": "DELETION",
+    "authorizes_deletion": true,
+    "language": "en",
+    "reason": "Explicit request to permanently delete account"
+   },
+   {
+    "id": 24,
+    "request_type": "DELETION",
+    "authorizes_deletion": true,
+    "language": "en",
+    "reason": "Explicit request to permanently delete account"
+   },
+   {
+    "id": 25,
+    "request_type": "DELETION",
+    "authorizes_deletion": true,
+    "language": "en",
+    "reason": "Requests permanent account-deletion processing"
+   },
+   {
+    "id": 26,
+    "request_type": "DELETION",
+    "authorizes_deletion": true,
+    "language": "en",
+    "reason": "Requests permanent account-deletion processing"
+   },
+   {
+    "id": 27,
+    "request_type": "DELETION",
+    "authorizes_deletion": true,
+    "language": "en",
+    "reason": "Requests permanent account-deletion processing"
+   },
+   {
+    "id": 28,
+    "request_type": "DELETION",
+    "authorizes_deletion": true,
+    "language": "en",
+    "reason": "Requests permanent account-deletion processing"
+   },
+   {
+    "id": 29,
+    "request_type": "DELETION",
+    "authorizes_deletion": true,
+    "language": "en",
+    "reason": "Requests permanent account-deletion processing"
+   },
+   {
+    "id": 30,
+    "request_type": "DELETION",
+    "authorizes_deletion": true,
+    "language": "en",
+    "reason": "Requests permanent account-deletion processing"
+   },
+   {
+    "id": 31,
+    "request_type": "DELETION",
+    "authorizes_deletion": true,
+    "language": "en",
+    "reason": "Requests permanent account-deletion processing"
+   },
+   {
+    "id": 32,
+    "request_type": "DELETION",
+    "authorizes_deletion": true,
+    "language": "en",
+    "reason": "Requests permanent account-deletion processing"
+   },
+   {
+    "id": 33,
+    "request_type": "DELETION",
+    "authorizes_deletion": true,
+    "language": "en",
+    "reason": "Requests permanent account-deletion processing"
+   },
+   {
+    "id": 34,
+    "request_type": "DELETION",
+    "authorizes_deletion": true,
+    "language": "en",
+    "reason": "Requests permanent account-deletion processing"
+   },
+   {
+    "id": 35,
+    "request_type": "DELETION",
+    "authorizes_deletion": true,
+    "language": "en",
+    "reason": "Requests permanent account-deletion processing"
+   },
+   {
+    "id": 36,
+    "request_type": "DELETION",
+    "authorizes_deletion": true,
+    "language": "en",
+    "reason": "Requests permanent account-deletion processing"
+   },
+   {
+    "id": 37,
+    "request_type": "DELETION",
+    "authorizes_deletion": true,
+    "language": "en",
+    "reason": "Requests permanent account-deletion processing"
+   },
+   {
+    "id": 38,
+    "request_type": "DELETION",
+    "authorizes_deletion": true,
+    "language": "en",
+    "reason": "Requests permanent account-deletion processing"
+   },
+   {
+    "id": 39,
+    "request_type": "DELETION",
+    "authorizes_deletion": true,
+    "language": "en",
+    "reason": "Requests permanent account-deletion processing"
+   }
+  ]
+ },
+ "usage": {
+  "input": 2939,
+  "output": 2104
+ }
+}

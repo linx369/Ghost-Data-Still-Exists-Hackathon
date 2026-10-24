@@ -67,6 +67,8 @@ class Auditor:
         self.accounts = AccountLinker(dataset, self.owners, cases, self.users_of)
         self.activity = ActivityLinker(dataset, self.owners)
         self.activity_deletes = {a["activity_id"]: a["resource_id"] for a in self.accounts.deletes}
+        # the workflow's own intake record: accounts whose request it classified as non-deletion
+        self.intake_nondeletion = {a["resource_id"]: a["activity_id"] for a in self.accounts.intake}
         self._results: dict[str, CaseResult] | None = None
 
     # ===================================================================== pipeline
@@ -212,9 +214,23 @@ class Auditor:
         return s["operation"] == "VERIFY_RECORD_ABSENT" and any(
             sc.evidence_id == ev and sc.system_id == s["system_id"] for sc in self.scopes)
 
+    def _intake_disagrees(self, q: dict, r: CaseResult) -> str | None:
+        """Independent cross-check of the model's intent against the workflow's intake record."""
+        mine = set(self.users_of[r.case_id])
+        hits = [aid for acc, aid in self.intake_nondeletion.items() if self.owners.get(acc, set()) & mine]
+        model_says_na = r.status == "NOT_APPLICABLE"
+        if hits and not model_says_na:
+            return f"{r.case_id}: intake record {hits[0]} says non-deletion, the model says deletion"
+        if model_says_na and not hits:
+            return f"{r.case_id}: the model says non-deletion, no intake record confirms it"
+        return None
+
     def _verify(self, q: dict, r: CaseResult) -> list[str]:
         errs = [f"{r.case_id}: step {s['step_no']} cites {s['evidence_id']}, which does not mention {s['resource_id']}"
                 for s in r.steps if not self._grounded(s)]
+        disagreement = self._intake_disagrees(q, r)
+        if disagreement:
+            errs.append(disagreement)
         if self.evidence_time is not None:
             errs += check_case(r.case_id, r.status, r.steps, q["audit_at"], self.evidence_time)
         return errs

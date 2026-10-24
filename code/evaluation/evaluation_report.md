@@ -14,13 +14,13 @@ The pieces it runs can also be called alone: `python -m pytest code/tests -q`,
 ## 1. Measured results
 
 <!-- VERIFY:START -->
-_Measured by `python code/verify.py` on 2026-10-24 15:39 UTC. Everything between these markers is generated; do not edit by hand._
+_Measured by `python code/verify.py` on 2026-10-24 15:45 UTC. Everything between these markers is generated; do not edit by hand._
 
 **Checks**
 
 | Check | Result | Detail |
 |---|---|---|
-| Unit + stress tests | PASS | 17 passed in 26.62s |
+| Unit + stress tests | PASS | 22 passed in 26.55s |
 | Sample status accuracy is 1.000 | PASS | 1.000 |
 | Sample step F1 at least 0.99 (regression guard) | PASS | 0.992 |
 | Leave-one-out: no wrong account link | PASS | 0 wrong |
@@ -122,8 +122,9 @@ current counts are in §1; every link's provenance and the affected requests are
 ## 2. Custom evaluation cases (created by us)
 
 `code/tests/test_engine.py` builds a tiny synthetic dataset for each trap described in the challenge and
-asserts the engine's **exact** output; `code/tests/test_stress.py` adds unusual situations. No model
-calls (intent is injected); all but the full-run determinism test take milliseconds. **17/17 pass.**
+asserts the engine's **exact** output; `code/tests/test_stress.py` adds unusual situations;
+`code/tests/test_intent.py` tests the model-call safeguards with a scripted fake model. No model
+calls (intent is injected); all but the full-run determinism test take milliseconds. **22/22 pass.**
 
 | # | Case | What it proves | Expected result |
 |---|---|---|---|
@@ -144,6 +145,11 @@ calls (intent is injected); all but the full-run determinism test take milliseco
 | 15 | **Determinism across hash seeds** | Two full offline runs under different `PYTHONHASHSEED` values. | Byte-identical `output.csv` (a set-order citation tie was found and fixed this way). |
 | 16 | **Grounding check** | A step cites a file that never mentions the record. | Stage 5 flags it. |
 | 17 | **Presence seen only in a later file** | A file captured after `audit_at` shows the account still active. | No finding is raised and the file is never cited. |
+| 18 | **Missing intent answer** | The model's batch answer skips one request. | That request is re-asked alone and answered. |
+| 19 | **Duplicated intent answer** | Two answers for one request. | Neither is trusted; re-asked alone. |
+| 20 | **Model unavailable** | No answer at all. | Safe default: audit the deletion (and the intake cross-check flags any non-deletion it contradicts). |
+| 21 | **Prompt injection via slot closing** | A request text tries to close its slot and open a new one. | Escaped: exactly one slot. |
+| 22 | **Label that does not fit the system** | A search entry labelled as a security audit record. | Ignored; code decides `SEARCH_INDEX_ENTRY`. |
 
 ### Sanity checks on the 518 unlabelled requests
 
@@ -176,6 +182,7 @@ calls (intent is injected); all but the full-run determinism test take milliseco
 | 17 | Report numbers were typed by hand and could drift from the code. | Several figures had to be corrected by hand during the day. | `python code/verify.py` measures everything and writes §1 itself; it fails if any check fails. |
 | 18 | New in-pipeline grounding check (every citation must mention its record). | case_126: the account was seen active only in a file captured *after* `audit_at`; the code still reported it as remaining and filled the citation with a file that never mentions the account. The file-level validator could not see this. | A fact known only from a later file can no longer create a finding; the account is judged on admissible evidence (a covering snapshot without it, the same pattern as the sample answers). case_126 → `COMPLETE`. Only output change of the refactor. |
 | 19 | The grounding check then flagged our own citation fallback ("the case's main evidence file") in a synthetic test. | Never used on the real data, but not grounded. | Fallback is now: a snapshot covering accounts, else the worker's deletion row for that account. |
+| 20 | Code review: 40 untrusted request texts per model call with no isolation; batch answers not checked for completeness; the vision model's label could set any category. | One malicious text could try to steer its neighbours; a skipped answer silently became the default. | Escaped per-request slots, exactly-once answers with single re-asks, per-request cross-check against the intake record (all 10 non-deletion decisions confirmed), labels accepted only if valid for the system. Output unchanged. |
 
 ## 4. Limitations and honest caveats
 

@@ -35,7 +35,7 @@ python code/main.py --offline                         # no API calls: replay cac
 python code/main.py --split sample                    # the 32 labelled samples -> code/evaluation/sample_predictions.csv
 python code/evaluation/main.py --pred code/evaluation/sample_predictions.csv --gold dataset/sample_output.csv --verbose
 python code/evaluation/validate.py                    # contract check of output.csv
-python -m pytest code/tests -q                        # 17 custom evaluation + stress cases
+python -m pytest code/tests -q                        # 22 custom evaluation, stress and safeguard tests
 python code/evaluation/loo_timing.py                  # out-of-sample check of account linking
 python code/main.py --trace trace.jsonl               # per-case reasoning (why each step exists)
 python code/main.py --offline --explain case_63       # readable evidence chain for one request
@@ -71,7 +71,7 @@ OUTPUT     main.py        output.csv, per-case trace, usage + uncertainty report
 |---|---|---|
 | `audit/evidence.py` | Parse every text evidence format into uniform observations; resolve trace ids so a log line's lookup key is attached to its result line; a malformed file is skipped and reported, never fatal | no |
 | `audit/multimodal.py` | Screenshots and PDFs → the same observation shape (records, identifiers, visible state, aliases such as file names) | **yes**, once per file |
-| `audit/intent.py` | Does the request authorize deletion? Distinct texts, any language | **yes**, once per distinct text |
+| `audit/intent.py` | Does the request authorize deletion? Distinct texts, any language; isolated slots, exactly-once answers | **yes**, once per distinct text |
 | `audit/identity.py` | Every identifier a person ever had, from `user_identities.csv` + `user_audit_log.csv` | no |
 | `audit/accounts.py` | Link each request to its account record (direct → window + status → timing → unresolved tie) | no |
 | `audit/timing.py` | Learn the worker's per-action timing grid from directly evidenced links | no |
@@ -116,16 +116,25 @@ steps, what is uncertain, and the verification result.
 
 ## Safety and failure handling
 
-- Untrusted inputs: request texts and artifacts are data. The model only classifies or extracts into a fixed
-  JSON schema; it never chooses steps. Prompt-injection text in a request can at most change one boolean,
-  which is audited against the activity log (10 non-deletion requests = 10 intake events).
-- Model failures: JSON validated with pydantic; one repair retry with the validation error; then the
-  fallback model (`claude-opus-5-5`); refusals and network errors are caught. If both fail, intent defaults
-  to "audit the deletion" (the conservative choice) and the artifact is skipped; the run never crashes.
-- Every model answer is cached by a hash of (prompt version, model, input), so reruns are free and identical.
-- Secrets come from the environment / `.env` only; nothing is logged or committed.
-- `validate.py` enforces the output contract (sorting, numbering, allowed values, phase order, citations,
-  no evidence after `audit_at`) before packaging.
+- **The model describes, code decides.** The model only fills fixed JSON schemas (intent; facts read from an
+  artifact). It never chooses steps, statuses or citations.
+- **Isolation of untrusted text.** Each request text sits in its own escaped `<request id=N>` slot, and the
+  model is told the content is customer data, never instructions, so one text cannot steer another.
+- **Exactly once.** The intent answer must cover every slot exactly once; a missing or duplicated answer is
+  re-asked for that text alone, and only then does the safe default ("audit the deletion") apply.
+- **Independent cross-check.** Every intent is compared with the workflow's own intake record; each of the
+  10 non-deletion decisions is confirmed by its own intake event, and any disagreement is flagged in
+  verification (demonstrated: with the model unavailable, all 10 were flagged).
+- **Labels must fit.** A category label (from a file or from the vision model) is accepted only if it is
+  valid for the record's system; otherwise code decides.
+- **Verification before writing.** Stage 5 checks every answer against the output contract and checks that
+  each citation actually mentions its record.
+- **Failures are contained.** JSON validated with pydantic, one repair retry, then the fallback model
+  (`claude-opus-5-5`); refusals and network errors are caught; a malformed evidence file is skipped and
+  reported. The run never crashes.
+- **Reproducible.** Every model answer is cached by a hash of (prompt version, model, input); output is
+  identical across Python hash seeds; `verify.py --fresh` reproduces `output.csv` from an empty cache.
+- **Secrets** come from the environment / `.env` only; nothing is logged or committed.
 
 ## Results
 

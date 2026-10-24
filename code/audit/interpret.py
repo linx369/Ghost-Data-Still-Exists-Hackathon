@@ -20,6 +20,24 @@ PII_FIELDS = ("email", "phone", "email_hash", "full_name", "name", "requester_na
               "customer_reference", "user_id")
 
 
+# Which policy categories a record of each system can be; anything else is decided by code below.
+VALID_LABELS = {
+    "account_service": {"USER_PROFILE", "SECONDARY_IDENTIFIER"},
+    "search_service": {"SEARCH_INDEX_ENTRY"},
+    "support_platform": {"SUPPORT_MESSAGE", "SUPPORT_ATTACHMENT"},
+    "analytics_platform": {"ANALYTICS_PROFILE", "PRODUCT_TELEMETRY", "MARKETING_PROFILE"},
+    "marketing_platform": {"MARKETING_PROFILE"},
+    "export_service": {"USER_EXPORT"},
+    "backup_service": {"BACKUP_ARCHIVE"},
+    "security_service": {"SECURITY_AUDIT_LOG"},
+    "identity_service": {"ACCOUNT_TOMBSTONE"},
+    "object_storage": {"SUPPORT_ATTACHMENT", "USER_EXPORT"},
+    "legal_service": {"LEGAL_HOLD_RECORD"},
+    "cache_service": {"CACHE_ENTRY"},
+    "email_delivery_service": {"EMAIL_DELIVERY_LOG"},
+}
+
+
 def _truthy(v) -> bool:
     return (str(v).lower() in {"true", "1", "yes"}) if not isinstance(v, bool) else v
 
@@ -40,7 +58,7 @@ def category(o: Observation) -> str:
     if sysid == "support_platform" and str(a.get("_artifact", "")).endswith(".pdf"):
         return "SUPPORT_ATTACHMENT"  # a document held by support is an attachment, whatever its label
     rt = str(a.get("record_type", "")).upper()
-    if rt and rt not in ("DATA_FLOW",):
+    if rt and rt in VALID_LABELS.get(sysid, ()):  # a label (from a file or the vision model) must fit the system
         return rt
     ev = str(a.get("event", ""))
     if sysid == "account_service":

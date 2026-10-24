@@ -87,7 +87,7 @@ def main() -> int:
 
         traces = [json.loads(line) for line in open(tmp / "trace.jsonl", encoding="utf-8")]
         flagged = sum(len(t.get("verification", [])) for t in traces)
-        checks.append(("In-pipeline verification (contract + grounding) of every answer", flagged == 0,
+        checks.append(("In-pipeline verification of every answer (contract, grounding, intake cross-check)", flagged == 0,
                        f"{flagged} problems"))
         if a.fresh:
             cache = tmp / "empty_cache"

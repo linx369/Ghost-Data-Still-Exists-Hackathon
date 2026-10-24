@@ -1,0 +1,116 @@
+{
+ "model": "claude-fable-5-1",
+ "parsed": {
+  "items": [
+   {
+    "id": 0,
+    "request_type": "DELETION",
+    "authorizes_deletion": true,
+    "language": "en",
+    "reason": "Explicit request for permanent account deletion with confirmation."
+   },
+   {
+    "id": 1,
+    "request_type": "DELETION",
+    "authorizes_deletion": true,
+    "language": "en",
+    "reason": "Explicit request for permanent account deletion with confirmation."
+   },
+   {
+    "id": 2,
+    "request_type": "DELETION",
+    "authorizes_deletion": true,
+    "language": "en",
+    "reason": "Explicit request for permanent account deletion under deletion procedure."
+   },
+   {
+    "id": 3,
+    "request_type": "DELETION",
+    "authorizes_deletion": true,
+    "language": "en",
+    "reason": "Explicit request for permanent account deletion, wants confirmation."
+   },
+   {
+    "id": 4,
+    "request_type": "DELETION",
+    "authorizes_deletion": true,
+    "language": "en",
+    "reason": "Explicit request for permanent account deletion with confirmation."
+   },
+   {
+    "id": 5,
+    "request_type": "DELETION",
+    "authorizes_deletion": true,
+    "language": "en",
+    "reason": "Explicit request for permanent account deletion, confirm when complete."
+   },
+   {
+    "id": 6,
+    "request_type": "DELETION",
+    "authorizes_deletion": true,
+    "language": "en",
+    "reason": "Explicit request for permanent account deletion, open to verification."
+   },
+   {
+    "id": 7,
+    "request_type": "DELETION",
+    "authorizes_deletion": true,
+    "language": "en",
+    "reason": "Explicit request for permanent account deletion of eligible data."
+   },
+   {
+    "id": 8,
+    "request_type": "DELETION",
+    "authorizes_deletion": true,
+    "language": "en",
+    "reason": "Explicit request for permanent account deletion of eligible data."
+   },
+   {
+    "id": 9,
+    "request_type": "DELETION",
+    "authorizes_deletion": true,
+    "language": "en",
+    "reason": "Explicit request for permanent account deletion with confirmation."
+   },
+   {
+    "id": 10,
+    "request_type": "DELETION",
+    "authorizes_deletion": true,
+    "language": "pt",
+    "reason": "Requests permanent deletion of account linked to email."
+   },
+   {
+    "id": 11,
+    "request_type": "DELETION",
+    "authorizes_deletion": true,
+    "language": "es",
+    "reason": "Requests permanent deletion of account linked to email."
+   },
+   {
+    "id": 12,
+    "request_type": "CORRECTION",
+    "authorizes_deletion": false,
+    "language": "en",
+    "reason": "Phone number update; explicitly wants account kept active."
+   },
+   {
+    "id": 13,
+    "request_type": "DELETION",
+    "authorizes_deletion": true,
+    "language": "ja",
+    "reason": "Requests complete deletion of account linked to email."
+   },
+   {
+    "id": 14,
+    "request_type": "DELETION",
+    "authorizes_deletion": true,
+    "language": "ko",
+    "reason": "Requests permanent deletion of account linked to email."
+   }
+  ]
+ },
+ "usage": {
+  "input": 1523,
+  "output": 936
+ }
+}

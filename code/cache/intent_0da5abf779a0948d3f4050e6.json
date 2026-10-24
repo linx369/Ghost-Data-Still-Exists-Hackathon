@@ -1,0 +1,291 @@
+{
+ "model": "claude-fable-5-1",
+ "parsed": {
+  "items": [
+   {
+    "id": 0,
+    "request_type": "DELETION",
+    "authorizes_deletion": true,
+    "language": "en",
+    "reason": "Asks to erase the account linked to the email address."
+   },
+   {
+    "id": 1,
+    "request_type": "DELETION",
+    "authorizes_deletion": true,
+    "language": "en",
+    "reason": "Asks to erase the account linked to the email address."
+   },
+   {
+    "id": 2,
+    "request_type": "DELETION",
+    "authorizes_deletion": true,
+    "language": "en",
+    "reason": "Asks to erase the account linked to the email address."
+   },
+   {
+    "id": 3,
+    "request_type": "DELETION",
+    "authorizes_deletion": true,
+    "language": "en",
+    "reason": "Asks to erase the account linked to the email address."
+   },
+   {
+    "id": 4,
+    "request_type": "DELETION",
+    "authorizes_deletion": true,
+    "language": "en",
+    "reason": "Asks to erase the account across systems under deletion policy."
+   },
+   {
+    "id": 5,
+    "request_type": "DELETION",
+    "authorizes_deletion": true,
+    "language": "en",
+    "reason": "Asks to erase the account across systems under deletion policy."
+   },
+   {
+    "id": 6,
+    "request_type": "DELETION",
+    "authorizes_deletion": true,
+    "language": "en",
+    "reason": "Asks to erase the account across systems under deletion policy."
+   },
+   {
+    "id": 7,
+    "request_type": "DELETION",
+    "authorizes_deletion": true,
+    "language": "en",
+    "reason": "Asks to erase the account across systems under deletion policy."
+   },
+   {
+    "id": 8,
+    "request_type": "DELETION",
+    "authorizes_deletion": true,
+    "language": "en",
+    "reason": "Asks to erase the account and confirm completion."
+   },
+   {
+    "id": 9,
+    "request_type": "DELETION",
+    "authorizes_deletion": true,
+    "language": "en",
+    "reason": "Asks to erase the account and confirm completion."
+   },
+   {
+    "id": 10,
+    "request_type": "DELETION",
+    "authorizes_deletion": true,
+    "language": "en",
+    "reason": "Asks to erase the account with normal identity review."
+   },
+   {
+    "id": 11,
+    "request_type": "DELETION",
+    "authorizes_deletion": true,
+    "language": "en",
+    "reason": "Asks to erase the account and relevant records."
+   },
+   {
+    "id": 12,
+    "request_type": "DELETION",
+    "authorizes_deletion": true,
+    "language": "en",
+    "reason": "Asks to erase the account and relevant records."
+   },
+   {
+    "id": 13,
+    "request_type": "DELETION",
+    "authorizes_deletion": true,
+    "language": "en",
+    "reason": "Asks to erase the account following deletion requirements."
+   },
+   {
+    "id": 14,
+    "request_type": "DELETION",
+    "authorizes_deletion": true,
+    "language": "en",
+    "reason": "Asks to erase the account following deletion requirements."
+   },
+   {
+    "id": 15,
+    "request_type": "DELETION",
+    "authorizes_deletion": true,
+    "language": "en",
+    "reason": "Asks to erase the account following deletion requirements."
+   },
+   {
+    "id": 16,
+    "request_type": "DELETION",
+    "authorizes_deletion": true,
+    "language": "en",
+    "reason": "Asks to erase the account including copies in scope."
+   },
+   {
+    "id": 17,
+    "request_type": "DELETION",
+    "authorizes_deletion": true,
+    "language": "en",
+    "reason": "Asks to erase the account including copies in scope."
+   },
+   {
+    "id": 18,
+    "request_type": "DELETION",
+    "authorizes_deletion": true,
+    "language": "en",
+    "reason": "Asks to erase the account including copies in scope."
+   },
+   {
+    "id": 19,
+    "request_type": "DELETION",
+    "authorizes_deletion": true,
+    "language": "en",
+    "reason": "Asks to erase the account and linked identifier data."
+   },
+   {
+    "id": 20,
+    "request_type": "DELETION",
+    "authorizes_deletion": true,
+    "language": "en",
+    "reason": "Asks to erase the account and linked identifier data."
+   },
+   {
+    "id": 21,
+    "request_type": "DELETION",
+    "authorizes_deletion": true,
+    "language": "en",
+    "reason": "Asks to erase the account and associated records."
+   },
+   {
+    "id": 22,
+    "request_type": "DELETION",
+    "authorizes_deletion": true,
+    "language": "en",
+    "reason": "Asks to erase the account and associated records."
+   },
+   {
+    "id": 23,
+    "request_type": "DELETION",
+    "authorizes_deletion": true,
+    "language": "en",
+    "reason": "Asks to erase account under standard deletion procedure."
+   },
+   {
+    "id": 24,
+    "request_type": "DELETION",
+    "authorizes_deletion": true,
+    "language": "en",
+    "reason": "Asks to erase account under standard deletion procedure."
+   },
+   {
+    "id": 25,
+    "request_type": "DELETION",
+    "authorizes_deletion": true,
+    "language": "en",
+    "reason": "Asks to erase account under standard deletion procedure."
+   },
+   {
+    "id": 26,
+    "request_type": "DELETION",
+    "authorizes_deletion": true,
+    "language": "en",
+    "reason": "Asks to erase account under standard deletion procedure."
+   },
+   {
+    "id": 27,
+    "request_type": "DELETION",
+    "authorizes_deletion": true,
+    "language": "en",
+    "reason": "Asks to erase account under standard deletion procedure."
+   },
+   {
+    "id": 28,
+    "request_type": "DELETION",
+    "authorizes_deletion": true,
+    "language": "en",
+    "reason": "Asks to erase the account and review connected identifiers."
+   },
+   {
+    "id": 29,
+    "request_type": "DELETION",
+    "authorizes_deletion": true,
+    "language": "en",
+    "reason": "Asks to erase the account and eligible data."
+   },
+   {
+    "id": 30,
+    "request_type": "DELETION",
+    "authorizes_deletion": true,
+    "language": "en",
+    "reason": "Asks to erase the account and eligible data."
+   },
+   {
+    "id": 31,
+    "request_type": "DELETION",
+    "authorizes_deletion": true,
+    "language": "en",
+    "reason": "Asks to erase the account and eligible data."
+   },
+   {
+    "id": 32,
+    "request_type": "DELETION",
+    "authorizes_deletion": true,
+    "language": "en",
+    "reason": "Asks to erase the account and eligible data."
+   },
+   {
+    "id": 33,
+    "request_type": "DELETION",
+    "authorizes_deletion": true,
+    "language": "en",
+    "reason": "Asks to erase the account and eligible data."
+   },
+   {
+    "id": 34,
+    "request_type": "DELETION",
+    "authorizes_deletion": true,
+    "language": "en",
+    "reason": "Asks to erase the account and eligible data."
+   },
+   {
+    "id": 35,
+    "request_type": "DELETION",
+    "authorizes_deletion": true,
+    "language": "en",
+    "reason": "Asks to permanently delete the account."
+   },
+   {
+    "id": 36,
+    "request_type": "DELETION",
+    "authorizes_deletion": true,
+    "language": "en",
+    "reason": "Asks to permanently delete the account."
+   },
+   {
+    "id": 37,
+    "request_type": "DELETION",
+    "authorizes_deletion": true,
+    "language": "en",
+    "reason": "Asks to permanently delete the account."
+   },
+   {
+    "id": 38,
+    "request_type": "DELETION",
+    "authorizes_deletion": true,
+    "language": "en",
+    "reason": "Asks to permanently delete the account."
+   },
+   {
+    "id": 39,
+    "request_type": "DELETION",
+    "authorizes_deletion": true,
+    "language": "en",
+    "reason": "Asks to permanently delete the account."
+   }
+  ]
+ },
+ "usage": {
+  "input": 2853,
+  "output": 2332
+ }
+}

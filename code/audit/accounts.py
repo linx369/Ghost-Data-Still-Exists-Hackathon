@@ -53,6 +53,7 @@ class AccountLinker:
         with open(dataset / "system_activity.csv", encoding="utf-8") as f:
             acts = list(csv.DictReader(f))
         self.deletes = [a for a in acts if a["event_type"] == "DELETE_RECORD" and a["target_system"] == "account_service"]
+        self.intake = [a for a in acts if a["event_type"] == "CLASSIFY_REQUEST" and "non-deletion" in a["details"]]
         worker = [a for a in acts if a["source_system"] == "deletion_worker" and a["target_system"] != "account_service"]
         self.timing = TimingModel(self.deletes, worker, owners)
         actions_of_user: dict[str, list[dict]] = defaultdict(list)  # worker actions on resources a user owns
