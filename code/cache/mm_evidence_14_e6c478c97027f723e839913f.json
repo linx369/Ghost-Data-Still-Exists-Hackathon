@@ -1,0 +1,39 @@
+{
+ "model": "claude-fable-5-1",
+ "parsed": {
+  "records": [
+   {
+    "resource_id": "data_flow_1121",
+    "record_type": "DATA_FLOW",
+    "user_ids": [],
+    "emails": [
+     "jain.aditi@gmail.com"
+    ],
+    "phones": [],
+    "names": [],
+    "state": "ENABLED",
+    "shows_direct_identifiers": true,
+    "observed_at": "2026-08-07T07:59:42Z",
+    "note": "Healthy, Continuous sync to customer_analytics_warehouse, selector jain.aditi@gmail.com, 1,284 events/hour, last response 200 OK"
+   },
+   {
+    "resource_id": "data_flow_9846",
+    "record_type": "DATA_FLOW",
+    "user_ids": [],
+    "emails": [
+     "lucia-torres@gmail.com"
+    ],
+    "phones": [],
+    "names": [],
+    "state": "ENABLED",
+    "shows_direct_identifiers": true,
+    "observed_at": "2026-08-07T07:59:36Z",
+    "note": "Continuous mode to customer_analytics_warehouse, selector lucia-torres@gmail.com, 842 events/hour, last contact 07:59:36"
+   }
+  ]
+ },
+ "usage": {
+  "input": 3430,
+  "output": 641
+ }
+}

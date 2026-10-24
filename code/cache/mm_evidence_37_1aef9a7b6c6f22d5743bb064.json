@@ -1,0 +1,95 @@
+{
+ "model": "claude-fable-5-1",
+ "parsed": {
+  "records": [
+   {
+    "resource_id": "audit_record_003",
+    "record_type": "SECURITY_AUDIT_LOG",
+    "user_ids": [
+     "user_03"
+    ],
+    "emails": [],
+    "phones": [],
+    "names": [],
+    "state": "PRESENT",
+    "shows_direct_identifiers": false,
+    "observed_at": "2026-08-25T04:03:00Z",
+    "note": "Account closure recorded; actor automated account workflow; signature Valid; journal 2026-Q3; fingerprint 8f0c...31ad"
+   },
+   {
+    "resource_id": "audit_record_002",
+    "record_type": "SECURITY_AUDIT_LOG",
+    "user_ids": [
+     "user_03"
+    ],
+    "emails": [],
+    "phones": [],
+    "names": [],
+    "state": "PRESENT",
+    "shows_direct_identifiers": false,
+    "observed_at": "2026-08-25T03:21:00Z",
+    "note": "Session revoked; Session management; actor Security system; integrity Valid"
+   },
+   {
+    "resource_id": "audit_record_001",
+    "record_type": "SECURITY_AUDIT_LOG",
+    "user_ids": [
+     "user_03"
+    ],
+    "emails": [],
+    "phones": [],
+    "names": [],
+    "state": "PRESENT",
+    "shows_direct_identifiers": false,
+    "observed_at": "2026-08-24T16:14:00Z",
+    "note": "Recovery challenge completed; Authentication; actor User (self); integrity Valid"
+   },
+   {
+    "resource_id": "audit_record_006",
+    "record_type": "SECURITY_AUDIT_LOG",
+    "user_ids": [
+     "user_03"
+    ],
+    "emails": [],
+    "phones": [],
+    "names": [],
+    "state": "PRESENT",
+    "shows_direct_identifiers": false,
+    "observed_at": "2026-08-22T11:27:00Z",
+    "note": "Email change confirmed; Profile update; actor User (self); integrity Valid"
+   },
+   {
+    "resource_id": "audit_record_005",
+    "record_type": "SECURITY_AUDIT_LOG",
+    "user_ids": [
+     "user_03"
+    ],
+    "emails": [],
+    "phones": [],
+    "names": [],
+    "state": "PRESENT",
+    "shows_direct_identifiers": false,
+    "observed_at": "2026-08-20T09:42:00Z",
+    "note": "Login from new device; Authentication; actor User (self); integrity Valid"
+   },
+   {
+    "resource_id": "audit_record_004",
+    "record_type": "SECURITY_AUDIT_LOG",
+    "user_ids": [
+     "user_03"
+    ],
+    "emails": [],
+    "phones": [],
+    "names": [],
+    "state": "PRESENT",
+    "shows_direct_identifiers": false,
+    "observed_at": "2026-08-18T14:05:00Z",
+    "note": "Password changed; Authentication; actor User (self); integrity Valid"
+   }
+  ]
+ },
+ "usage": {
+  "input": 3302,
+  "output": 1130
+ }
+}

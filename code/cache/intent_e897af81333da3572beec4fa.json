@@ -1,0 +1,291 @@
+{
+ "model": "claude-fable-5-1",
+ "parsed": {
+  "items": [
+   {
+    "id": 0,
+    "request_type": "DELETION",
+    "authorizes_deletion": true,
+    "language": "en",
+    "reason": "Asks to close account and delete personal data"
+   },
+   {
+    "id": 1,
+    "request_type": "DELETION",
+    "authorizes_deletion": true,
+    "language": "en",
+    "reason": "Asks to close account and delete personal data"
+   },
+   {
+    "id": 2,
+    "request_type": "DELETION",
+    "authorizes_deletion": true,
+    "language": "en",
+    "reason": "Asks to close account and delete personal data"
+   },
+   {
+    "id": 3,
+    "request_type": "DELETION",
+    "authorizes_deletion": true,
+    "language": "en",
+    "reason": "Asks to close account and delete personal data"
+   },
+   {
+    "id": 4,
+    "request_type": "DELETION",
+    "authorizes_deletion": true,
+    "language": "en",
+    "reason": "Asks to close account and delete personal data"
+   },
+   {
+    "id": 5,
+    "request_type": "DELETION",
+    "authorizes_deletion": true,
+    "language": "en",
+    "reason": "Asks to close account and delete personal data"
+   },
+   {
+    "id": 6,
+    "request_type": "DELETION",
+    "authorizes_deletion": true,
+    "language": "en",
+    "reason": "Asks to close account and delete personal data"
+   },
+   {
+    "id": 7,
+    "request_type": "DELETION",
+    "authorizes_deletion": true,
+    "language": "en",
+    "reason": "Asks to close account and delete personal data"
+   },
+   {
+    "id": 8,
+    "request_type": "DELETION",
+    "authorizes_deletion": true,
+    "language": "en",
+    "reason": "Asks to close account and delete personal data"
+   },
+   {
+    "id": 9,
+    "request_type": "DELETION",
+    "authorizes_deletion": true,
+    "language": "en",
+    "reason": "Asks to close account and delete personal data"
+   },
+   {
+    "id": 10,
+    "request_type": "DELETION",
+    "authorizes_deletion": true,
+    "language": "en",
+    "reason": "Asks to close account and delete personal data"
+   },
+   {
+    "id": 11,
+    "request_type": "DELETION",
+    "authorizes_deletion": true,
+    "language": "en",
+    "reason": "Asks to close account and delete personal data"
+   },
+   {
+    "id": 12,
+    "request_type": "DELETION",
+    "authorizes_deletion": true,
+    "language": "en",
+    "reason": "Asks to close account and delete personal data"
+   },
+   {
+    "id": 13,
+    "request_type": "DELETION",
+    "authorizes_deletion": true,
+    "language": "en",
+    "reason": "Asks to close account and delete personal data"
+   },
+   {
+    "id": 14,
+    "request_type": "DELETION",
+    "authorizes_deletion": true,
+    "language": "en",
+    "reason": "Asks to permanently close account; backups must not restore profile"
+   },
+   {
+    "id": 15,
+    "request_type": "DELETION_FOLLOW_UP",
+    "authorizes_deletion": true,
+    "language": "en",
+    "reason": "Prior deletion incomplete; asks to finish deletion"
+   },
+   {
+    "id": 16,
+    "request_type": "DELETION_FOLLOW_UP",
+    "authorizes_deletion": true,
+    "language": "en",
+    "reason": "Prior deletion left traces; asks to remove them"
+   },
+   {
+    "id": 17,
+    "request_type": "DELETION",
+    "authorizes_deletion": true,
+    "language": "en",
+    "reason": "Asks for account to be erased"
+   },
+   {
+    "id": 18,
+    "request_type": "DELETION",
+    "authorizes_deletion": true,
+    "language": "en",
+    "reason": "Asks for account to be erased"
+   },
+   {
+    "id": 19,
+    "request_type": "DELETION",
+    "authorizes_deletion": true,
+    "language": "en",
+    "reason": "Asks for account to be erased"
+   },
+   {
+    "id": 20,
+    "request_type": "DELETION",
+    "authorizes_deletion": true,
+    "language": "en",
+    "reason": "Asks for account to be erased"
+   },
+   {
+    "id": 21,
+    "request_type": "DELETION",
+    "authorizes_deletion": true,
+    "language": "en",
+    "reason": "Asks for account to be erased"
+   },
+   {
+    "id": 22,
+    "request_type": "DELETION",
+    "authorizes_deletion": true,
+    "language": "en",
+    "reason": "Asks for account to be erased"
+   },
+   {
+    "id": 23,
+    "request_type": "DELETION",
+    "authorizes_deletion": true,
+    "language": "en",
+    "reason": "Asks for account to be erased"
+   },
+   {
+    "id": 24,
+    "request_type": "DELETION",
+    "authorizes_deletion": true,
+    "language": "en",
+    "reason": "Asks for account to be erased"
+   },
+   {
+    "id": 25,
+    "request_type": "DELETION",
+    "authorizes_deletion": true,
+    "language": "en",
+    "reason": "Asks for account to be erased"
+   },
+   {
+    "id": 26,
+    "request_type": "DELETION",
+    "authorizes_deletion": true,
+    "language": "en",
+    "reason": "Asks for account to be erased"
+   },
+   {
+    "id": 27,
+    "request_type": "DELETION",
+    "authorizes_deletion": true,
+    "language": "en",
+    "reason": "Asks for account to be erased"
+   },
+   {
+    "id": 28,
+    "request_type": "DELETION",
+    "authorizes_deletion": true,
+    "language": "en",
+    "reason": "Asks for account to be erased"
+   },
+   {
+    "id": 29,
+    "request_type": "DELETION",
+    "authorizes_deletion": true,
+    "language": "en",
+    "reason": "Asks for account to be erased"
+   },
+   {
+    "id": 30,
+    "request_type": "DELETION",
+    "authorizes_deletion": true,
+    "language": "en",
+    "reason": "Asks for account to be erased"
+   },
+   {
+    "id": 31,
+    "request_type": "DELETION",
+    "authorizes_deletion": true,
+    "language": "en",
+    "reason": "Asks for account to be erased"
+   },
+   {
+    "id": 32,
+    "request_type": "DELETION",
+    "authorizes_deletion": true,
+    "language": "en",
+    "reason": "Asks for account to be erased"
+   },
+   {
+    "id": 33,
+    "request_type": "DELETION",
+    "authorizes_deletion": true,
+    "language": "en",
+    "reason": "Asks for account to be erased"
+   },
+   {
+    "id": 34,
+    "request_type": "DELETION",
+    "authorizes_deletion": true,
+    "language": "en",
+    "reason": "Asks for account to be erased"
+   },
+   {
+    "id": 35,
+    "request_type": "DELETION",
+    "authorizes_deletion": true,
+    "language": "en",
+    "reason": "Asks for account to be erased"
+   },
+   {
+    "id": 36,
+    "request_type": "DELETION",
+    "authorizes_deletion": true,
+    "language": "en",
+    "reason": "Asks for account to be erased"
+   },
+   {
+    "id": 37,
+    "request_type": "DELETION",
+    "authorizes_deletion": true,
+    "language": "en",
+    "reason": "Asks for account to be erased"
+   },
+   {
+    "id": 38,
+    "request_type": "DELETION",
+    "authorizes_deletion": true,
+    "language": "en",
+    "reason": "Asks for account to be erased"
+   },
+   {
+    "id": 39,
+    "request_type": "DELETION",
+    "authorizes_deletion": true,
+    "language": "en",
+    "reason": "Asks for account to be erased"
+   }
+  ]
+ },
+ "usage": {
+  "input": 2513,
+  "output": 2057
+ }
+}

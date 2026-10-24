@@ -1,0 +1,291 @@
+{
+ "model": "claude-fable-5-1",
+ "parsed": {
+  "items": [
+   {
+    "id": 0,
+    "request_type": "DELETION",
+    "authorizes_deletion": true,
+    "language": "en",
+    "reason": "Asks to permanently delete account and confirm completion."
+   },
+   {
+    "id": 1,
+    "request_type": "DELETION",
+    "authorizes_deletion": true,
+    "language": "en",
+    "reason": "Asks to permanently delete account including connected identifiers."
+   },
+   {
+    "id": 2,
+    "request_type": "DELETION",
+    "authorizes_deletion": true,
+    "language": "en",
+    "reason": "Asks to permanently delete account including connected identifiers."
+   },
+   {
+    "id": 3,
+    "request_type": "DELETION",
+    "authorizes_deletion": true,
+    "language": "en",
+    "reason": "Asks to permanently delete account and confirm result."
+   },
+   {
+    "id": 4,
+    "request_type": "DELETION",
+    "authorizes_deletion": true,
+    "language": "en",
+    "reason": "Asks to permanently delete account and eligible data."
+   },
+   {
+    "id": 5,
+    "request_type": "DELETION",
+    "authorizes_deletion": true,
+    "language": "en",
+    "reason": "Requests permanent account deletion with confirmation."
+   },
+   {
+    "id": 6,
+    "request_type": "DELETION",
+    "authorizes_deletion": true,
+    "language": "en",
+    "reason": "Requests permanent account deletion with confirmation."
+   },
+   {
+    "id": 7,
+    "request_type": "DELETION",
+    "authorizes_deletion": true,
+    "language": "en",
+    "reason": "Requests permanent account deletion with completion notice."
+   },
+   {
+    "id": 8,
+    "request_type": "DELETION",
+    "authorizes_deletion": true,
+    "language": "en",
+    "reason": "Requests permanent account deletion across systems."
+   },
+   {
+    "id": 9,
+    "request_type": "DELETION",
+    "authorizes_deletion": true,
+    "language": "en",
+    "reason": "Requests permanent account deletion and record check."
+   },
+   {
+    "id": 10,
+    "request_type": "DELETION",
+    "authorizes_deletion": true,
+    "language": "en",
+    "reason": "Requests permanent account deletion and record check."
+   },
+   {
+    "id": 11,
+    "request_type": "DELETION",
+    "authorizes_deletion": true,
+    "language": "en",
+    "reason": "Requests permanent account deletion, open to verification."
+   },
+   {
+    "id": 12,
+    "request_type": "DELETION",
+    "authorizes_deletion": true,
+    "language": "en",
+    "reason": "Requests permanent account deletion and review notice."
+   },
+   {
+    "id": 13,
+    "request_type": "DELETION",
+    "authorizes_deletion": true,
+    "language": "en",
+    "reason": "Requests permanent account deletion with confirmation."
+   },
+   {
+    "id": 14,
+    "request_type": "DELETION",
+    "authorizes_deletion": true,
+    "language": "en",
+    "reason": "Requests permanent account deletion with identity review."
+   },
+   {
+    "id": 15,
+    "request_type": "DELETION",
+    "authorizes_deletion": true,
+    "language": "en",
+    "reason": "Requests permanent account deletion with identity review."
+   },
+   {
+    "id": 16,
+    "request_type": "DELETION",
+    "authorizes_deletion": true,
+    "language": "en",
+    "reason": "Requests permanent account deletion of relevant records."
+   },
+   {
+    "id": 17,
+    "request_type": "DELETION",
+    "authorizes_deletion": true,
+    "language": "en",
+    "reason": "Requests permanent account deletion of relevant records."
+   },
+   {
+    "id": 18,
+    "request_type": "DELETION",
+    "authorizes_deletion": true,
+    "language": "en",
+    "reason": "Requests permanent account deletion per retention rules."
+   },
+   {
+    "id": 19,
+    "request_type": "DELETION",
+    "authorizes_deletion": true,
+    "language": "en",
+    "reason": "Requests permanent account deletion per retention rules."
+   },
+   {
+    "id": 20,
+    "request_type": "DELETION",
+    "authorizes_deletion": true,
+    "language": "en",
+    "reason": "Requests permanent account deletion per retention rules."
+   },
+   {
+    "id": 21,
+    "request_type": "DELETION",
+    "authorizes_deletion": true,
+    "language": "en",
+    "reason": "Requests permanent account deletion per retention rules."
+   },
+   {
+    "id": 22,
+    "request_type": "DELETION",
+    "authorizes_deletion": true,
+    "language": "en",
+    "reason": "Requests permanent account deletion including copies."
+   },
+   {
+    "id": 23,
+    "request_type": "DELETION",
+    "authorizes_deletion": true,
+    "language": "en",
+    "reason": "Requests permanent account deletion including copies."
+   },
+   {
+    "id": 24,
+    "request_type": "DELETION",
+    "authorizes_deletion": true,
+    "language": "en",
+    "reason": "Requests permanent account deletion including linked identifiers."
+   },
+   {
+    "id": 25,
+    "request_type": "DELETION",
+    "authorizes_deletion": true,
+    "language": "en",
+    "reason": "Requests permanent account deletion of associated records."
+   },
+   {
+    "id": 26,
+    "request_type": "DELETION",
+    "authorizes_deletion": true,
+    "language": "en",
+    "reason": "Requests permanent account deletion under standard procedure."
+   },
+   {
+    "id": 27,
+    "request_type": "DELETION",
+    "authorizes_deletion": true,
+    "language": "en",
+    "reason": "Requests permanent account deletion of eligible data."
+   },
+   {
+    "id": 28,
+    "request_type": "DELETION",
+    "authorizes_deletion": true,
+    "language": "en",
+    "reason": "Requests permanent account deletion of eligible data."
+   },
+   {
+    "id": 29,
+    "request_type": "DELETION",
+    "authorizes_deletion": true,
+    "language": "en",
+    "reason": "Requests permanent account deletion of eligible data."
+   },
+   {
+    "id": 30,
+    "request_type": "DELETION",
+    "authorizes_deletion": true,
+    "language": "en",
+    "reason": "Requests permanent account deletion of eligible data."
+   },
+   {
+    "id": 31,
+    "request_type": "DELETION",
+    "authorizes_deletion": true,
+    "language": "en",
+    "reason": "Requests permanent account deletion of eligible data."
+   },
+   {
+    "id": 32,
+    "request_type": "MARKETING_OPT_OUT",
+    "authorizes_deletion": false,
+    "language": "en",
+    "reason": "Marketing opt-out only; wants to keep account messages."
+   },
+   {
+    "id": 33,
+    "request_type": "DELETION",
+    "authorizes_deletion": true,
+    "language": "en",
+    "reason": "Asks to remove profile and personal details from support history."
+   },
+   {
+    "id": 34,
+    "request_type": "MARKETING_OPT_OUT",
+    "authorizes_deletion": false,
+    "language": "en",
+    "reason": "Stop promotional emails; explicitly not requesting deletion."
+   },
+   {
+    "id": 35,
+    "request_type": "DELETION",
+    "authorizes_deletion": true,
+    "language": "en",
+    "reason": "Explicit request for permanent account deletion."
+   },
+   {
+    "id": 36,
+    "request_type": "DELETION",
+    "authorizes_deletion": true,
+    "language": "en",
+    "reason": "Explicit request for permanent account deletion."
+   },
+   {
+    "id": 37,
+    "request_type": "DELETION",
+    "authorizes_deletion": true,
+    "language": "en",
+    "reason": "Explicit request for permanent account deletion."
+   },
+   {
+    "id": 38,
+    "request_type": "DELETION",
+    "authorizes_deletion": true,
+    "language": "en",
+    "reason": "Explicit request for permanent account deletion across systems."
+   },
+   {
+    "id": 39,
+    "request_type": "DELETION",
+    "authorizes_deletion": true,
+    "language": "en",
+    "reason": "Explicit request for permanent account deletion across systems."
+   }
+  ]
+ },
+ "usage": {
+  "input": 2580,
+  "output": 2386
+ }
+}

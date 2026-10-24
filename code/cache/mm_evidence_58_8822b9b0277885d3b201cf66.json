@@ -1,0 +1,29 @@
+{
+ "model": "claude-fable-5-1",
+ "parsed": {
+  "records": [
+   {
+    "resource_id": "support_001",
+    "record_type": "SUPPORT_ATTACHMENT",
+    "user_ids": [],
+    "emails": [
+     "priya.raman@gmail.com"
+    ],
+    "phones": [
+     "+91 98765 73142"
+    ],
+    "names": [
+     "Priya Raman"
+    ],
+    "state": "PRESENT",
+    "shows_direct_identifiers": true,
+    "observed_at": "2026-09-12T07:30:00Z",
+    "note": "Ticket CS-4827 attachment delivery_address_correction.pdf (312 KB, ap-south) shows name, email, phone, order ORD-20264827."
+   }
+  ]
+ },
+ "usage": {
+  "input": 1088,
+  "output": 577
+ }
+}

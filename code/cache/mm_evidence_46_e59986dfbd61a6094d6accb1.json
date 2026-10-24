@@ -1,0 +1,10 @@
+{
+ "model": "claude-fable-5-1",
+ "parsed": {
+  "records": []
+ },
+ "usage": {
+  "input": 3431,
+  "output": 109
+ }
+}

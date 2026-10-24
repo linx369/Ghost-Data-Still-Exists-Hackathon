@@ -1,0 +1,43 @@
+{
+ "model": "claude-fable-5-1",
+ "parsed": {
+  "records": [
+   {
+    "resource_id": "search_428",
+    "record_type": "SEARCH_INDEX_ENTRY",
+    "user_ids": [
+     "user_13"
+    ],
+    "emails": [
+     "g.silva76@gmail.com"
+    ],
+    "phones": [],
+    "names": [
+     "Gabriel Silva"
+    ],
+    "state": "PRESENT",
+    "shows_direct_identifiers": true,
+    "observed_at": "2026-09-01T06:00:14Z",
+    "note": "Indexed in customer_directory_v3 (prod-eu); indexed_at 2026-09-01T05:58:21Z; score 9.84."
+   },
+   {
+    "resource_id": "search_1874",
+    "record_type": "SEARCH_INDEX_ENTRY",
+    "user_ids": [],
+    "emails": [
+     "g.silva76.jr@gmail.com"
+    ],
+    "phones": [],
+    "names": [],
+    "state": "PRESENT",
+    "shows_direct_identifiers": true,
+    "observed_at": "2026-09-01T06:00:14Z",
+    "note": "Second hit; display name and customer reference shown as dash; last indexed 05:55:03 UTC; score 4.12."
+   }
+  ]
+ },
+ "usage": {
+  "input": 3301,
+  "output": 364
+ }
+}

@@ -1,0 +1,27 @@
+{
+ "model": "claude-fable-5-1",
+ "parsed": {
+  "records": [
+   {
+    "resource_id": "support_1034",
+    "record_type": "SUPPORT_MESSAGE",
+    "user_ids": [],
+    "emails": [
+     "kagyeman8947@fastmail.com"
+    ],
+    "phones": [],
+    "names": [
+     "Kofi Agyeman"
+    ],
+    "state": "PRESENT",
+    "shows_direct_identifiers": true,
+    "observed_at": null,
+    "note": "Ticket CS-5034 with 4 messages visible; customer name and email shown in plaintext; order ORD-20265034."
+   }
+  ]
+ },
+ "usage": {
+  "input": 3496,
+  "output": 172
+ }
+}
