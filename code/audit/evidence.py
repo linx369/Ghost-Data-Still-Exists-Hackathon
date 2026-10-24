@@ -313,18 +313,19 @@ def load_manifest(dataset: Path) -> list[dict]:
         return list(csv.DictReader(f))
 
 
+PARSERS = {".sql": parse_sql, ".json": parse_json, ".log": parse_log, ".txt": parse_text}
+SKIPPED: list[str] = []  # files that could not be read: reported, never fatal
+
+
 def load_text_evidence(dataset: Path) -> list[Observation]:
     obs: list[Observation] = []
     for row in load_manifest(dataset):
         p = dataset / row["file_path"]
-        fid, cap = row["file_id"], row["captured_at"]
-        suffix = p.suffix.lower()
-        if suffix == ".sql":
-            obs += parse_sql(p, fid, cap)
-        elif suffix == ".json":
-            obs += parse_json(p, fid, cap)
-        elif suffix == ".log":
-            obs += parse_log(p, fid, cap)
-        elif suffix == ".txt":
-            obs += parse_text(p, fid, cap)
+        parser = PARSERS.get(p.suffix.lower())
+        if parser is None:
+            continue
+        try:  # one unreadable or malformed file must not stop the audit of 518 requests
+            obs += parser(p, row["file_id"], row["captured_at"])
+        except Exception as e:  # noqa: BLE001
+            SKIPPED.append(f"{row['file_id']} ({p.name}): {type(e).__name__}: {str(e)[:120]}")
     return obs + parse_activity_links(dataset)

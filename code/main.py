@@ -17,7 +17,7 @@ ROOT = Path(__file__).resolve().parent.parent
 sys.path.insert(0, str(Path(__file__).resolve().parent))
 
 from audit.engine import Auditor  # noqa: E402
-from audit.evidence import load_text_evidence  # noqa: E402
+from audit.evidence import SKIPPED, load_text_evidence  # noqa: E402
 from audit.intent import classify  # noqa: E402
 from audit.llm import LLM, USAGE  # noqa: E402
 from audit.multimodal import load_multimodal_evidence  # noqa: E402
@@ -76,6 +76,8 @@ def main() -> None:
         sys.path.insert(0, str(ROOT / "code" / "evaluation"))
         from usage import write_usage_report
         write_usage_report(ROOT / "code" / "evaluation" / "usage_report.md", len(results), a.split, a.offline)
+    for msg in SKIPPED:
+        print("WARNING skipped evidence file:", msg)
     print(f"wrote {len(results)} rows -> {out}")
     print("model usage:", json.dumps(USAGE.as_dict()))
 

@@ -24,14 +24,24 @@ from .timing import TimingModel
 COMPAT = {"COMPLETE": "SUCCESS", "PARTIALLY_COMPLETE": "PARTIAL", "NOT_STARTED": "FAILED"}
 
 # When does the worker delete the account, relative to reported_at? Measured on the 238 test
-# requests whose account is proven by identifiers: always 75-41 min before. The hand-written
-# sample cases sit within +-15 min. A wider window pulls in the previous batch's accounts.
-WINDOWS = [(-80, -38), (-15, 15)]  # minutes relative to reported_at
+# requests whose account is proven by identifiers: always 75-41 min before. A wider window pulls
+# in the neighbouring batch's accounts. The hand-written sample cases sit within +-15 min; that
+# window overlaps the next hour's batch, so it is only consulted when the main one is empty.
+MAIN_WINDOW = (-80, -38)    # minutes relative to reported_at
+NEAR_WINDOW = (-15, 15)
+
+
+def _minutes(t: datetime, rep: datetime) -> float:
+    return (t - rep).total_seconds() / 60
 
 
 def in_window(t: datetime, rep: datetime) -> bool:
-    m = (t - rep).total_seconds() / 60
-    return any(lo <= m <= hi for lo, hi in WINDOWS)
+    return MAIN_WINDOW[0] <= _minutes(t, rep) <= MAIN_WINDOW[1]
+
+
+def window_events(events: list[dict], rep: datetime) -> list[dict]:
+    main = [a for a in events if in_window(ts(a["event_time"]), rep)]
+    return main or [a for a in events if NEAR_WINDOW[0] <= _minutes(ts(a["event_time"]), rep) <= NEAR_WINDOW[1]]
 
 
 def ts(s: str) -> datetime:
@@ -58,7 +68,7 @@ class AccountLinker:
             cid, users = q["case_id"], set(users_of.get(q["case_id"], []))
             direct = sorted(r for r, us in owners.items() if r.startswith("account_") and us & users)
             rep = ts(q["reported_at"])
-            window = [a for a in self.deletes if in_window(ts(a["event_time"]), rep)]
+            window = window_events(self.deletes, rep)
             if len(direct) == 1:
                 self.result[cid] = (direct[0], "direct")
                 taken.add(direct[0])

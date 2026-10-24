@@ -1,6 +1,6 @@
 # Token usage and cost — final full-dataset run
 
-- Generated: 2026-10-24T14:38:03+00:00 by `python code/main.py` --offline (split: `test`, 518 requests).
+- Generated: 2026-10-24T14:40:22+00:00 by `python code/main.py` --offline (split: `test`, 518 requests).
 - Provider: **Anthropic (Claude API)**. Prices used for estimates (USD per million tokens, input / output): `claude-fable-5-1` 10.00 / 50.00, `claude-opus-5-5` 4.00 / 20.00.
 - Model calls happen only for (a) reading the 11 screenshots + 4 PDFs once and (b) classifying each
   *distinct* request text once (batched 40 per call). Everything else is deterministic Python, so the
