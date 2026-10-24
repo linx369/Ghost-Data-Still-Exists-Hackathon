@@ -20,8 +20,8 @@ from audit.identity import IdentityIndex  # noqa: E402
 from audit.timing import TimingModel  # noqa: E402
 
 
-def main() -> None:
-    ds = ROOT / "dataset"
+def leave_one_out(ds: Path = ROOT / "dataset") -> Counter:
+    """Counts of outcomes when each proven account link is hidden and re-derived."""
     idx = IdentityIndex(ds)
     owners: dict[str, set[str]] = defaultdict(set)
     for o in load_text_evidence(ds):
@@ -62,7 +62,11 @@ def main() -> None:
             res["signature: tie"] += 1
         else:
             res["signature: correct" if top[0] == truth else "signature: WRONG"] += 1
-    for k, v in sorted(res.items()):
+    return res
+
+
+def main() -> None:
+    for k, v in sorted(leave_one_out().items()):
         print(f"{k:<40} {v}")
 
 

@@ -21,7 +21,8 @@ PRICES = {  # USD per million tokens (input, output)
     "claude-fable-5-1": (10.0, 50.0),
     "claude-opus-5-5": (4.0, 20.0),
 }
-CACHE_DIR = Path(__file__).resolve().parent.parent / "cache"
+# AUDIT_CACHE_DIR lets `verify.py --fresh` prove a from-scratch run gives the same output
+CACHE_DIR = Path(os.environ.get("AUDIT_CACHE_DIR", Path(__file__).resolve().parent.parent / "cache"))
 PROMPT_VERSION = "v1"
 
 

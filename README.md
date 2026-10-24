@@ -20,6 +20,14 @@ cp .env.example .env            # put your ANTHROPIC_API_KEY in .env (never comm
 python code/main.py             # 518 requests -> ./output.csv  (+ code/evaluation/usage_report.md)
 ```
 
+Verify every claim in one step (tests, sample scores, out-of-sample check, byte-for-byte reproduction of
+`output.csv`, contract), which also rewrites the measured section of the evaluation report:
+
+```bash
+python code/verify.py            # offline, ~1 min
+python code/verify.py --fresh    # also reproduces output.csv from an empty model cache (API calls)
+```
+
 Other commands:
 
 ```bash

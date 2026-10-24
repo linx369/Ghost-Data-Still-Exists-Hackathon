@@ -1,31 +1,80 @@
 # Evaluation report — Ghost Data Still Exists
 
-All numbers are reproducible:
+Every number in §1 is measured and written by one command:
 
 ```bash
-python code/main.py --split sample --offline          # -> code/evaluation/sample_predictions.csv
-python code/evaluation/main.py --pred code/evaluation/sample_predictions.csv --gold dataset/sample_output.csv --verbose
-python -m pytest code/tests -q                       # custom evaluation cases
-python code/evaluation/loo_timing.py                 # out-of-sample check of account linking (no labels)
+python code/verify.py           # tests, sample scores, leave-one-out, reproduction of output.csv, contract
+python code/verify.py --fresh   # additionally re-runs from an EMPTY model cache (API calls) and compares
 ```
 
-## 1. Metrics on the 32 labelled sample cases
+The pieces it runs can also be called alone: `python -m pytest code/tests -q`,
+`python code/main.py --split sample --offline` + `python code/evaluation/main.py --pred … --gold …`,
+`python code/evaluation/loo_timing.py`, `python code/evaluation/validate.py`.
 
-| Metric | Definition | Score |
-|---|---|---:|
-| **Case-level status accuracy** | `deletion_status` exact match | **1.000** (32/32) |
-| **Step precision** | predicted steps that exactly match a gold step (all fields except `step_no`) | **1.000** (190/190) |
-| **Step recall** | gold steps reproduced exactly | **0.984** (190/193) |
-| **Step F1** | | **0.992** |
-| Step F1 ignoring `evidence_id` | isolates citation errors | 0.992 |
-| **Sequence accuracy** | whole `steps_json` array exactly right, including order and numbering | **0.906** (29/32) |
+## 1. Measured results
 
-**Field-level accuracy** (steps aligned by position; a missing step makes every later position in that
-case count as wrong, so this is the strictest view):
+<!-- VERIFY:START -->
+_Measured by `python code/verify.py` on 2026-10-24 15:31 UTC. Everything between these markers is generated; do not edit by hand._
+
+**Checks**
+
+| Check | Result | Detail |
+|---|---|---|
+| Unit + stress tests | PASS | 15 passed in 40.91s |
+| Sample status accuracy is 1.000 | PASS | 1.000 |
+| Sample step F1 at least 0.99 (regression guard) | PASS | 0.992 |
+| Leave-one-out: no wrong account link | PASS | 0 wrong |
+| Pipeline reproduces the submitted output.csv byte for byte | PASS | identical |
+| output.csv satisfies the contract | PASS | 518 rows, 0 problems |
+
+**Sample scores (32 labelled cases)**
+
+| Metric | Score |
+|---|---:|
+| Case-level status accuracy | **1.000** (32/32) |
+| Step precision | **1.000** (190/190) |
+| Step recall | **0.984** (190/193) |
+| Step F1 | **0.992** |
+| Step F1 ignoring `evidence_id` | 0.992 |
+| Sequence accuracy (whole `steps_json` exactly right) | **0.906** (29/32) |
+
+Field-level accuracy (steps aligned by position):
 
 | phase | system_id | resource_id | operation | state | evidence_id |
 |---:|---:|---:|---:|---:|---:|
 | 0.984 | 0.959 | 0.959 | 0.959 | 0.959 | 0.979 |
+
+**Leave-one-out validation of account linking on the unlabelled test requests** (each proven
+account link is hidden and re-derived; the timing model is rebuilt without that person):
+
+| Outcome | Requests |
+|---|---:|
+| account outside window | 7 |
+| no other worker actions (tie stays) | 7 |
+| signature: correct | 21 |
+| signature: tie | 2 |
+| status match alone: correct | 208 |
+
+**Full run on the 518 requests**
+
+| Status | Requests |
+|---|---:|
+| COMPLETE | 155 |
+| INCOMPLETE | 353 |
+| NOT_APPLICABLE | 10 |
+
+| Account link | Requests |  | Anonymized-analytics link | Requests |
+|---|---:|---|---|---:|
+| `direct` | 245 |  | `timing-grid` | 111 |
+| `direct-multi` | 1 |  | `unresolved-tie` | 6 |
+| `none` | 3 |  |  |  |
+| `same-user-other-case` | 1 |  |  |  |
+| `unresolved-tie` | 23 |  |  |  |
+| `window` | 164 |  |  |  |
+| `window+signature` | 71 |  |  |  |
+
+Requests containing at least one uncertain step: **28** (listed in [`uncertainty_report.md`](uncertainty_report.md)).
+<!-- VERIFY:END -->
 
 **Remaining errors** (3 missing gold steps, 0 wrong or extra steps; status is never wrong). None is
 recoverable from participant-facing data:
@@ -53,14 +102,7 @@ requests: for every request whose account is directly evidenced, the link is hid
 is rebuilt **without that person's links**, and the account is recovered from the deletion window
 (`python code/evaluation/loo_timing.py`):
 
-| Outcome | Requests |
-|---|---:|
-| Status match alone picks the account — correct | 208 |
-| Timing signature breaks the tie — correct | 21 |
-| **Wrong (either way)** | **0** |
-| Still tied | 2 |
-| Person has no other worker actions to compare | 7 |
-| Account deleted outside the window (reused users on other dates) | 7 |
+Results: see the leave-one-out table in §1.
 
 The deletion window itself is measured, not assumed: on the 238 proven links the worker deletes the
 account **75–41 min before `reported_at`**. The first version used a 3 h window, which let adjacent
@@ -71,10 +113,10 @@ Two further ideas were tested out of sample and **rejected**:
   test pairs it agrees 74 times and disagrees 76 times: chance. It is no longer used as a rule.
 - *Profile-update events at the time of an identity change* — no proven account shows any.
 
-On the real run: 23 accounts and 9 anonymized-analytics links remain **unresolved ties** (the evidence
-fits several requests equally). Tom's decision: output a deterministic pick, because every deletion case
-must verify its account, and report it as uncertain. Every link's provenance and the 31 affected requests
-are listed in [`uncertainty_report.md`](uncertainty_report.md).
+Requests whose evidence fits several candidates equally are **unresolved ties**. Tom's decision: output a
+deterministic pick, because every deletion case must verify its account, and report it as uncertain. The
+current counts are in §1; every link's provenance and the affected requests are listed in
+[`uncertainty_report.md`](uncertainty_report.md).
 
 ## 2. Custom evaluation cases (created by us)
 
@@ -104,11 +146,9 @@ calls (intent is injected); all but the full-run determinism test take milliseco
 
 - **Intent:** the model marked exactly **10** requests as non-deletion; the activity stream independently
   contains exactly **10** `privacy_intake … classified request as non-deletion` events.
-- **Contract:** 518 rows, sorted, valid JSON, consecutive step numbers, only allowed operations/states,
-  no finding without evidence, no `COMPLETE` verification without evidence, no evidence captured after
-  `audit_at` — `python code/evaluation/validate.py`: 518 rows, 0 problems.
-- **Reproducibility:** a run from an *empty* cache (fresh model calls) reproduced the previous
-  `output.csv` exactly (518/518 rows, step F1 1.000 against it); `--offline` replay is byte-identical across Python hash seeds (test 15).
+- **Contract and reproduction:** checked by `verify.py` (§1): `output.csv` satisfies every contract rule, and
+  the pipeline reproduces it byte for byte. `--fresh` repeats this from an empty model cache; the result of
+  the last fresh run is in §1. Output is also identical across Python hash seeds (test 15).
 
 ## 3. Failures found and improvements made
 
@@ -129,6 +169,8 @@ calls (intent is injected); all but the full-run determinism test take milliseco
 | 13 | Is "newest request first" real? | Out of sample: 74 agree / 76 disagree. | Not a rule. Remaining ties are labelled `unresolved-tie` and reported (Tom's decision A: keep a deterministic pick, report it as uncertain). |
 | 14 | A single malformed evidence file crashed the whole run. | Found while writing stress test 13. | Each file is parsed independently; failures are reported, never fatal. |
 | 15 | Two identical offline runs differed in one citation (case_393). | Evidence-citation tie broken by Python set order, which varies with the hash seed. | Stable tie-break by evidence id; 6 seeds byte-identical; regression test 15. |
+| 16 | Code review: the analytics linker still used the original 3 h window after the account window was narrowed. | 4 "unresolved-tie" analytics links pointed at an anonymization 88–89 min before `reported_at`, i.e. from an earlier batch; every real one sits 21–29 min before. | Analytics events limited to the measured clean-up slot (35–20 min before; proven links put placeholder/legal-hold actions at ~30, support redactions ~25, flow shut-offs ~15, restore blocks ~10 min before), near window only if the slot is empty (same rule as for accounts). Samples unchanged; 4 wrong links removed; uncertain requests 31 → 28. |
+| 17 | Report numbers were typed by hand and could drift from the code. | Several figures had to be corrected by hand during the day. | `python code/verify.py` measures everything and writes §1 itself; it fails if any check fails. |
 
 ## 4. Limitations and honest caveats
 
