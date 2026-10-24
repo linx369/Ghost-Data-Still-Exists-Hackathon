@@ -81,7 +81,8 @@ def test_true_tie_is_labelled_and_deterministic(tmp_path):
     reqs = [req(1), req(2)]
     first, second = audit_all(ds, reqs), audit_all(ds, reqs)
     for cid in ("case_1", "case_2"):
-        assert account_of(first[cid])["link"] == "fallback-tiebreak"
+        assert account_of(first[cid])["link"] == "unresolved-tie"
+        assert first[cid].trace["uncertain"] == [account_of(first[cid])["resource_id"]]
         assert first[cid].steps == second[cid].steps
     assert {account_of(first[c])["resource_id"] for c in first} == {"account_10", "account_20"}
 

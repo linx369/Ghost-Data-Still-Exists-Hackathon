@@ -144,4 +144,9 @@ class Auditor:
                                  or self.accounts.activity_for(acc))
         status, steps, why = plan(resources, self.rules)
         trace["reasoning"] = link_notes + why
+        # transparent uncertainty: which emitted resources rest on a pick the evidence cannot settle
+        trace["uncertain"] = sorted(
+            ([acc] if how == "unresolved-tie" and any(s["resource_id"] == acc for s in steps) else [])
+            + [r for r, _ in extra if self.activity.how.get(cid) == "unresolved-tie"
+               and any(s["resource_id"] == r for s in steps)])
         return CaseResult(cid, status, steps, trace)

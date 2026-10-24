@@ -74,8 +74,10 @@ def main() -> None:
                 f.write(json.dumps({"case_id": r.case_id, "status": r.status, **r.trace}, ensure_ascii=False) + "\n")
     if a.split == "test" and not a.out:
         sys.path.insert(0, str(ROOT / "code" / "evaluation"))
+        from uncertainty import write_uncertainty_report
         from usage import write_usage_report
         write_usage_report(ROOT / "code" / "evaluation" / "usage_report.md", len(results), a.split, a.offline)
+        write_uncertainty_report(ROOT / "code" / "evaluation" / "uncertainty_report.md", results)
     for msg in SKIPPED:
         print("WARNING skipped evidence file:", msg)
     print(f"wrote {len(results)} rows -> {out}")

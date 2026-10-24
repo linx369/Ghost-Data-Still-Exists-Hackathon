@@ -2,17 +2,15 @@
 
 Such a profile carries no identifier at all, so no evidence record can tie it to a person. The
 only trace is the worker's ANONYMIZE_RECORD action in the batch of requests that share a
-reported_at. Two observations from the labelled samples make the assignment tractable:
-
-  * every missed anonymized profile belonged to a case that is otherwise COMPLETE (if the
-    anonymization had failed, the profile would still carry identifiers and be linked directly);
-  * the worker processes a batch newest request first (4/4 sample batches).
+reported_at. Every missed anonymized profile in the samples belonged to a case that is otherwise
+COMPLETE (a failed anonymization would leave identifiers and be linked directly).
 
 So, per batch, otherwise-COMPLETE cases without an analytics record are paired with the batch's
-unowned ANONYMIZE actions. A pair is preferred when the action sits on the worker's timing grid
-relative to that case's account deletion ((delta mod 30 s) in {9..11, 20..22}; timing.py); pairs
-fixed that way are removed and the rest are matched newest request first, in time order.
-Every assignment is labelled in the trace as heuristic.
+unowned ANONYMIZE actions:
+  1. "timing-grid": the action sits on the worker's timing grid relative to that case's account
+     deletion ((delta mod 30 s) in {9..11, 20..22}; timing.py) and the pairing is unique;
+  2. "unresolved-tie": what remains is paired deterministically (newest request first). Out of
+     sample this order is chance (74 vs 76 proven pairs), so these links are reported as uncertain.
 """
 from __future__ import annotations
 
@@ -69,10 +67,10 @@ class ActivityLinker:
                         needy.remove(q)
                         evs.remove(fits[0])
                         changed = True
-            # 2) the rest: newest request first, in time order
+            # 2) the rest cannot be told apart: deterministic pick, reported as uncertain
             for q, a in zip(needy, evs):
                 self.assigned[q["case_id"]] = (a["resource_id"], a["activity_id"])
-                self.how[q["case_id"]] = "batch-order"
+                self.how[q["case_id"]] = "unresolved-tie"
 
     def resources_for(self, case_id: str) -> list[tuple[str, str]]:
         return [self.assigned[case_id]] if case_id in self.assigned else []

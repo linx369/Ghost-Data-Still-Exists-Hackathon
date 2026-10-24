@@ -55,21 +55,32 @@ is rebuilt **without that person's links**, and the account is recovered from th
 
 | Outcome | Requests |
 |---|---:|
-| Status match alone picks the account — correct | 139 |
-| Timing signature breaks the tie — correct | 68 |
+| Status match alone picks the account — correct | 208 |
+| Timing signature breaks the tie — correct | 21 |
 | **Wrong (either way)** | **0** |
-| Still tied (fallback used) | 6 |
-| Person has no other worker actions to compare (fallback used) | 25 |
-| Account outside the 3 h window | 7 |
+| Still tied | 2 |
+| Person has no other worker actions to compare | 7 |
+| Account deleted outside the window (reused users on other dates) | 7 |
 
-On the real run this cut the fallback tie-break from 131 to 30 test accounts, and 108 of 120
-anonymized-analytics links are now decided by the timing grid (12 by batch order).
+The deletion window itself is measured, not assumed: on the 238 proven links the worker deletes the
+account **75–41 min before `reported_at`**. The first version used a 3 h window, which let adjacent
+batches compete for accounts (31 unresolved instead of 9).
+
+Two further ideas were tested out of sample and **rejected**:
+- *"The worker processes a batch newest request first"* — matched 4/4 sample batches, but on proven
+  test pairs it agrees 74 times and disagrees 76 times: chance. It is no longer used as a rule.
+- *Profile-update events at the time of an identity change* — no proven account shows any.
+
+On the real run: 23 accounts and 9 anonymized-analytics links remain **unresolved ties** (the evidence
+fits several requests equally). Tom's decision: output a deterministic pick, because every deletion case
+must verify its account, and report it as uncertain. Every link's provenance and the 31 affected requests
+are listed in [`uncertainty_report.md`](uncertainty_report.md).
 
 ## 2. Custom evaluation cases (created by us)
 
 `code/tests/test_engine.py` builds a tiny synthetic dataset for each trap described in the challenge and
-asserts the engine's **exact** output. No model calls (intent is injected), so they run in milliseconds.
-**8/8 pass.**
+asserts the engine's **exact** output; `code/tests/test_stress.py` adds unusual situations. No model
+calls (intent is injected), so they run in milliseconds. **14/14 pass.**
 
 | # | Case | What it proves | Expected result |
 |---|---|---|---|
@@ -81,6 +92,12 @@ asserts the engine's **exact** output. No model calls (intent is injected), so t
 | 6 | **Non-deletion request** | "Send me a copy of my data, keep my account." | `NOT_APPLICABLE`, `[]`. |
 | 7 | **Ordering** | Search, analytics, support, data flow, backup and audit record together. | Findings by operation then system; flows disabled and restores blocked before records are changed; full 17-step sequence asserted. |
 | 8 | **Citations on COMPLETE** | Clean tombstone, disabled flow, retained audit record. | Every verification step cites evidence (a fallback citation path was added after this test failed — see §3). |
+| 9 | **Same person, two requests** | Two audits of one person at different dates. | Both find the same directly evidenced account. |
+| 10 | **Overlapping batches** | The 11:00 batch's account is deleted at 10:00, inside the 10:00 batch's ±15 min fallback window. | Each request gets its own account (main window first). |
+| 11 | **True tie** | Two identical requests, two identical deletions. | Deterministic output, labelled `unresolved-tie`, listed as uncertain. |
+| 12 | **Timing signature needs support** | The grid must be learned from a directly evidenced person before it may break a tie. | Tie broken correctly, labelled `window+signature`. |
+| 13 | **Malformed evidence file** | One evidence file is invalid JSON. | Skipped with a warning; the rest of the audit is unaffected (previously the whole run crashed). |
+| 14 | **No evidence at all** | Nothing links the request to any record. | No crash; account link `none`; serialisable output. |
 
 ### Sanity checks on the 518 unlabelled requests
 
@@ -107,12 +124,15 @@ asserts the engine's **exact** output. No model calls (intent is injected), so t
 | 9 | Hashes inside `correlation_key`, uppercase emails, legal holds named `legal_service`. | Missed links on case_12; wrong `system_id` on 7 test cases. | Normalized. |
 | 10 | Custom case 8 failed: `COMPLETE` account check with no citable evidence. | Contract requires evidence on every COMPLETE verification. | Fallback citation: account-scoped snapshot → case's main evidence → the worker's deletion activity id. |
 | 11 | Reviewing the 7 imperfect sample sequences (Tom's request): 4 were anonymized-analytics assignments; the other 3 are not recoverable from the data (§1). Found that the worker schedules each request's actions on a fixed grid relative to its account deletion: (Δt mod 60 s) is type-specific (e.g. export deletions 51–52 s, search deletions 21–22 s, restore blocks 9–10 s). | Learned from directly evidenced links only; leave-one-out on test accounts 68 correct / 0 wrong. A first coarse version (mod 30 for every type) broke case_23; per-type sets fixed it. | Adopted for account ties (`timing.py`) and anonymized analytics (coarse grid, since no directly owned *successful* anonymization exists to learn from — the one sample-informed choice). Samples: F1 0.976 → **0.992**, sequence 0.781 → **0.906**, precision 1.000. |
+| 12 | Tom: "make it reliable on the hidden cases, not the samples". Examined the 30 fallback accounts one by one. | The 3 h window mixed adjacent batches; true offset measured on 238 proven links is 75–41 min. | Window narrowed (±15 min kept only as a fallback). Out-of-sample unresolved 31 → 9, still 0 wrong; real fallback 30 → 23. |
+| 13 | Is "newest request first" real? | Out of sample: 74 agree / 76 disagree. | Not a rule. Remaining ties are labelled `unresolved-tie` and reported (Tom's decision A: keep a deterministic pick, report it as uncertain). |
+| 14 | A single malformed evidence file crashed the whole run. | Found while writing stress test 13. | Each file is parsed independently; failures are reported, never fatal. |
 
 ## 4. Limitations and honest caveats
 
 - The 32 samples were used for development; there was no separate hold-out (too few cases). To limit
   over-fitting, every rule is stated as a general principle (time, identity, policy) and checked against
   test-set sanity signals rather than tuned per case.
-- 30 test accounts still rely on the flagged fallback tie-break (no other worker actions to compare); those account steps may be wrong.
-- Already-anonymized analytics profiles carry no identifiers: 108 test links come from the timing grid, 12 from batch order. The timing signature is a property of how this dataset's worker logs were produced; on real systems I would ask for the worker's batch log instead of inferring it.
+- 23 test accounts and 9 anonymized-analytics links are unresolved ties (deterministic pick, ~chance); listed in `uncertainty_report.md`.
+- Already-anonymized analytics profiles carry no identifiers: 111 test links come from the timing grid. The timing signature is a property of how this dataset's worker logs were produced; on real systems I would ask for the worker's batch log instead of inferring it.
 - case_63 depends on a judgement call (catalog link vs. contradicting screenshot), decided by Tom.

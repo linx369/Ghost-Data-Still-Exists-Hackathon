@@ -27,13 +27,15 @@ python code/main.py --offline                         # no API calls: replay cac
 python code/main.py --split sample                    # the 32 labelled samples -> code/evaluation/sample_predictions.csv
 python code/evaluation/main.py --pred code/evaluation/sample_predictions.csv --gold dataset/sample_output.csv --verbose
 python code/evaluation/validate.py                    # contract check of output.csv
-python -m pytest code/tests -q                        # 8 custom evaluation cases
+python -m pytest code/tests -q                        # 14 custom evaluation + stress cases
 python code/evaluation/loo_timing.py                  # out-of-sample check of account linking
 python code/main.py --trace trace.jsonl               # per-case reasoning (why each step exists)
 ```
 
 A full run takes ~1.5 min with fresh model calls (~$2.43, 25 calls) and ~2 s offline.
 `--offline` reproduces the submitted `output.csv` byte for byte.
+
+Every full run also writes `code/evaluation/usage_report.md` and `code/evaluation/uncertainty_report.md`.
 
 Environment variables: `ANTHROPIC_API_KEY` (required unless `--offline`), `MODEL` (default
 `claude-fable-5-1`), `FALLBACK_MODEL` (default `claude-opus-5-5`), `ACTIVITY_LINK=0` (turns off the
@@ -48,7 +50,7 @@ dataset/ ──► evidence.py ── SQL (sqlite), JSON, 7 log formats, handove
                      ▼  Observation = (evidence_id, captured_at, observed_at, system, resource, attrs)
 identity.py   current + historical emails / phones / hashes per user_id
 intent.py     distinct request texts ──► Claude ──► authorizes deletion?             [cached]
-accounts.py   which account_service record is this case's (direct link → window+status → fallback)
+accounts.py   which account_service record is this case's (direct → window+status → timing → unresolved)
 interpret.py  observation ──► (policy category, state: PRESENT/ABSENT/CLEAN/ACTIVE/STOPPED/RETAINED)
 engine.py     per case: linked resources, state at audit_at, which evidence may be cited
 policy.py     deletion_rules.csv ──► findings / remediation / verification, ordered per the contract
@@ -63,7 +65,7 @@ main.py       ──► output.csv, trace, usage_report.md
 | `audit/identity.py` | Every identifier a person ever had, from `user_identities.csv` + `user_audit_log.csv` | no |
 | `audit/accounts.py` | Link each case to its account record | no |
 | `audit/timing.py` | Learn the worker's per-action timing grid from directly evidenced links | no |
-| `audit/activity.py` | Link already-anonymized analytics profiles via the timing grid / batch order (heuristic, labelled) | no |
+| `audit/activity.py` | Link already-anonymized analytics profiles via the timing grid (unresolved ties labelled) | no |
 | `audit/interpret.py` | Map ~40 evidence vocabularies (404, rows=0, NOT_FOUND, enabled=false, restore_allowed=0, null PII…) to one state vocabulary | no |
 | `audit/engine.py` | Time rules, linking, state at `audit_at`, citations | no |
 | `audit/policy.py` | Rules → steps and ordering | no |
@@ -85,12 +87,15 @@ main.py       ──► output.csv, trace, usage_report.md
 - **Replication drift.** Same-time conflicting readings resolve to the riskier one (a replica holding the
   row beats a primary that lost it).
 - **Account linking ladder.** (1) evidence ties the account to the person; (2) the worker deleted it in the
-  3 h before `reported_at`, nobody else owns it, and its result matches the workflow claim
-  (COMPLETE↔SUCCESS, PARTIALLY_COMPLETE↔PARTIAL, NOT_STARTED↔FAILED), solved jointly so one account = one
-  case; remaining ties are broken by the worker's **timing signature** (each request's actions sit on a
-  type-specific grid relative to its account deletion, learned from directly evidenced links; leave-one-out
-  on test accounts: 68 correct, 0 wrong); (3) a flagged fallback for true ties (30 test cases).
-  Each case's link type is in the trace.
+  measured window (75–41 min before `reported_at`, from 238 proven links), nobody else owns it, and its
+  result matches the workflow claim (COMPLETE↔SUCCESS, PARTIALLY_COMPLETE↔PARTIAL, NOT_STARTED↔FAILED),
+  solved jointly so one account = one case; remaining ties are broken by the worker's **timing signature**
+  (each request's actions sit on a type-specific grid relative to its account deletion, learned from
+  directly evidenced links). Leave-one-out on proven test accounts: 229 recovered, **0 wrong**, 9 unresolved.
+  (3) **Unresolved ties** (23 test accounts): the contract needs an account check, so a deterministic pick
+  is output and reported as uncertain — never as a fact (Tom's decision).
+- **Transparent uncertainty.** `code/evaluation/uncertainty_report.md` (written by every full run) states
+  how each link was established and lists the 31 requests that contain an uncertain step.
 
 ## Safety and failure handling
 
@@ -116,9 +121,10 @@ Token use and cost: [`code/evaluation/usage_report.md`](code/evaluation/usage_re
 
 ## Known limitations
 
-- Already-anonymized analytics profiles carry no identifier; they are linked through the worker's timing
-  grid (108 test cases) or batch order (12). The timing signature is a property of this dataset's logs.
-- 30 test accounts still depend on the fallback tie-break.
+- Already-anonymized analytics profiles carry no identifier; 111 are linked through the worker's timing
+  grid, 9 are unresolved ties. The timing signature is a property of this dataset's logs.
+- 23 test accounts are unresolved ties (deterministic pick, about chance).
+- "Newest request first" looked like a rule on the samples (4/4) but is chance out of sample (74 vs 76).
 - No hold-out split: the 32 samples were all used for development.
 
 ## How AI tools were used

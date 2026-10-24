@@ -9,8 +9,11 @@ Evidence ladder, strongest first:
      + signature - if several candidates remain, keep the ones whose deletion time fits the
                 timing grid of this person's other worker actions (timing.py; learned from
                 directly evidenced links, validated leave-one-out)
-  3. fallback - remaining ties: the most recently requested case takes the earliest event
-                (4/4 sample batches). Flagged in the trace.
+  3. unresolved tie - the evidence fits several requests equally well. The output format still
+                needs an account (every deletion case verifies it), so a deterministic pick is made
+                and labelled "unresolved-tie" in the trace and the evaluation report. It is NOT a
+                rule: "newest request first" matched 4/4 sample batches but only 74 of 150 proven
+                pairs out of sample, i.e. chance. Decision (Tom): keep the pick, report it as uncertain.
 """
 from __future__ import annotations
 
@@ -102,7 +105,7 @@ class AccountLinker:
                     self.result[cid] = (c2[0], "window+signature" if cid in self.signature_used else "window")
                     taken.add(c2[0])
                     changed = True
-        # fallback tie-break within each group of identical candidate sets
+        # unresolved ties: arbitrary but deterministic pick within each group of identical candidates
         groups = defaultdict(list)
         qmap = {q["case_id"]: q for q in cases}
         for cid, c in cand.items():
@@ -112,7 +115,7 @@ class AccountLinker:
             events = sorted((x for x in c if x not in taken), key=lambda x: evt[x]["event_time"])
             order = sorted(cids, key=lambda k: (-ts(qmap[k]["requested_at"]).timestamp(), k))
             for k, acc in zip(order, events):
-                self.result[k] = (acc, "fallback-tiebreak")
+                self.result[k] = (acc, "unresolved-tie")
                 taken.add(acc)
         # same person, other request (e.g. an earlier or later audit of the same user)
         by_user = {}
