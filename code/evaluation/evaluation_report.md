@@ -14,13 +14,13 @@ The pieces it runs can also be called alone: `python -m pytest code/tests -q`,
 ## 1. Measured results
 
 <!-- VERIFY:START -->
-_Measured by `python code/verify.py` on 2026-10-24 15:48 UTC. Everything between these markers is generated; do not edit by hand._
+_Measured by `python code/verify.py` on 2026-10-24 16:15 UTC. Everything between these markers is generated; do not edit by hand._
 
 **Checks**
 
 | Check | Result | Detail |
 |---|---|---|
-| Unit + stress tests | PASS | 22 passed in 27.11s |
+| Unit + stress tests | PASS | 22 passed in 28.59s |
 | Sample status accuracy is 1.000 | PASS | 1.000 |
 | Sample step F1 at least 0.99 (regression guard) | PASS | 0.992 |
 | Leave-one-out: no wrong account link | PASS | 0 wrong |

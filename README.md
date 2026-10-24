@@ -41,7 +41,7 @@ python code/main.py --trace trace.jsonl               # per-case reasoning (why 
 python code/main.py --offline --explain case_63       # readable evidence chain for one request
 ```
 
-A full run takes ~1.5 min with fresh model calls (~$2.43, 25 calls) and ~2 s offline.
+A full run takes ~1.5 min with fresh model calls (~$2.58, 25 calls; measured in `code/evaluation/usage_report.md`) and ~2 s offline.
 `--offline` reproduces the submitted `output.csv` byte for byte.
 
 Every full run also writes `code/evaluation/usage_report.md` and `code/evaluation/uncertainty_report.md`.
