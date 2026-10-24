@@ -14,7 +14,7 @@
     "state": "ENABLED",
     "shows_direct_identifiers": true,
     "observed_at": "2026-08-07T07:59:42Z",
-    "note": "Healthy, continuous sync to customer_analytics_warehouse; selector jain.aditi@gmail.com; 1,284 events/hour; owner Data Platform; 200 OK",
+    "note": "Healthy; owner Data Platform; destination customer_analytics_warehouse; Continuous sync; 1,284 events/hour; 200 OK 1.8 s",
     "aliases": []
    },
    {
@@ -29,7 +29,7 @@
     "state": "ENABLED",
     "shows_direct_identifiers": true,
     "observed_at": "2026-08-07T07:59:36Z",
-    "note": "Continuous sync to customer_analytics_warehouse; selector lucia-torres@gmail.com; 842 events/hour; last contact 07:59:36",
+    "note": "Destination customer_analytics_warehouse; Continuous mode; 842 events/hour; last contact 07:59:36",
     "aliases": []
    },
    {
@@ -42,7 +42,7 @@
     "state": "ENABLED",
     "shows_direct_identifiers": false,
     "observed_at": "2026-08-07T07:59:28Z",
-    "note": "Continuous connector to notification_service; selector 'order events'; 650 events/hour; last contact 07:59:28",
+    "note": "Connector 'Order notifications' to notification_service; selector order events; Continuous; 650 events/hour",
     "aliases": [
      "Order notifications"
     ]
@@ -57,7 +57,7 @@
     "state": "ENABLED",
     "shows_direct_identifiers": false,
     "observed_at": "2026-08-07T07:59:13Z",
-    "note": "Continuous connector to logistics_warehouse; selector 'shipment events'; 420 events/hour; last contact 07:59:13",
+    "note": "Connector 'Delivery tracking' to logistics_warehouse; selector shipment events; Continuous; 420 events/hour",
     "aliases": [
      "Delivery tracking"
     ]
@@ -66,6 +66,6 @@
  },
  "usage": {
   "input": 3508,
-  "output": 1280
+  "output": 1041
  }
 }

@@ -14,7 +14,7 @@
     "state": "RETAINED",
     "shows_direct_identifiers": false,
     "observed_at": "2026-05-29T08:00:00Z",
-    "note": "Card dispute, 04 May 2026, USD 184.20, retain until 04 May 2033, owner initials AR",
+    "note": "Card dispute, 04 May 2026, USD 184.20, retain until 04 May 2033, owner AR",
     "aliases": [
      "ORD-20264118"
     ]
@@ -31,7 +31,7 @@
     "state": "RETAINED",
     "shows_direct_identifiers": false,
     "observed_at": "2026-05-29T08:00:00Z",
-    "note": "Tax correction, 09 May 2026, EUR 72.40, retain until 09 May 2033, owner initials ML",
+    "note": "Tax correction, 09 May 2026, EUR 72.40, retain until 09 May 2033, owner ML",
     "aliases": [
      "ORD-20264207"
     ]
@@ -48,7 +48,7 @@
     "state": "RETAINED",
     "shows_direct_identifiers": false,
     "observed_at": "2026-05-29T08:00:00Z",
-    "note": "Chargeback, 14 May 2026, GBP 219.00, retain until 14 May 2033, owner initials SK",
+    "note": "Chargeback, 14 May 2026, GBP 219.00, retain until 14 May 2033, owner SK",
     "aliases": [
      "ORD-20264319"
     ]
@@ -65,7 +65,7 @@
     "state": "RETAINED",
     "shows_direct_identifiers": false,
     "observed_at": "2026-05-29T08:00:00Z",
-    "note": "Invoice inquiry, 18 May 2026, CAD 96.55, retain until 18 May 2033, owner initials AR",
+    "note": "Invoice inquiry, 18 May 2026, CAD 96.55, retain until 18 May 2033, owner AR",
     "aliases": [
      "ORD-20264402"
     ]
@@ -82,7 +82,7 @@
     "state": "RETAINED",
     "shows_direct_identifiers": false,
     "observed_at": "2026-05-29T08:00:00Z",
-    "note": "Card dispute, 23 May 2026, AUD 311.80, retain until 23 May 2033, owner initials ML",
+    "note": "Card dispute, 23 May 2026, AUD 311.80, retain until 23 May 2033, owner ML",
     "aliases": [
      "ORD-20264511"
     ]
@@ -99,15 +99,37 @@
     "state": "RETAINED",
     "shows_direct_identifiers": false,
     "observed_at": "2026-05-29T08:00:00Z",
-    "note": "Tax record, 28 May 2026, USD 48.75, retain until 28 May 2033, owner initials SK",
+    "note": "Tax record, 28 May 2026, USD 48.75, retain until 28 May 2033, owner SK",
     "aliases": [
      "ORD-20264600"
+    ]
+   },
+   {
+    "resource_id": "",
+    "record_type": "OTHER",
+    "user_ids": [
+     "user_08",
+     "user_12",
+     "user_17",
+     "user_21",
+     "user_24",
+     "user_29"
+    ],
+    "emails": [],
+    "phones": [],
+    "names": [],
+    "state": "PRESENT",
+    "shows_direct_identifiers": false,
+    "observed_at": "2026-05-29T08:00:00Z",
+    "note": "Disputed orders/tax records register PDF, Finance Records owner, Internal classification, May 2026",
+    "aliases": [
+     "legal_retention_register_20260529.pdf"
     ]
    }
   ]
  },
  "usage": {
   "input": 1290,
-  "output": 1457
+  "output": 1635
  }
 }

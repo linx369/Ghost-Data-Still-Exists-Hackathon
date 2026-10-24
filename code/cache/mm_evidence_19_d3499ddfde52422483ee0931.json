@@ -17,8 +17,8 @@
     ],
     "state": "PRESENT",
     "shows_direct_identifiers": true,
-    "observed_at": null,
-    "note": "Pulse Analytics profile with name, email, event timeline (5 records), last activity 13 Jul 2026 14:22 UTC",
+    "observed_at": "2026-07-13T14:22:00Z",
+    "note": "Pulse Analytics profile with 5 event records, 12 sessions, 2 orders; last activity 13 Jul 2026 14:22 UTC",
     "aliases": [
      "analytics_profile_view_20260713.png"
     ]
@@ -27,6 +27,6 @@
  },
  "usage": {
   "input": 3510,
-  "output": 202
+  "output": 222
  }
 }

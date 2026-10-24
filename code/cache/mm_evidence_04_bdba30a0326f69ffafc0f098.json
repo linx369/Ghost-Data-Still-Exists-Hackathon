@@ -20,7 +20,7 @@
     "state": "PRESENT",
     "shows_direct_identifiers": true,
     "observed_at": null,
-    "note": "Live customer profile in admin console; address 2-18-4 Kichijoji, Musashino, Tokyo 180-0004; Silver tier, JP market, mobile_app signup",
+    "note": "Live profile: Silver tier, JP market, mobile_app signup, address 2-18-4 Kichijoji Musashino Tokyo 180-0004, member since 12 Jan 2024",
     "aliases": [
      "account_admin_console_20260926.png"
     ]
@@ -39,7 +39,7 @@
     "state": "PRESENT",
     "shows_direct_identifiers": false,
     "observed_at": null,
-    "note": "Support ticket CS-8538 linked to profile; created 28 Aug, agent responded 22 Sep, customer replied 24 Sep",
+    "note": "Support ticket created 28 Aug; agent responded 22 Sep; customer replied 24 Sep; linked to account_5762",
     "aliases": [
      "CS-8538"
     ]
@@ -86,6 +86,6 @@
  },
  "usage": {
   "input": 3573,
-  "output": 1311
+  "output": 1154
  }
 }

@@ -14,9 +14,12 @@
     "state": "RETAINED",
     "shows_direct_identifiers": false,
     "observed_at": "2026-03-10T07:18:00Z",
-    "note": "Customer key reference, badge 'Retained reference', owner Account Platform, eu-west; created 11 Jan 2024 08:42 UTC; 4 active links",
+    "note": "Customer key reference, badge 'Retained reference', owner Account Platform eu-west, created 11 Jan 2024 08:42 UTC, 4 linked records",
     "aliases": [
-     "deleted_account_reference_20260310.png"
+     "ORD-20263245",
+     "CS-3245",
+     "CS-3378",
+     "FIN-7742"
     ]
    },
    {
@@ -30,7 +33,7 @@
     "names": [],
     "state": "PRESENT",
     "shows_direct_identifiers": false,
-    "observed_at": null,
+    "observed_at": "2026-03-10T07:18:00Z",
     "note": "Orders system record linked to customer, status Active, created 11 Jan 2024 08:45 UTC",
     "aliases": [
      "ORD-20263245"
@@ -47,7 +50,7 @@
     "names": [],
     "state": "PRESENT",
     "shows_direct_identifiers": false,
-    "observed_at": null,
+    "observed_at": "2026-03-10T07:18:00Z",
     "note": "Support case linked to customer, status Active, created 14 Feb 2024 12:16 UTC",
     "aliases": [
      "CS-3245"
@@ -64,7 +67,7 @@
     "names": [],
     "state": "PRESENT",
     "shows_direct_identifiers": false,
-    "observed_at": null,
+    "observed_at": "2026-03-10T07:18:00Z",
     "note": "Support case linked to customer, status Active, created 03 Jun 2024 09:27 UTC",
     "aliases": [
      "CS-3378"
@@ -81,7 +84,7 @@
     "names": [],
     "state": "PRESENT",
     "shows_direct_identifiers": false,
-    "observed_at": null,
+    "observed_at": "2026-03-10T07:18:00Z",
     "note": "Finance record linked to customer, status Active, created 22 Aug 2024 15:03 UTC",
     "aliases": [
      "FIN-7742"
@@ -91,6 +94,6 @@
  },
  "usage": {
   "input": 3380,
-  "output": 1563
+  "output": 1781
  }
 }

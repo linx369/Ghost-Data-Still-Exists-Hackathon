@@ -14,7 +14,7 @@
     "state": "RETAINED",
     "shows_direct_identifiers": false,
     "observed_at": "2026-09-05T06:30:00Z",
-    "note": "Account closure event by automated workflow, recorded 2026-08-25T04:03Z; retain until 2026-08-25T04:03:00Z 2027; integrity seal valid.",
+    "note": "Account closure event recorded 25 Aug 2026 04:03 UTC; retain until 25 Aug 2027; integrity seal valid.",
     "aliases": [
      "CJX-20260905-0630",
      "security_retention_extract.pdf"
@@ -24,6 +24,6 @@
  },
  "usage": {
   "input": 1066,
-  "output": 583
+  "output": 533
  }
 }

@@ -17,7 +17,7 @@
     "state": "PRESENT",
     "shows_direct_identifiers": true,
     "observed_at": null,
-    "note": "Ticket CS-5034 'Where is my delivery?', 4 messages 09:12-09:35, customer email visible, assigned Maya Chen.",
+    "note": "Ticket CS-5034 'Where is my delivery?', 4 conversation records, customer name and email visible, assigned Maya Chen.",
     "aliases": [
      "CS-5034",
      "ORD-20265034",
@@ -28,6 +28,6 @@
  },
  "usage": {
   "input": 3574,
-  "output": 244
+  "output": 240
  }
 }

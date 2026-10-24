@@ -7,285 +7,285 @@
     "request_type": "DELETION",
     "authorizes_deletion": true,
     "language": "en",
-    "reason": "Asks to close account and delete personal data."
+    "reason": "Asks to erase account linked to email."
    },
    {
     "id": 1,
     "request_type": "DELETION",
     "authorizes_deletion": true,
     "language": "en",
-    "reason": "Asks to close account and delete personal data."
+    "reason": "Asks to erase account linked to email."
    },
    {
     "id": 2,
     "request_type": "DELETION",
     "authorizes_deletion": true,
     "language": "en",
-    "reason": "Asks to close account and delete personal data."
+    "reason": "Asks to erase account linked to email."
    },
    {
     "id": 3,
     "request_type": "DELETION",
     "authorizes_deletion": true,
     "language": "en",
-    "reason": "Asks to close account and delete personal data."
+    "reason": "Asks to erase account linked to email."
    },
    {
     "id": 4,
     "request_type": "DELETION",
     "authorizes_deletion": true,
     "language": "en",
-    "reason": "Asks to close account and delete personal data."
+    "reason": "Asks to erase account across systems."
    },
    {
     "id": 5,
     "request_type": "DELETION",
     "authorizes_deletion": true,
     "language": "en",
-    "reason": "Asks to close account and delete personal data."
+    "reason": "Asks to erase account across systems."
    },
    {
     "id": 6,
     "request_type": "DELETION",
     "authorizes_deletion": true,
     "language": "en",
-    "reason": "Asks to close account and delete personal data."
+    "reason": "Asks to erase account across systems."
    },
    {
     "id": 7,
     "request_type": "DELETION",
     "authorizes_deletion": true,
     "language": "en",
-    "reason": "Asks to close account and delete personal data."
+    "reason": "Asks to erase account across systems."
    },
    {
     "id": 8,
     "request_type": "DELETION",
     "authorizes_deletion": true,
     "language": "en",
-    "reason": "Asks to close account and delete personal data."
+    "reason": "Asks to erase account and connected records."
    },
    {
     "id": 9,
     "request_type": "DELETION",
     "authorizes_deletion": true,
     "language": "en",
-    "reason": "Asks to close account and delete personal data."
+    "reason": "Asks to erase account and connected records."
    },
    {
     "id": 10,
     "request_type": "DELETION",
     "authorizes_deletion": true,
     "language": "en",
-    "reason": "Asks to close account and delete personal data."
+    "reason": "Asks to erase account after standard review."
    },
    {
     "id": 11,
     "request_type": "DELETION",
     "authorizes_deletion": true,
     "language": "en",
-    "reason": "Asks to close account and delete personal data."
+    "reason": "Asks to erase account and relevant records."
    },
    {
     "id": 12,
     "request_type": "DELETION",
     "authorizes_deletion": true,
     "language": "en",
-    "reason": "Asks to close account and delete personal data."
+    "reason": "Asks to erase account and relevant records."
    },
    {
     "id": 13,
     "request_type": "DELETION",
     "authorizes_deletion": true,
     "language": "en",
-    "reason": "Asks to close account and delete personal data."
+    "reason": "Asks to erase account per retention rules."
    },
    {
     "id": 14,
     "request_type": "DELETION",
     "authorizes_deletion": true,
     "language": "en",
-    "reason": "Asks to close account and delete personal data."
+    "reason": "Asks to erase account per retention rules."
    },
    {
     "id": 15,
     "request_type": "DELETION",
     "authorizes_deletion": true,
     "language": "en",
-    "reason": "Asks to close account and delete personal data."
+    "reason": "Asks to erase account per retention rules."
    },
    {
     "id": 16,
     "request_type": "DELETION",
     "authorizes_deletion": true,
     "language": "en",
-    "reason": "Asks to close account and delete personal data."
+    "reason": "Asks to erase account including copies."
    },
    {
     "id": 17,
     "request_type": "DELETION",
     "authorizes_deletion": true,
     "language": "en",
-    "reason": "Asks to close account and delete personal data."
+    "reason": "Asks to erase account including copies."
    },
    {
     "id": 18,
     "request_type": "DELETION",
     "authorizes_deletion": true,
     "language": "en",
-    "reason": "Asks to delete account and submitted identity document."
+    "reason": "Asks to erase account including copies."
    },
    {
     "id": 19,
     "request_type": "DELETION",
     "authorizes_deletion": true,
     "language": "en",
-    "reason": "Asks to delete account, archive and search references."
+    "reason": "Asks to erase account and linked identifiers."
    },
    {
     "id": 20,
     "request_type": "DELETION",
     "authorizes_deletion": true,
     "language": "en",
-    "reason": "Asks to erase the account linked to email."
+    "reason": "Asks to erase account and linked identifiers."
    },
    {
     "id": 21,
     "request_type": "DELETION",
     "authorizes_deletion": true,
     "language": "en",
-    "reason": "Asks to erase the account linked to email."
+    "reason": "Asks to erase account and associated records."
    },
    {
     "id": 22,
     "request_type": "DELETION",
     "authorizes_deletion": true,
     "language": "en",
-    "reason": "Asks to erase the account linked to email."
+    "reason": "Asks to erase account and associated records."
    },
    {
     "id": 23,
     "request_type": "DELETION",
     "authorizes_deletion": true,
     "language": "en",
-    "reason": "Asks to erase the account linked to email."
+    "reason": "Asks to erase account via deletion procedure."
    },
    {
     "id": 24,
     "request_type": "DELETION",
     "authorizes_deletion": true,
     "language": "en",
-    "reason": "Asks to erase the account linked to email."
+    "reason": "Asks to erase account via deletion procedure."
    },
    {
     "id": 25,
     "request_type": "DELETION",
     "authorizes_deletion": true,
     "language": "en",
-    "reason": "Asks to erase the account linked to email."
+    "reason": "Asks to erase account via deletion procedure."
    },
    {
     "id": 26,
     "request_type": "DELETION",
     "authorizes_deletion": true,
     "language": "en",
-    "reason": "Asks to erase the account linked to email."
+    "reason": "Asks to erase account via deletion procedure."
    },
    {
     "id": 27,
     "request_type": "DELETION",
     "authorizes_deletion": true,
     "language": "en",
-    "reason": "Asks to erase the account linked to email."
+    "reason": "Asks to erase account via deletion procedure."
    },
    {
     "id": 28,
     "request_type": "DELETION",
     "authorizes_deletion": true,
     "language": "en",
-    "reason": "Asks to erase the account linked to email."
+    "reason": "Asks to erase account and connected identifiers."
    },
    {
     "id": 29,
     "request_type": "DELETION",
     "authorizes_deletion": true,
     "language": "en",
-    "reason": "Asks to erase the account linked to email."
+    "reason": "Asks to erase account and eligible data."
    },
    {
     "id": 30,
     "request_type": "DELETION",
     "authorizes_deletion": true,
     "language": "en",
-    "reason": "Asks to erase the account linked to email."
+    "reason": "Asks to erase account and eligible data."
    },
    {
     "id": 31,
     "request_type": "DELETION",
     "authorizes_deletion": true,
     "language": "en",
-    "reason": "Asks to erase the account linked to email."
+    "reason": "Asks to erase account and eligible data."
    },
    {
     "id": 32,
     "request_type": "DELETION",
     "authorizes_deletion": true,
     "language": "en",
-    "reason": "Asks to erase the account linked to email."
+    "reason": "Asks to erase account and eligible data."
    },
    {
     "id": 33,
     "request_type": "DELETION",
     "authorizes_deletion": true,
     "language": "en",
-    "reason": "Asks to erase the account linked to email."
+    "reason": "Asks to erase account and eligible data."
    },
    {
     "id": 34,
     "request_type": "DELETION",
     "authorizes_deletion": true,
     "language": "en",
-    "reason": "Asks to erase the account linked to email."
+    "reason": "Asks to erase account and eligible data."
    },
    {
     "id": 35,
     "request_type": "DELETION",
     "authorizes_deletion": true,
     "language": "en",
-    "reason": "Asks to erase the account linked to email."
+    "reason": "Asks to permanently delete account."
    },
    {
     "id": 36,
     "request_type": "DELETION",
     "authorizes_deletion": true,
     "language": "en",
-    "reason": "Asks to erase the account linked to email."
+    "reason": "Asks to permanently delete account."
    },
    {
     "id": 37,
     "request_type": "DELETION",
     "authorizes_deletion": true,
     "language": "en",
-    "reason": "Asks to erase the account linked to email."
+    "reason": "Asks to permanently delete account across systems."
    },
    {
     "id": 38,
     "request_type": "DELETION",
     "authorizes_deletion": true,
     "language": "en",
-    "reason": "Asks to erase the account linked to email."
+    "reason": "Asks to permanently delete account across systems."
    },
    {
     "id": 39,
     "request_type": "DELETION",
     "authorizes_deletion": true,
     "language": "en",
-    "reason": "Asks to erase the account linked to email."
+    "reason": "Asks to permanently delete account and records."
    }
   ]
  },
  "usage": {
-  "input": 2485,
-  "output": 2092
+  "input": 2464,
+  "output": 2080
  }
 }

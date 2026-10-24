@@ -1,0 +1,235 @@
+{
+ "model": "claude-fable-5-1",
+ "parsed": {
+  "items": [
+   {
+    "id": 0,
+    "request_type": "DELETION_FOLLOW_UP",
+    "authorizes_deletion": true,
+    "language": "en",
+    "reason": "Asks to verify account deletion was completed"
+   },
+   {
+    "id": 1,
+    "request_type": "DELETION",
+    "authorizes_deletion": true,
+    "language": "en",
+    "reason": "Asks to close account and remove profile and details"
+   },
+   {
+    "id": 2,
+    "request_type": "DELETION",
+    "authorizes_deletion": true,
+    "language": "en",
+    "reason": "Asks to remove account and linked personal information"
+   },
+   {
+    "id": 3,
+    "request_type": "DELETION_FOLLOW_UP",
+    "authorizes_deletion": true,
+    "language": "en",
+    "reason": "Already deleted; asks to check nothing remains"
+   },
+   {
+    "id": 4,
+    "request_type": "DELETION_FOLLOW_UP",
+    "authorizes_deletion": true,
+    "language": "en",
+    "reason": "Account closed; asks to delete remaining export file"
+   },
+   {
+    "id": 5,
+    "request_type": "DELETION_FOLLOW_UP",
+    "authorizes_deletion": true,
+    "language": "en",
+    "reason": "Asks to verify profile is gone after deletion"
+   },
+   {
+    "id": 6,
+    "request_type": "DELETION_FOLLOW_UP",
+    "authorizes_deletion": true,
+    "language": "en",
+    "reason": "Deleted; asks to remove any remaining profile copy"
+   },
+   {
+    "id": 7,
+    "request_type": "DELETION",
+    "authorizes_deletion": true,
+    "language": "en",
+    "reason": "Asks to close account completely"
+   },
+   {
+    "id": 8,
+    "request_type": "DELETION_FOLLOW_UP",
+    "authorizes_deletion": true,
+    "language": "en",
+    "reason": "Asks to confirm profile is gone"
+   },
+   {
+    "id": 9,
+    "request_type": "DELETION",
+    "authorizes_deletion": true,
+    "language": "en",
+    "reason": "Asks to remove name and contact details; account no longer needed"
+   },
+   {
+    "id": 10,
+    "request_type": "DELETION",
+    "authorizes_deletion": true,
+    "language": "en",
+    "reason": "Asks to remove records under both email addresses"
+   },
+   {
+    "id": 11,
+    "request_type": "DELETION",
+    "authorizes_deletion": true,
+    "language": "en",
+    "reason": "Asks to remove records linked to both addresses"
+   },
+   {
+    "id": 12,
+    "request_type": "DELETION",
+    "authorizes_deletion": true,
+    "language": "en",
+    "reason": "Asks to close account permanently"
+   },
+   {
+    "id": 13,
+    "request_type": "DELETION_FOLLOW_UP",
+    "authorizes_deletion": true,
+    "language": "en",
+    "reason": "Asks to investigate and finish deletion"
+   },
+   {
+    "id": 14,
+    "request_type": "DELETION_FOLLOW_UP",
+    "authorizes_deletion": true,
+    "language": "en",
+    "reason": "Asks to remove remaining traces after deletion"
+   },
+   {
+    "id": 15,
+    "request_type": "DELETION",
+    "authorizes_deletion": true,
+    "language": "en",
+    "reason": "Asks for account to be erased"
+   },
+   {
+    "id": 16,
+    "request_type": "DELETION_FOLLOW_UP",
+    "authorizes_deletion": true,
+    "language": "es",
+    "reason": "Deletion attempt errored; asks to check and complete deletion"
+   },
+   {
+    "id": 17,
+    "request_type": "DELETION",
+    "authorizes_deletion": true,
+    "language": "en",
+    "reason": "Deleting account; nothing should point back to them"
+   },
+   {
+    "id": 18,
+    "request_type": "DELETION",
+    "authorizes_deletion": true,
+    "language": "fr",
+    "reason": "Requests permanent deletion of account"
+   },
+   {
+    "id": 19,
+    "request_type": "DELETION_FOLLOW_UP",
+    "authorizes_deletion": true,
+    "language": "en",
+    "reason": "Account gone; asks to remove remaining search result"
+   },
+   {
+    "id": 20,
+    "request_type": "DELETION_FOLLOW_UP",
+    "authorizes_deletion": true,
+    "language": "en",
+    "reason": "Asks to audit and confirm account was fully removed"
+   },
+   {
+    "id": 21,
+    "request_type": "DELETION",
+    "authorizes_deletion": true,
+    "language": "en",
+    "reason": "Asks to close account and delete personal data"
+   },
+   {
+    "id": 22,
+    "request_type": "DELETION",
+    "authorizes_deletion": true,
+    "language": "en",
+    "reason": "Asks to delete account and identity document"
+   },
+   {
+    "id": 23,
+    "request_type": "DELETION",
+    "authorizes_deletion": true,
+    "language": "en",
+    "reason": "Asks to delete account, archive and search result"
+   },
+   {
+    "id": 24,
+    "request_type": "DELETION",
+    "authorizes_deletion": true,
+    "language": "en",
+    "reason": "Asks to erase account linked to email"
+   },
+   {
+    "id": 25,
+    "request_type": "DELETION",
+    "authorizes_deletion": true,
+    "language": "en",
+    "reason": "Asks to permanently delete account"
+   },
+   {
+    "id": 26,
+    "request_type": "DELETION",
+    "authorizes_deletion": true,
+    "language": "en",
+    "reason": "Asks to remove profile and personal details from support chats"
+   },
+   {
+    "id": 27,
+    "request_type": "DELETION",
+    "authorizes_deletion": true,
+    "language": "en",
+    "reason": "Explicit request for permanent account deletion"
+   },
+   {
+    "id": 28,
+    "request_type": "DELETION",
+    "authorizes_deletion": true,
+    "language": "en",
+    "reason": "Explicit request for permanent account deletion"
+   },
+   {
+    "id": 29,
+    "request_type": "DELETION_FOLLOW_UP",
+    "authorizes_deletion": true,
+    "language": "en",
+    "reason": "Account gone; asks to remove remaining personal details"
+   },
+   {
+    "id": 30,
+    "request_type": "DELETION_FOLLOW_UP",
+    "authorizes_deletion": true,
+    "language": "en",
+    "reason": "Asks to verify whether deletion actually completed"
+   },
+   {
+    "id": 31,
+    "request_type": "DELETION",
+    "authorizes_deletion": true,
+    "language": "ja",
+    "reason": "Requests complete deletion of account"
+   }
+  ]
+ },
+ "usage": {
+  "input": 2002,
+  "output": 2603
+ }
+}

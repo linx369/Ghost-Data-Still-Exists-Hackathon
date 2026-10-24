@@ -14,7 +14,7 @@
     "state": "PRESENT",
     "shows_direct_identifiers": true,
     "observed_at": null,
-    "note": "Status Collecting; created 20 Jun 14:18 UTC (year not shown); owner marcus.lee@northstar.shop",
+    "note": "Status Collecting; created 20 Jun 14:18 UTC; owner marcus.lee@northstar.shop; year not shown.",
     "aliases": [
      "customer_export_1261.zip"
     ]
@@ -31,7 +31,7 @@
     "state": "PRESENT",
     "shows_direct_identifiers": true,
     "observed_at": "2026-06-18T06:46:00Z",
-    "note": "Ready; created 2026-06-18 06:42 UTC, expires 2026-06-25; 18.4 MB; includes Profile, Orders, Saved addresses; 0 downloads",
+    "note": "Status Ready; created 18 Jun 2026 06:42 UTC, expires 25 Jun 2026; 18.4 MB; Profile, Orders, Saved addresses; 0 downloads.",
     "aliases": [
      "customer_export_1260.zip"
     ]
@@ -48,7 +48,7 @@
     "state": "PRESENT",
     "shows_direct_identifiers": true,
     "observed_at": null,
-    "note": "Status Packaging; created 17 Jun 11:03 UTC (year not shown); owner sara.kim@northstar.shop",
+    "note": "Status Packaging; created 17 Jun 11:03 UTC; owner sara.kim@northstar.shop; year not shown.",
     "aliases": [
      "customer_export_1259.zip"
     ]
@@ -65,7 +65,7 @@
     "state": "PRESENT",
     "shows_direct_identifiers": true,
     "observed_at": null,
-    "note": "Status Ready; created 16 Jun 09:27 UTC (year not shown); owner daniel.park@northstar.shop",
+    "note": "Status Ready; created 16 Jun 09:27 UTC; owner daniel.park@northstar.shop; year not shown.",
     "aliases": [
      "customer_export_1258.zip"
     ]
@@ -74,6 +74,6 @@
  },
  "usage": {
   "input": 3378,
-  "output": 1500
+  "output": 1317
  }
 }

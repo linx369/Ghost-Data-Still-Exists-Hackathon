@@ -12,7 +12,7 @@
     "state": "PRESENT",
     "shows_direct_identifiers": false,
     "observed_at": "2026-02-13T08:00:00Z",
-    "note": "northstar-customer-data/support-attachments/2026/02; 684 KB, v3, AES-256, uploader support-service, modified 12 Feb 2026 18:42 UTC",
+    "note": "684 KB, v3, Standard, modified 12 Feb 2026 18:42 UTC, uploader support-service, AES-256, checksum e71b6d...",
     "aliases": [
      "delivery_confirmation_19.pdf"
     ]
@@ -27,7 +27,7 @@
     "state": "PRESENT",
     "shows_direct_identifiers": false,
     "observed_at": "2026-02-13T08:00:00Z",
-    "note": "northstar-customer-data/support-attachments/2026/02; 712 KB, v1, Standard, modified 11 Feb 14:17",
+    "note": "712 KB, v1, Standard, modified 11 Feb 14:17; bucket northstar-customer-data/support-attachments/2026/02",
     "aliases": [
      "delivery_confirmation_20.pdf"
     ]
@@ -42,9 +42,10 @@
     "state": "PRESENT",
     "shows_direct_identifiers": false,
     "observed_at": "2026-02-13T08:00:00Z",
-    "note": "northstar-customer-data/support-attachments/2026/02; 203 KB, v1, Standard, modified 10 Feb 09:33",
+    "note": "203 KB, v1, Standard, modified 10 Feb 09:33; support-attachments prefix",
     "aliases": [
-     "return_label_4821.pdf"
+     "return_label_4821.pdf",
+     "4821"
     ]
    },
    {
@@ -57,9 +58,10 @@
     "state": "PRESENT",
     "shows_direct_identifiers": false,
     "observed_at": "2026-02-13T08:00:00Z",
-    "note": "northstar-customer-data/support-attachments/2026/02; 198 KB, v2, Standard, modified 11 Feb 16:05",
+    "note": "198 KB, v2, Standard, modified 11 Feb 16:05; support-attachments prefix",
     "aliases": [
-     "return_label_4876.pdf"
+     "return_label_4876.pdf",
+     "4876"
     ]
    },
    {
@@ -72,7 +74,7 @@
     "state": "PRESENT",
     "shows_direct_identifiers": false,
     "observed_at": "2026-02-13T08:00:00Z",
-    "note": "northstar-customer-data/support-attachments/2026/02; 318 KB, v1, Standard, modified 10 Feb 11:21",
+    "note": "318 KB, v1, Standard, modified 10 Feb 11:21; invoice stored under support-attachments",
     "aliases": [
      "invoice_NS-10493.pdf",
      "NS-10493"
@@ -88,9 +90,10 @@
     "state": "PRESENT",
     "shows_direct_identifiers": false,
     "observed_at": "2026-02-13T08:00:00Z",
-    "note": "northstar-customer-data/support-attachments/2026/02; 2.4 MB, v1, Standard, modified 12 Feb 10:08",
+    "note": "2.4 MB, v1, Standard, modified 12 Feb 10:08; image in support-attachments prefix",
     "aliases": [
-     "parcel_damage_7713.jpg"
+     "parcel_damage_7713.jpg",
+     "7713"
     ]
    },
    {
@@ -103,7 +106,7 @@
     "state": "PRESENT",
     "shows_direct_identifiers": false,
     "observed_at": "2026-02-13T08:00:00Z",
-    "note": "Zip in support-attachments/2026/02 prefix; 128 MB, v1, Standard, modified 10 Feb 23:14",
+    "note": "128 MB, v1, Standard, modified 10 Feb 23:14; stored under support-attachments/2026/02",
     "aliases": [
      "customer_export_2026-02-10.zip"
     ]
@@ -118,7 +121,7 @@
     "state": "PRESENT",
     "shows_direct_identifiers": false,
     "observed_at": "2026-02-13T08:00:00Z",
-    "note": "Zip in support-attachments/2026/02 prefix; 131 MB, v1, Standard, modified 12 Feb 21:56",
+    "note": "131 MB, v1, Standard, modified 12 Feb 21:56; stored under support-attachments/2026/02",
     "aliases": [
      "customer_export_2026-02-12.zip"
     ]
@@ -127,6 +130,6 @@
  },
  "usage": {
   "input": 3509,
-  "output": 1898
+  "output": 2046
  }
 }

@@ -18,7 +18,7 @@
     "state": "PRESENT",
     "shows_direct_identifiers": true,
     "observed_at": null,
-    "note": "Customer statement PDF with name, email, user id, delivery address, Visa ending 4821, order ORD-20261260 delivered 14 Jul.",
+    "note": "Customer statement PDF; order ORD-20261260, Visa ending 4821, address 24 Fjordgata Trondheim, delivered 14 Jul 2026",
     "aliases": [
      "account_history_report_20260718.pdf",
      "NST-2026-0718-1842",
@@ -29,6 +29,6 @@
  },
  "usage": {
   "input": 1155,
-  "output": 563
+  "output": 778
  }
 }

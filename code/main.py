@@ -61,7 +61,7 @@ def main() -> None:
     load_env()
     llm = LLM(offline=a.offline)
     observations = load_text_evidence(ds) + load_multimodal_evidence(ds, llm)
-    intents = classify(sample + test, llm)
+    intents = classify(cases, llm)  # only the requests being audited
     auditor = Auditor(ds, observations, sample + test, intents)
     results = [auditor.audit(q) for q in cases]
 
@@ -72,6 +72,10 @@ def main() -> None:
         with open(a.trace, "w", encoding="utf-8") as f:
             for r in results:
                 f.write(json.dumps({"case_id": r.case_id, "status": r.status, **r.trace}, ensure_ascii=False) + "\n")
+    if a.split == "test" and not a.out:
+        sys.path.insert(0, str(ROOT / "code" / "evaluation"))
+        from usage import write_usage_report
+        write_usage_report(ROOT / "code" / "evaluation" / "usage_report.md", len(results), a.split, a.offline)
     print(f"wrote {len(results)} rows -> {out}")
     print("model usage:", json.dumps(USAGE.as_dict()))
 

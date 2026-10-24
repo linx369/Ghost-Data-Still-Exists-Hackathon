@@ -18,7 +18,7 @@
     "state": "PRESENT",
     "shows_direct_identifiers": true,
     "observed_at": "2026-06-18T10:24:00Z",
-    "note": "Delivery address correction request CS-4827, order ORD-20264827, apartment 14B to 18B, carrier SwiftShip, contact SMS",
+    "note": "Delivery address correction request, ticket CS-4827, received/submitted 18 Jun 2026; full contact details visible.",
     "aliases": [
      "CS-4827",
      "ORD-20264827",
@@ -29,19 +29,13 @@
     "resource_id": "",
     "record_type": "SUPPORT_ATTACHMENT",
     "user_ids": [],
-    "emails": [
-     "priya.raman@gmail.com"
-    ],
-    "phones": [
-     "+91 98765 73142"
-    ],
-    "names": [
-     "Priya Raman"
-    ],
+    "emails": [],
+    "phones": [],
+    "names": [],
     "state": "PRESENT",
-    "shows_direct_identifiers": true,
+    "shows_direct_identifiers": false,
     "observed_at": "2026-09-12T07:30:00Z",
-    "note": "Stored file 312 KB, ticket CS-4827, region ap-south, uploader customer, checksum prefix c90a42; holds customer request PII",
+    "note": "Attachment 312 KB, region ap-south, uploader customer, captured 12 Sep 2026, checksum prefix c90a42.",
     "aliases": [
      "delivery_address_correction.pdf",
      "CS-4827"
@@ -51,6 +45,6 @@
  },
  "usage": {
   "input": 1166,
-  "output": 1489
+  "output": 868
  }
 }

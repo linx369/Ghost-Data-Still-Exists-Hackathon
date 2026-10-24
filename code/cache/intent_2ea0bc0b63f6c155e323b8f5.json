@@ -4,288 +4,288 @@
   "items": [
    {
     "id": 0,
-    "request_type": "DELETION",
-    "authorizes_deletion": true,
+    "request_type": "ACCESS",
+    "authorizes_deletion": false,
     "language": "en",
-    "reason": "Asks to close account and delete personal data"
+    "reason": "Asks what data is held; explicitly not an erasure request."
    },
    {
     "id": 1,
-    "request_type": "DELETION",
-    "authorizes_deletion": true,
+    "request_type": "EXPORT",
+    "authorizes_deletion": false,
     "language": "en",
-    "reason": "Asks to close account and delete personal data"
+    "reason": "Wants copy of data and explicitly keeps account active."
    },
    {
     "id": 2,
     "request_type": "DELETION",
     "authorizes_deletion": true,
     "language": "en",
-    "reason": "Asks to close account and delete personal data"
+    "reason": "Asks to remove account and linked personal information."
    },
    {
     "id": 3,
     "request_type": "DELETION",
     "authorizes_deletion": true,
     "language": "en",
-    "reason": "Asks to close account and delete personal data"
+    "reason": "Asks to remove account and linked personal information."
    },
    {
     "id": 4,
     "request_type": "DELETION",
     "authorizes_deletion": true,
     "language": "en",
-    "reason": "Asks to close account and delete personal data"
+    "reason": "Asks to remove account and linked personal information."
    },
    {
     "id": 5,
     "request_type": "DELETION",
     "authorizes_deletion": true,
     "language": "en",
-    "reason": "Asks to close account and delete personal data"
+    "reason": "Asks to remove account and linked personal information."
    },
    {
     "id": 6,
     "request_type": "DELETION",
     "authorizes_deletion": true,
     "language": "en",
-    "reason": "Asks to close account and delete personal data"
+    "reason": "Asks to remove account and linked personal information."
    },
    {
     "id": 7,
     "request_type": "DELETION",
     "authorizes_deletion": true,
     "language": "en",
-    "reason": "Asks to close account and delete personal data"
+    "reason": "Asks to remove account and linked personal information."
    },
    {
     "id": 8,
     "request_type": "DELETION",
     "authorizes_deletion": true,
     "language": "en",
-    "reason": "Asks to close account and delete personal data"
+    "reason": "Asks to remove account and linked personal information."
    },
    {
     "id": 9,
     "request_type": "DELETION",
     "authorizes_deletion": true,
     "language": "en",
-    "reason": "Asks to close account and delete personal data"
+    "reason": "Asks to remove account and linked personal information."
    },
    {
     "id": 10,
     "request_type": "DELETION",
     "authorizes_deletion": true,
     "language": "en",
-    "reason": "Asks to close account and delete personal data"
+    "reason": "Asks to remove account and linked personal information."
    },
    {
     "id": 11,
     "request_type": "DELETION",
     "authorizes_deletion": true,
     "language": "en",
-    "reason": "Asks to close account and delete personal data"
+    "reason": "Asks to remove account and linked personal information."
    },
    {
     "id": 12,
     "request_type": "DELETION",
     "authorizes_deletion": true,
     "language": "en",
-    "reason": "Asks to close account and delete personal data"
+    "reason": "Asks to remove account and linked personal information."
    },
    {
     "id": 13,
     "request_type": "DELETION",
     "authorizes_deletion": true,
     "language": "en",
-    "reason": "Asks to close account and delete personal data"
+    "reason": "Asks to remove account and linked personal information."
    },
    {
     "id": 14,
     "request_type": "DELETION",
     "authorizes_deletion": true,
     "language": "en",
-    "reason": "Asks to permanently close account; backups must not restore profile"
+    "reason": "Asks to remove account and linked personal information."
    },
    {
     "id": 15,
-    "request_type": "DELETION_FOLLOW_UP",
+    "request_type": "DELETION",
     "authorizes_deletion": true,
     "language": "en",
-    "reason": "Prior deletion incomplete; asks to finish deletion"
+    "reason": "Asks to remove account and linked personal information."
    },
    {
     "id": 16,
-    "request_type": "DELETION_FOLLOW_UP",
+    "request_type": "DELETION",
     "authorizes_deletion": true,
     "language": "en",
-    "reason": "Prior deletion left traces; asks to remove them"
+    "reason": "Asks to remove account and linked personal information."
    },
    {
     "id": 17,
     "request_type": "DELETION",
     "authorizes_deletion": true,
     "language": "en",
-    "reason": "Asks for account to be erased"
+    "reason": "Asks to remove account and linked personal information."
    },
    {
     "id": 18,
     "request_type": "DELETION",
     "authorizes_deletion": true,
     "language": "en",
-    "reason": "Asks for account to be erased"
+    "reason": "Asks to remove account and linked personal information."
    },
    {
     "id": 19,
     "request_type": "DELETION",
     "authorizes_deletion": true,
     "language": "en",
-    "reason": "Asks for account to be erased"
+    "reason": "Asks to remove account and linked personal information."
    },
    {
     "id": 20,
     "request_type": "DELETION",
     "authorizes_deletion": true,
     "language": "en",
-    "reason": "Asks for account to be erased"
+    "reason": "Asks to remove account and linked personal information."
    },
    {
     "id": 21,
     "request_type": "DELETION",
     "authorizes_deletion": true,
     "language": "en",
-    "reason": "Asks for account to be erased"
+    "reason": "Asks to remove account and linked personal information."
    },
    {
     "id": 22,
     "request_type": "DELETION",
     "authorizes_deletion": true,
     "language": "en",
-    "reason": "Asks for account to be erased"
+    "reason": "Asks to remove account and linked personal information."
    },
    {
     "id": 23,
     "request_type": "DELETION",
     "authorizes_deletion": true,
     "language": "en",
-    "reason": "Asks for account to be erased"
+    "reason": "Asks to remove account and linked personal information."
    },
    {
     "id": 24,
     "request_type": "DELETION",
     "authorizes_deletion": true,
     "language": "en",
-    "reason": "Asks for account to be erased"
+    "reason": "Asks to remove account and linked personal information."
    },
    {
     "id": 25,
     "request_type": "DELETION",
     "authorizes_deletion": true,
     "language": "en",
-    "reason": "Asks for account to be erased"
+    "reason": "Asks to remove account and linked personal information."
    },
    {
     "id": 26,
     "request_type": "DELETION",
     "authorizes_deletion": true,
     "language": "en",
-    "reason": "Asks for account to be erased"
+    "reason": "Asks to remove account and linked personal information."
    },
    {
     "id": 27,
     "request_type": "DELETION",
     "authorizes_deletion": true,
     "language": "en",
-    "reason": "Asks for account to be erased"
+    "reason": "Asks to remove account and linked personal information."
    },
    {
     "id": 28,
     "request_type": "DELETION",
     "authorizes_deletion": true,
     "language": "en",
-    "reason": "Asks for account to be erased"
+    "reason": "Asks to remove account and linked personal information."
    },
    {
     "id": 29,
     "request_type": "DELETION",
     "authorizes_deletion": true,
     "language": "en",
-    "reason": "Asks for account to be erased"
+    "reason": "Asks to remove account and linked personal information."
    },
    {
     "id": 30,
     "request_type": "DELETION",
     "authorizes_deletion": true,
     "language": "en",
-    "reason": "Asks for account to be erased"
+    "reason": "Asks to remove account and linked personal information."
    },
    {
     "id": 31,
     "request_type": "DELETION",
     "authorizes_deletion": true,
     "language": "en",
-    "reason": "Asks for account to be erased"
+    "reason": "Asks to remove account and linked personal information."
    },
    {
     "id": 32,
     "request_type": "DELETION",
     "authorizes_deletion": true,
     "language": "en",
-    "reason": "Asks for account to be erased"
+    "reason": "Requests deletion of account registered to this email."
    },
    {
     "id": 33,
     "request_type": "DELETION",
     "authorizes_deletion": true,
     "language": "en",
-    "reason": "Asks for account to be erased"
+    "reason": "Requests deletion of account registered to this email."
    },
    {
     "id": 34,
     "request_type": "DELETION",
     "authorizes_deletion": true,
     "language": "en",
-    "reason": "Asks for account to be erased"
+    "reason": "Requests deletion of account registered to this email."
    },
    {
     "id": 35,
     "request_type": "DELETION",
     "authorizes_deletion": true,
     "language": "en",
-    "reason": "Asks for account to be erased"
+    "reason": "Requests deletion of account registered to this email."
    },
    {
     "id": 36,
     "request_type": "DELETION",
     "authorizes_deletion": true,
     "language": "en",
-    "reason": "Asks for account to be erased"
+    "reason": "Requests deletion of account registered to this email."
    },
    {
     "id": 37,
     "request_type": "DELETION",
     "authorizes_deletion": true,
     "language": "en",
-    "reason": "Asks for account to be erased"
+    "reason": "Requests deletion of account registered to this email."
    },
    {
     "id": 38,
     "request_type": "DELETION",
     "authorizes_deletion": true,
     "language": "en",
-    "reason": "Asks for account to be erased"
+    "reason": "Requests deletion of account registered to this email."
    },
    {
     "id": 39,
     "request_type": "DELETION",
     "authorizes_deletion": true,
     "language": "en",
-    "reason": "Asks for account to be erased"
+    "reason": "Requests deletion of account registered to this email."
    }
   ]
  },
  "usage": {
-  "input": 2513,
-  "output": 2057
+  "input": 2657,
+  "output": 2140
  }
 }
