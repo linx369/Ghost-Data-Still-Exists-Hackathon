@@ -1,0 +1,29 @@
+{
+ "model": "claude-fable-5-1",
+ "parsed": {
+  "records": [
+   {
+    "resource_id": "audit_record_003",
+    "record_type": "SECURITY_AUDIT_LOG",
+    "user_ids": [
+     "user_03"
+    ],
+    "emails": [],
+    "phones": [],
+    "names": [],
+    "state": "RETAINED",
+    "shows_direct_identifiers": false,
+    "observed_at": "2026-09-05T06:30:00Z",
+    "note": "Account closure event by automated workflow, recorded 2026-08-25T04:03Z; retain until 2026-08-25T04:03:00Z 2027; integrity seal valid.",
+    "aliases": [
+     "CJX-20260905-0630",
+     "security_retention_extract.pdf"
+    ]
+   }
+  ]
+ },
+ "usage": {
+  "input": 1066,
+  "output": 583
+ }
+}

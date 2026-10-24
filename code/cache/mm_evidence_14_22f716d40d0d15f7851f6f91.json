@@ -1,0 +1,71 @@
+{
+ "model": "claude-fable-5-1",
+ "parsed": {
+  "records": [
+   {
+    "resource_id": "data_flow_1121",
+    "record_type": "DATA_FLOW",
+    "user_ids": [],
+    "emails": [
+     "jain.aditi@gmail.com"
+    ],
+    "phones": [],
+    "names": [],
+    "state": "ENABLED",
+    "shows_direct_identifiers": true,
+    "observed_at": "2026-08-07T07:59:42Z",
+    "note": "Healthy, continuous sync to customer_analytics_warehouse; selector jain.aditi@gmail.com; 1,284 events/hour; owner Data Platform; 200 OK",
+    "aliases": []
+   },
+   {
+    "resource_id": "data_flow_9846",
+    "record_type": "DATA_FLOW",
+    "user_ids": [],
+    "emails": [
+     "lucia-torres@gmail.com"
+    ],
+    "phones": [],
+    "names": [],
+    "state": "ENABLED",
+    "shows_direct_identifiers": true,
+    "observed_at": "2026-08-07T07:59:36Z",
+    "note": "Continuous sync to customer_analytics_warehouse; selector lucia-torres@gmail.com; 842 events/hour; last contact 07:59:36",
+    "aliases": []
+   },
+   {
+    "resource_id": "",
+    "record_type": "DATA_FLOW",
+    "user_ids": [],
+    "emails": [],
+    "phones": [],
+    "names": [],
+    "state": "ENABLED",
+    "shows_direct_identifiers": false,
+    "observed_at": "2026-08-07T07:59:28Z",
+    "note": "Continuous connector to notification_service; selector 'order events'; 650 events/hour; last contact 07:59:28",
+    "aliases": [
+     "Order notifications"
+    ]
+   },
+   {
+    "resource_id": "",
+    "record_type": "DATA_FLOW",
+    "user_ids": [],
+    "emails": [],
+    "phones": [],
+    "names": [],
+    "state": "ENABLED",
+    "shows_direct_identifiers": false,
+    "observed_at": "2026-08-07T07:59:13Z",
+    "note": "Continuous connector to logistics_warehouse; selector 'shipment events'; 420 events/hour; last contact 07:59:13",
+    "aliases": [
+     "Delivery tracking"
+    ]
+   }
+  ]
+ },
+ "usage": {
+  "input": 3508,
+  "output": 1280
+ }
+}

@@ -1,0 +1,34 @@
+{
+ "model": "claude-fable-5-1",
+ "parsed": {
+  "records": [
+   {
+    "resource_id": "",
+    "record_type": "OTHER",
+    "user_ids": [
+     "user_18"
+    ],
+    "emails": [
+     "ingrid.dahl@outlook.com"
+    ],
+    "phones": [],
+    "names": [
+     "Ingrid Dahl"
+    ],
+    "state": "PRESENT",
+    "shows_direct_identifiers": true,
+    "observed_at": null,
+    "note": "Customer statement PDF with name, email, user id, delivery address, Visa ending 4821, order ORD-20261260 delivered 14 Jul.",
+    "aliases": [
+     "account_history_report_20260718.pdf",
+     "NST-2026-0718-1842",
+     "ORD-20261260"
+    ]
+   }
+  ]
+ },
+ "usage": {
+  "input": 1155,
+  "output": 563
+ }
+}

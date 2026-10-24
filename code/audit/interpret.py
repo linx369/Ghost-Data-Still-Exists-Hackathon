@@ -38,6 +38,8 @@ def _has_pii(a: dict, fields=PII_FIELDS) -> bool:
 
 def category(o: Observation) -> str:
     a, sysid = o.attrs, o.system_id
+    if sysid == "support_platform" and str(a.get("_artifact", "")).endswith(".pdf"):
+        return "SUPPORT_ATTACHMENT"  # a document held by support is an attachment, whatever its label
     rt = str(a.get("record_type", "")).upper()
     if rt and rt not in ("DATA_FLOW",):
         return rt
@@ -66,6 +68,8 @@ def category(o: Observation) -> str:
         return "SECURITY_AUDIT_LOG"
     if sysid == "identity_service":
         return "ACCOUNT_TOMBSTONE"
+    if sysid == "object_storage":
+        return "SUPPORT_ATTACHMENT"
     if sysid in ("legal_hold", "legal_service"):
         return "LEGAL_HOLD_RECORD"
     if sysid == "cache_service":
@@ -80,6 +84,8 @@ def category(o: Observation) -> str:
 def state(o: Observation) -> str | None:
     """Return the normalized state, or None when the observation says nothing about state."""
     a = o.attrs
+    if a.get("_link_only"):
+        return None
     ev = str(a.get("event", ""))
     res = str(a.get("result", "")).upper()
     cat = category(o)

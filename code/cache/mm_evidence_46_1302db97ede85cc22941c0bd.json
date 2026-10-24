@@ -1,0 +1,132 @@
+{
+ "model": "claude-fable-5-1",
+ "parsed": {
+  "records": [
+   {
+    "resource_id": "",
+    "record_type": "SUPPORT_ATTACHMENT",
+    "user_ids": [],
+    "emails": [],
+    "phones": [],
+    "names": [],
+    "state": "PRESENT",
+    "shows_direct_identifiers": false,
+    "observed_at": "2026-02-13T08:00:00Z",
+    "note": "northstar-customer-data/support-attachments/2026/02; 684 KB, v3, AES-256, uploader support-service, modified 12 Feb 2026 18:42 UTC",
+    "aliases": [
+     "delivery_confirmation_19.pdf"
+    ]
+   },
+   {
+    "resource_id": "",
+    "record_type": "SUPPORT_ATTACHMENT",
+    "user_ids": [],
+    "emails": [],
+    "phones": [],
+    "names": [],
+    "state": "PRESENT",
+    "shows_direct_identifiers": false,
+    "observed_at": "2026-02-13T08:00:00Z",
+    "note": "northstar-customer-data/support-attachments/2026/02; 712 KB, v1, Standard, modified 11 Feb 14:17",
+    "aliases": [
+     "delivery_confirmation_20.pdf"
+    ]
+   },
+   {
+    "resource_id": "",
+    "record_type": "SUPPORT_ATTACHMENT",
+    "user_ids": [],
+    "emails": [],
+    "phones": [],
+    "names": [],
+    "state": "PRESENT",
+    "shows_direct_identifiers": false,
+    "observed_at": "2026-02-13T08:00:00Z",
+    "note": "northstar-customer-data/support-attachments/2026/02; 203 KB, v1, Standard, modified 10 Feb 09:33",
+    "aliases": [
+     "return_label_4821.pdf"
+    ]
+   },
+   {
+    "resource_id": "",
+    "record_type": "SUPPORT_ATTACHMENT",
+    "user_ids": [],
+    "emails": [],
+    "phones": [],
+    "names": [],
+    "state": "PRESENT",
+    "shows_direct_identifiers": false,
+    "observed_at": "2026-02-13T08:00:00Z",
+    "note": "northstar-customer-data/support-attachments/2026/02; 198 KB, v2, Standard, modified 11 Feb 16:05",
+    "aliases": [
+     "return_label_4876.pdf"
+    ]
+   },
+   {
+    "resource_id": "",
+    "record_type": "SUPPORT_ATTACHMENT",
+    "user_ids": [],
+    "emails": [],
+    "phones": [],
+    "names": [],
+    "state": "PRESENT",
+    "shows_direct_identifiers": false,
+    "observed_at": "2026-02-13T08:00:00Z",
+    "note": "northstar-customer-data/support-attachments/2026/02; 318 KB, v1, Standard, modified 10 Feb 11:21",
+    "aliases": [
+     "invoice_NS-10493.pdf",
+     "NS-10493"
+    ]
+   },
+   {
+    "resource_id": "",
+    "record_type": "SUPPORT_ATTACHMENT",
+    "user_ids": [],
+    "emails": [],
+    "phones": [],
+    "names": [],
+    "state": "PRESENT",
+    "shows_direct_identifiers": false,
+    "observed_at": "2026-02-13T08:00:00Z",
+    "note": "northstar-customer-data/support-attachments/2026/02; 2.4 MB, v1, Standard, modified 12 Feb 10:08",
+    "aliases": [
+     "parcel_damage_7713.jpg"
+    ]
+   },
+   {
+    "resource_id": "",
+    "record_type": "USER_EXPORT",
+    "user_ids": [],
+    "emails": [],
+    "phones": [],
+    "names": [],
+    "state": "PRESENT",
+    "shows_direct_identifiers": false,
+    "observed_at": "2026-02-13T08:00:00Z",
+    "note": "Zip in support-attachments/2026/02 prefix; 128 MB, v1, Standard, modified 10 Feb 23:14",
+    "aliases": [
+     "customer_export_2026-02-10.zip"
+    ]
+   },
+   {
+    "resource_id": "",
+    "record_type": "USER_EXPORT",
+    "user_ids": [],
+    "emails": [],
+    "phones": [],
+    "names": [],
+    "state": "PRESENT",
+    "shows_direct_identifiers": false,
+    "observed_at": "2026-02-13T08:00:00Z",
+    "note": "Zip in support-attachments/2026/02 prefix; 131 MB, v1, Standard, modified 12 Feb 21:56",
+    "aliases": [
+     "customer_export_2026-02-12.zip"
+    ]
+   }
+  ]
+ },
+ "usage": {
+  "input": 3509,
+  "output": 1898
+ }
+}

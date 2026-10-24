@@ -1,0 +1,33 @@
+{
+ "model": "claude-fable-5-1",
+ "parsed": {
+  "records": [
+   {
+    "resource_id": "support_1034",
+    "record_type": "SUPPORT_MESSAGE",
+    "user_ids": [],
+    "emails": [
+     "kagyeman8947@fastmail.com"
+    ],
+    "phones": [],
+    "names": [
+     "Kofi Agyeman",
+     "Maya Chen"
+    ],
+    "state": "PRESENT",
+    "shows_direct_identifiers": true,
+    "observed_at": null,
+    "note": "Ticket CS-5034 'Where is my delivery?', 4 messages 09:12-09:35, customer email visible, assigned Maya Chen.",
+    "aliases": [
+     "CS-5034",
+     "ORD-20265034",
+     "SWF-884103"
+    ]
+   }
+  ]
+ },
+ "usage": {
+  "input": 3574,
+  "output": 244
+ }
+}

@@ -1,0 +1,91 @@
+{
+ "model": "claude-fable-5-1",
+ "parsed": {
+  "records": [
+   {
+    "resource_id": "account_5762",
+    "record_type": "USER_PROFILE",
+    "user_ids": [
+     "user_11"
+    ],
+    "emails": [
+     "haruka.s1838@zoho.com"
+    ],
+    "phones": [
+     "+81 90 7610 2507"
+    ],
+    "names": [
+     "Haruka Sato"
+    ],
+    "state": "PRESENT",
+    "shows_direct_identifiers": true,
+    "observed_at": null,
+    "note": "Live customer profile in admin console; address 2-18-4 Kichijoji, Musashino, Tokyo 180-0004; Silver tier, JP market, mobile_app signup",
+    "aliases": [
+     "account_admin_console_20260926.png"
+    ]
+   },
+   {
+    "resource_id": "support_9538",
+    "record_type": "SUPPORT_MESSAGE",
+    "user_ids": [
+     "user_11"
+    ],
+    "emails": [],
+    "phones": [],
+    "names": [
+     "Haruka Sato"
+    ],
+    "state": "PRESENT",
+    "shows_direct_identifiers": false,
+    "observed_at": null,
+    "note": "Support ticket CS-8538 linked to profile; created 28 Aug, agent responded 22 Sep, customer replied 24 Sep",
+    "aliases": [
+     "CS-8538"
+    ]
+   },
+   {
+    "resource_id": "",
+    "record_type": "OTHER",
+    "user_ids": [
+     "user_11"
+    ],
+    "emails": [],
+    "phones": [],
+    "names": [
+     "Haruka Sato"
+    ],
+    "state": "PRESENT",
+    "shows_direct_identifiers": false,
+    "observed_at": null,
+    "note": "Order 12 Sep 2026, Ceramic coffee set, qty 1, JPY 8,900, Delivered 18 Sep",
+    "aliases": [
+     "ORD-20265762"
+    ]
+   },
+   {
+    "resource_id": "",
+    "record_type": "OTHER",
+    "user_ids": [
+     "user_11"
+    ],
+    "emails": [],
+    "phones": [],
+    "names": [
+     "Haruka Sato"
+    ],
+    "state": "PRESENT",
+    "shows_direct_identifiers": false,
+    "observed_at": null,
+    "note": "Order 28 Aug 2026, Travel backpack, qty 1, JPY 12,400, Returned 03 Sep",
+    "aliases": [
+     "ORD-20265518"
+    ]
+   }
+  ]
+ },
+ "usage": {
+  "input": 3573,
+  "output": 1311
+ }
+}

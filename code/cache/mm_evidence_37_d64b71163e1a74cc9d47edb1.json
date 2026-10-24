@@ -1,0 +1,101 @@
+{
+ "model": "claude-fable-5-1",
+ "parsed": {
+  "records": [
+   {
+    "resource_id": "audit_record_003",
+    "record_type": "SECURITY_AUDIT_LOG",
+    "user_ids": [
+     "user_03"
+    ],
+    "emails": [],
+    "phones": [],
+    "names": [],
+    "state": "PRESENT",
+    "shows_direct_identifiers": false,
+    "observed_at": null,
+    "note": "Account closure recorded, 2026-08-25T04:03:00Z, actor automated workflow, signature Valid, journal 2026-Q3, fingerprint 8f0c...31ad",
+    "aliases": []
+   },
+   {
+    "resource_id": "audit_record_002",
+    "record_type": "SECURITY_AUDIT_LOG",
+    "user_ids": [
+     "user_03"
+    ],
+    "emails": [],
+    "phones": [],
+    "names": [],
+    "state": "PRESENT",
+    "shows_direct_identifiers": false,
+    "observed_at": null,
+    "note": "Session revoked, 25 Aug 03:21 UTC, Session management, actor Security system, integrity Valid",
+    "aliases": []
+   },
+   {
+    "resource_id": "audit_record_001",
+    "record_type": "SECURITY_AUDIT_LOG",
+    "user_ids": [
+     "user_03"
+    ],
+    "emails": [],
+    "phones": [],
+    "names": [],
+    "state": "PRESENT",
+    "shows_direct_identifiers": false,
+    "observed_at": null,
+    "note": "Recovery challenge completed, 24 Aug 16:14 UTC, Authentication, actor User (self), integrity Valid",
+    "aliases": []
+   },
+   {
+    "resource_id": "audit_record_006",
+    "record_type": "SECURITY_AUDIT_LOG",
+    "user_ids": [
+     "user_03"
+    ],
+    "emails": [],
+    "phones": [],
+    "names": [],
+    "state": "PRESENT",
+    "shows_direct_identifiers": false,
+    "observed_at": null,
+    "note": "Email change confirmed, 22 Aug 11:27 UTC, Profile update, actor User (self), integrity Valid",
+    "aliases": []
+   },
+   {
+    "resource_id": "audit_record_005",
+    "record_type": "SECURITY_AUDIT_LOG",
+    "user_ids": [
+     "user_03"
+    ],
+    "emails": [],
+    "phones": [],
+    "names": [],
+    "state": "PRESENT",
+    "shows_direct_identifiers": false,
+    "observed_at": null,
+    "note": "Login from new device, 20 Aug 09:42 UTC, Authentication, actor User (self), integrity Valid",
+    "aliases": []
+   },
+   {
+    "resource_id": "audit_record_004",
+    "record_type": "SECURITY_AUDIT_LOG",
+    "user_ids": [
+     "user_03"
+    ],
+    "emails": [],
+    "phones": [],
+    "names": [],
+    "state": "PRESENT",
+    "shows_direct_identifiers": false,
+    "observed_at": null,
+    "note": "Password changed, 18 Aug 14:05 UTC, Authentication, actor User (self), integrity Valid",
+    "aliases": []
+   }
+  ]
+ },
+ "usage": {
+  "input": 3380,
+  "output": 1219
+ }
+}

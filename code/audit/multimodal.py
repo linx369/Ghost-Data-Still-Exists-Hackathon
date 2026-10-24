@@ -12,7 +12,7 @@ from typing import Optional
 
 from pydantic import BaseModel, Field
 
-from .evidence import Observation, RESOURCE_RE, load_manifest, system_of
+from .evidence import Observation, RESOURCE_RE, load_manifest, parse_activity_links, system_of
 from .llm import LLM
 
 SYSTEM = """You extract facts from internal business artifacts (admin-console screenshots, PDFs) of a
@@ -28,8 +28,10 @@ Return JSON only, matching this shape:
   "observed_at": "ISO-8601 time the record state was observed if shown, else null",
   "note": "<= 20 words of supporting detail"
 }]}
-Only include records that have an explicit resource id of the forms above. Records listed for other
-people (other rows in a table) must be included too, each with their own identifiers."""
+Also include stored objects/documents that are identified only by a file name or a document/statement
+reference (e.g. a PDF in a storage bucket, a statement number): use "resource_id": "" and list those names
+in "aliases". Records listed for other people (other rows in a table) must be included too, each with their
+own identifiers. Every record may carry "aliases": file names, ticket numbers, statement or order references."""
 
 
 class MMRecord(BaseModel):
@@ -43,6 +45,7 @@ class MMRecord(BaseModel):
     shows_direct_identifiers: bool = False
     observed_at: Optional[str] = None
     note: str = ""
+    aliases: list[str] = Field(default_factory=list)
 
 
 class MMResult(BaseModel):
@@ -67,6 +70,9 @@ def _content_for(path: Path):
 def load_multimodal_evidence(dataset: Path, llm: LLM, log=print) -> list[Observation]:
     from concurrent.futures import ThreadPoolExecutor
     obs: list[Observation] = []
+    # aliases (file names, statement numbers) -> resource ids, from the data-catalog link events
+    alias_to_rid = {o.attrs["alias"].lower(): o.resource_id for o in parse_activity_links(dataset)
+                    if o.attrs.get("alias") and o.attrs["alias"] != o.resource_id}
     rows = [r for r in load_manifest(dataset) if Path(r["file_path"]).suffix.lower() in (".png", ".pdf")]
 
     def run(row):
@@ -82,6 +88,8 @@ def load_multimodal_evidence(dataset: Path, llm: LLM, log=print) -> list[Observa
         for r in res.records:
             rid = r.resource_id.strip()
             if not RESOURCE_RE.fullmatch(rid):
+                rid = next((alias_to_rid[a.lower()] for a in r.aliases if a.lower() in alias_to_rid), "")
+            if not RESOURCE_RE.fullmatch(rid):
                 continue
             attrs = {"record_type": r.record_type if r.record_type != "OTHER" else "",
                      "result": STATE_MAP.get(r.state, ""),
@@ -89,7 +97,8 @@ def load_multimodal_evidence(dataset: Path, llm: LLM, log=print) -> list[Observa
                      "phone": r.phones[0] if r.phones else None,
                      "name": r.names[0] if r.names else None,
                      "shows_direct_identifiers": r.shows_direct_identifiers,
-                     "note": r.note, "_model": meta.get("model")}
+                     "aliases": r.aliases, "note": r.note, "_model": meta.get("model"),
+                     "_artifact": Path(row["file_path"]).name}
             # a screenshot/PDF shows state as of its capture time
             obs.append(Observation(row["file_id"], row["captured_at"], row["captured_at"],
                                    system_of(rid), rid, attrs, "multimodal", "primary"))

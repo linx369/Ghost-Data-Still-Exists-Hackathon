@@ -17,7 +17,7 @@ EMAIL_RE = re.compile(r"[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,}")
 USER_RE = re.compile(r"\buser_\d+\b")
 HASH_RE = re.compile(r"\b[0-9a-f]{64}\b")
 RESOURCE_RE = re.compile(
-    r"\b(?:account|search|support|analytics|export|data_flow|backup|audit_record|tombstone|cache|email_delivery|marketing|telemetry)_\d+\b"
+    r"\b(?:account|search|support|analytics|export|data_flow|backup|audit_record|tombstone|cache|email_delivery|marketing|telemetry|legal_hold|object)_\d+\b"
 )
 TRACE_RE = re.compile(r"\b(?:tr|rb)-[\w-]+")
 KV_RE = re.compile(r'([A-Za-z_][\w]*)=("(?:[^"\\]|\\.)*"|[^\s|]+)')
@@ -38,6 +38,8 @@ PREFIX_SYSTEM = {
     "email_delivery": "email_delivery_service",
     "marketing": "marketing_platform",
     "telemetry": "product_telemetry",
+    "legal_hold": "legal_service",
+    "object": "object_storage",
 }
 
 
@@ -128,7 +130,7 @@ def parse_sql(path: Path, fid: str, captured: str) -> list[Observation]:
             rid = d.get("resource_id")
             if not rid:
                 continue
-            sysid = system_of(rid)
+            sysid = d.get("origin_system") or system_of(rid)  # replica tables name the origin
             obs.append(Observation(
                 evidence_id=fid, file_captured_at=captured,
                 observed_at=d.get("captured_at") or scope.get(sysid) or captured,
@@ -282,6 +284,29 @@ def parse_text(path: Path, fid: str, captured: str) -> list[Observation]:
     return obs
 
 
+# ------------------------------------------------------------- catalog link events
+LINK_RE = re.compile(r"(?:linked|confirmed) (\S+) \(([^)]+)\) (?:belongs only to|to) (\S+) and (user_\d+)")
+
+
+def parse_activity_links(dataset: Path) -> list[Observation]:
+    """Data-catalog events tie a resource (and an alias such as a file name) to a person.
+    They are identity links only: they never establish a resource's state."""
+    obs = []
+    with open(dataset / "system_activity.csv", encoding="utf-8") as f:
+        for a in csv.DictReader(f):
+            if a["event_type"] != "LINK_RESOURCE_IDENTITY":
+                continue
+            m = LINK_RE.search(a["details"])
+            if not m:
+                continue
+            rid, alias, email, user = m.groups()
+            attrs = {"subject_reference": f"{email} {user}", "alias": alias, "_link_only": True,
+                     "record_type": "SUPPORT_ATTACHMENT" if "belongs only to" in a["details"] else ""}
+            obs.append(Observation(a["activity_id"], a["event_time"], a["event_time"], a["target_system"], rid,
+                                   attrs, "activity:catalog_link", "primary"))
+    return obs
+
+
 # ------------------------------------------------------------------------ loader
 def load_manifest(dataset: Path) -> list[dict]:
     with open(dataset / "evidence_files.csv", encoding="utf-8") as f:
@@ -302,4 +327,4 @@ def load_text_evidence(dataset: Path) -> list[Observation]:
             obs += parse_log(p, fid, cap)
         elif suffix == ".txt":
             obs += parse_text(p, fid, cap)
-    return obs
+    return obs + parse_activity_links(dataset)

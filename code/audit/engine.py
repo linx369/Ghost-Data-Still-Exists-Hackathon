@@ -58,9 +58,21 @@ class Auditor:
         people = [self.idx.people[u] for u in self.users_of[cid]]
         return set().union(*(p.strong_ids for p in people)) if people else {email.lower()}
 
-    def _linked(self, q: dict) -> set[str]:
+    def _linked(self, q: dict, why: list | None = None) -> set[str]:
         ids = self._ids(q["case_id"], q["email"])
-        return {o.resource_id for o in self.obs if o.observed_at <= q["audit_at"] and o.identifiers & ids}
+        by_link, by_content = set(), set()
+        for o in self.obs:
+            if o.observed_at <= q["audit_at"] and o.identifiers & ids:
+                (by_link if o.attrs.get("_link_only") else by_content).add(o.resource_id)
+        # A catalog link is a claim. If the record itself shows someone else's email, the record wins.
+        for rid in by_link - by_content:
+            shown = {i for o in self.by_resource[rid] if not o.attrs.get("_link_only")
+                     for i in o.identifiers if "@" in i}
+            if shown and not shown & ids:
+                by_link.discard(rid)
+                if why is not None:
+                    why.append(f"{rid}: catalog link ignored, record shows {sorted(shown)}")
+        return by_content | by_link
 
     def _linked_systems(self, cases: list[dict]) -> dict[str, set[str]]:
         return {q["case_id"]: {system_of(r) for r in self._linked(q)} for q in cases}
@@ -85,7 +97,8 @@ class Auditor:
             trace["reasoning"] = ["request does not authorize deletion -> NOT_APPLICABLE"]
             return CaseResult(cid, "NOT_APPLICABLE", [], trace)
 
-        linked = self._linked(q)
+        link_notes: list = []
+        linked = self._linked(q, link_notes)
         acc, how = self.accounts.account_for(cid)
         trace["account"] = {"resource_id": acc, "link": how}
         if acc:
@@ -96,7 +109,9 @@ class Auditor:
 
         resources: list[ResourceState] = []
         for rid in sorted(linked):
-            known = [o for o in self.by_resource.get(rid, []) if o.observed_at <= audit_at]
+            # state must be observed after the request: older sightings predate the deletion run
+            known = [o for o in self.by_resource.get(rid, [])
+                     if q["requested_at"] <= o.observed_at <= audit_at]
             citable = [o for o in known if o.file_captured_at <= audit_at]
             pool = [(o, state(o)) for o in (citable or known)]
             pool = [(o, s) for o, s in pool if s]
@@ -117,5 +132,5 @@ class Auditor:
             if r.resource_id == acc and not r.evidence_id:
                 r.evidence_id = self._account_scope_evidence(audit_at, prefer)
         status, steps, why = plan(resources, self.rules)
-        trace["reasoning"] = why
+        trace["reasoning"] = link_notes + why
         return CaseResult(cid, status, steps, trace)
