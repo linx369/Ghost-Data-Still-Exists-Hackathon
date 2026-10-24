@@ -14,19 +14,20 @@ The pieces it runs can also be called alone: `python -m pytest code/tests -q`,
 ## 1. Measured results
 
 <!-- VERIFY:START -->
-_Measured by `python code/verify.py` on 2026-10-24 15:45 UTC. Everything between these markers is generated; do not edit by hand._
+_Measured by `python code/verify.py` on 2026-10-24 15:48 UTC. Everything between these markers is generated; do not edit by hand._
 
 **Checks**
 
 | Check | Result | Detail |
 |---|---|---|
-| Unit + stress tests | PASS | 22 passed in 26.55s |
+| Unit + stress tests | PASS | 22 passed in 27.11s |
 | Sample status accuracy is 1.000 | PASS | 1.000 |
 | Sample step F1 at least 0.99 (regression guard) | PASS | 0.992 |
 | Leave-one-out: no wrong account link | PASS | 0 wrong |
 | Pipeline reproduces the submitted output.csv byte for byte | PASS | identical |
 | output.csv satisfies the contract | PASS | 518 rows, 0 problems |
-| In-pipeline verification (contract + grounding) of every answer | PASS | 0 problems |
+| In-pipeline verification of every answer (contract, grounding, intake cross-check) | PASS | 0 problems |
+| From an empty model cache, output.csv is reproduced | PASS | identical |
 
 **Sample scores (32 labelled cases)**
 
