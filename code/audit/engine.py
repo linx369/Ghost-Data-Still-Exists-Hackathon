@@ -8,6 +8,7 @@ State is taken from citable observations when any exist, otherwise from known on
 """
 from __future__ import annotations
 
+import os
 from collections import defaultdict
 from dataclasses import dataclass, field
 from pathlib import Path
@@ -89,7 +90,7 @@ class Auditor:
         trace["account"] = {"resource_id": acc, "link": how}
         if acc:
             linked = {r for r in linked if not r.startswith("account_")} | {acc}
-        extra = self.activity.resources_for(cid)
+        extra = self.activity.resources_for(cid) if os.environ.get("ACTIVITY_LINK", "0") == "1" else []
         trace["activity_linked"] = extra
         linked |= {r for r, _ in extra}
 

@@ -136,6 +136,11 @@ def parse_sql(path: Path, fid: str, captured: str) -> list[Observation]:
                 source=f"sql:{t}", layer=layer))
     # Tables that were captured but hold no row for a resource still tell us the
     # snapshot scope; record it so absence can be proven for systems in scope.
+    if not scope:  # no explicit scope table: every system with rows in the snapshot was captured
+        for o in obs:
+            scope.setdefault(o.system_id, captured)
+        if any(t.startswith("customer_profiles") for t in tables):
+            scope.setdefault("account_service", captured)
     for sysid, at in scope.items():
         obs.append(Observation(fid, captured, at, sysid, "__scope__", {"scope": True}, "sql:scope", "primary"))
     for t in tables:

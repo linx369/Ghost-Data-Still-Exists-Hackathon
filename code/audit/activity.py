@@ -1,8 +1,8 @@
 """Link resources that carry no identifiers at all (e.g. an analytics profile that was
 already anonymized) to a case through the deletion worker's own activity.
 
-The worker processes all requests that share a reported_at in one batch, in a fixed order.
-We reconstruct that order from each case's account-deletion event and hand out the batch's
+The worker processes all requests that share a reported_at in one batch, newest request
+first (consistent across every sample batch). We hand out the batch's
 unowned policy actions (anonymize/redact/disable/block/delete) per system in the same order,
 only to cases that have no evidence-linked resource in that system. This is a heuristic and
 every assignment is labelled as such in the trace.
@@ -38,10 +38,9 @@ class ActivityLinker:
             if not events:
                 continue
 
+            # Observed in 4 sample batches: the most recently requested case is processed first.
             def order_key(q):
-                acc = account_of.get(q["case_id"])
-                t = acc_time.get(acc) if acc else None
-                return (0, t, q["case_id"]) if t else (1, -ts(q["requested_at"]).timestamp(), q["case_id"])
+                return (-ts(q["requested_at"]).timestamp(), int(q["case_id"].split("_")[1]))
 
             ordered = sorted(qs, key=order_key)
             by_sys = defaultdict(list)
