@@ -13,17 +13,7 @@ ROOT = Path(__file__).resolve().parents[2]
 sys.path.insert(0, str(ROOT / "code"))
 from audit.clock import canon  # noqa: E402
 from audit.contract import check_case  # noqa: E402
-
-
-def evidence_times(dataset: Path) -> dict[str, str]:
-    """When each citable id became available: evidence files, activity rows, audit-log rows."""
-    def rows(name):
-        with open(dataset / name, encoding="utf-8") as f:
-            return list(csv.DictReader(f))
-    when = {r["file_id"]: canon(r["captured_at"]) for r in rows("evidence_files.csv")}
-    when |= {r["activity_id"]: canon(r["event_time"]) for r in rows("system_activity.csv")}
-    when |= {r["audit_id"]: canon(r["event_time"]) for r in rows("user_audit_log.csv")}
-    return when
+from audit.evidence import evidence_times  # noqa: E402
 
 
 def validate(path: Path, dataset: Path = ROOT / "dataset") -> tuple[int, list[str]]:

@@ -14,18 +14,19 @@ The pieces it runs can also be called alone: `python -m pytest code/tests -q`,
 ## 1. Measured results
 
 <!-- VERIFY:START -->
-_Measured by `python code/verify.py` on 2026-10-24 15:31 UTC. Everything between these markers is generated; do not edit by hand._
+_Measured by `python code/verify.py` on 2026-10-24 15:39 UTC. Everything between these markers is generated; do not edit by hand._
 
 **Checks**
 
 | Check | Result | Detail |
 |---|---|---|
-| Unit + stress tests | PASS | 15 passed in 40.91s |
+| Unit + stress tests | PASS | 17 passed in 26.62s |
 | Sample status accuracy is 1.000 | PASS | 1.000 |
 | Sample step F1 at least 0.99 (regression guard) | PASS | 0.992 |
 | Leave-one-out: no wrong account link | PASS | 0 wrong |
 | Pipeline reproduces the submitted output.csv byte for byte | PASS | identical |
 | output.csv satisfies the contract | PASS | 518 rows, 0 problems |
+| In-pipeline verification (contract + grounding) of every answer | PASS | 0 problems |
 
 **Sample scores (32 labelled cases)**
 
@@ -59,13 +60,13 @@ account link is hidden and re-derived; the timing model is rebuilt without that 
 
 | Status | Requests |
 |---|---:|
-| COMPLETE | 155 |
-| INCOMPLETE | 353 |
+| COMPLETE | 156 |
+| INCOMPLETE | 352 |
 | NOT_APPLICABLE | 10 |
 
 | Account link | Requests |  | Anonymized-analytics link | Requests |
 |---|---:|---|---|---:|
-| `direct` | 245 |  | `timing-grid` | 111 |
+| `direct` | 245 |  | `timing-grid` | 112 |
 | `direct-multi` | 1 |  | `unresolved-tie` | 6 |
 | `none` | 3 |  |  |  |
 | `same-user-other-case` | 1 |  |  |  |
@@ -122,7 +123,7 @@ current counts are in §1; every link's provenance and the affected requests are
 
 `code/tests/test_engine.py` builds a tiny synthetic dataset for each trap described in the challenge and
 asserts the engine's **exact** output; `code/tests/test_stress.py` adds unusual situations. No model
-calls (intent is injected); all but the full-run determinism test take milliseconds. **15/15 pass.**
+calls (intent is injected); all but the full-run determinism test take milliseconds. **17/17 pass.**
 
 | # | Case | What it proves | Expected result |
 |---|---|---|---|
@@ -141,6 +142,8 @@ calls (intent is injected); all but the full-run determinism test take milliseco
 | 13 | **Malformed evidence file** | One evidence file is invalid JSON. | Skipped with a warning; the rest of the audit is unaffected (previously the whole run crashed). |
 | 14 | **No evidence at all** | Nothing links the request to any record. | No crash; account link `none`; serialisable output. |
 | 15 | **Determinism across hash seeds** | Two full offline runs under different `PYTHONHASHSEED` values. | Byte-identical `output.csv` (a set-order citation tie was found and fixed this way). |
+| 16 | **Grounding check** | A step cites a file that never mentions the record. | Stage 5 flags it. |
+| 17 | **Presence seen only in a later file** | A file captured after `audit_at` shows the account still active. | No finding is raised and the file is never cited. |
 
 ### Sanity checks on the 518 unlabelled requests
 
@@ -171,6 +174,8 @@ calls (intent is injected); all but the full-run determinism test take milliseco
 | 15 | Two identical offline runs differed in one citation (case_393). | Evidence-citation tie broken by Python set order, which varies with the hash seed. | Stable tie-break by evidence id; 6 seeds byte-identical; regression test 15. |
 | 16 | Code review: the analytics linker still used the original 3 h window after the account window was narrowed. | 4 "unresolved-tie" analytics links pointed at an anonymization 88–89 min before `reported_at`, i.e. from an earlier batch; every real one sits 21–29 min before. | Analytics events limited to the measured clean-up slot (35–20 min before; proven links put placeholder/legal-hold actions at ~30, support redactions ~25, flow shut-offs ~15, restore blocks ~10 min before), near window only if the slot is empty (same rule as for accounts). Samples unchanged; 4 wrong links removed; uncertain requests 31 → 28. |
 | 17 | Report numbers were typed by hand and could drift from the code. | Several figures had to be corrected by hand during the day. | `python code/verify.py` measures everything and writes §1 itself; it fails if any check fails. |
+| 18 | New in-pipeline grounding check (every citation must mention its record). | case_126: the account was seen active only in a file captured *after* `audit_at`; the code still reported it as remaining and filled the citation with a file that never mentions the account. The file-level validator could not see this. | A fact known only from a later file can no longer create a finding; the account is judged on admissible evidence (a covering snapshot without it, the same pattern as the sample answers). case_126 → `COMPLETE`. Only output change of the refactor. |
+| 19 | The grounding check then flagged our own citation fallback ("the case's main evidence file") in a synthetic test. | Never used on the real data, but not grounded. | Fallback is now: a snapshot covering accounts, else the worker's deletion row for that account. |
 
 ## 4. Limitations and honest caveats
 

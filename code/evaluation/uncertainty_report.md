@@ -20,7 +20,7 @@ deterministically, and the pick is reported here as uncertain rather than presen
 
 | Link | Meaning | Confidence | Requests |
 |---|---|---|---:|
-| `timing-grid` | unique fit on the worker's timing grid | inferred | 111 |
+| `timing-grid` | unique fit on the worker's timing grid | inferred | 112 |
 | `unresolved-tie` | several requests fit equally; deterministic pick | **uncertain (~chance)** | 6 |
 
 ## Requests containing an uncertain step (28)

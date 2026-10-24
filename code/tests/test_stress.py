@@ -146,3 +146,33 @@ def test_full_run_is_identical_across_hash_seeds(tmp_path):
                        env={**os.environ, "PYTHONHASHSEED": seed}, capture_output=True)
         outs.append(out.read_bytes())
     assert outs[0] == outs[1]
+
+
+def test_verification_flags_a_citation_that_does_not_mention_the_record(tmp_path):
+    """Stage 5 grounding: citing a file that never mentions the record must be flagged."""
+    from audit.engine import CaseResult
+    snap = {"file_id": "evidence_01", "captured_at": "2026-09-05T00:00:00Z", "data_store": "security_service",
+            "records": [AUDIT_REC]}
+    ds, r = build(tmp_path, [snap])
+    a = Auditor(ds, load_text_evidence(ds), [r], {r["case_id"]: {"authorizes_deletion": True}})
+    good = a.audit(r)
+    assert good.trace["verification"] == []
+    bad = CaseResult("case_1", "COMPLETE", [{"step_no": 1, "phase": "VERIFICATION", "system_id": "search_service",
+                                              "resource_id": "search_9", "operation": "VERIFY_RECORD_ABSENT",
+                                              "state": "ABSENT", "evidence_id": "evidence_01"}])
+    assert any("does not mention search_9" in e for e in a._verify(r, bad))
+
+
+def test_presence_seen_only_after_audit_never_becomes_a_finding(tmp_path):
+    """A file captured after audit_at shows the account still ACTIVE: it may not support a finding."""
+    late = {"file_id": "evidence_09", "captured_at": "2026-09-20T00:00:00Z", "data_store": "account_service",
+            "records": [{"resource_id": "account_1", "customer_reference": "user_900", "email": USER["email"],
+                         "account_status": "ACTIVE"}]}
+    ds, r = build(tmp_path, [late])
+    late_path = ds / "evidence" / "records" / "evidence_09.json"
+    doc = json.loads(late_path.read_text())
+    doc["snapshots"][0]["captured_at"] = "2026-09-05T00:00:00Z"   # the fact is from before audit_at...
+    late_path.write_text(json.dumps(doc))                         # ...but the file was captured after it
+    out = audit_all(ds, [r])["case_1"]
+    assert all(s["phase"] != "FINDING" for s in out.steps)
+    assert all(s["evidence_id"] != "evidence_09" for s in out.steps)

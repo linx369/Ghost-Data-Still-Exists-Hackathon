@@ -315,6 +315,17 @@ def parse_activity_links(dataset: Path) -> list[Observation]:
 
 
 # ------------------------------------------------------------------------ loader
+def evidence_times(dataset: Path) -> dict[str, str]:
+    """When each citable id became available: evidence files, activity rows, audit-log rows."""
+    def rows(name):
+        with open(dataset / name, encoding="utf-8") as f:
+            return list(csv.DictReader(f))
+    when = {r["file_id"]: canon(r["captured_at"]) for r in rows("evidence_files.csv")}
+    when |= {r["activity_id"]: canon(r["event_time"]) for r in rows("system_activity.csv")}
+    when |= {r["audit_id"]: canon(r["event_time"]) for r in rows("user_audit_log.csv")}
+    return when
+
+
 def load_manifest(dataset: Path) -> list[dict]:
     with open(dataset / "evidence_files.csv", encoding="utf-8") as f:
         return list(csv.DictReader(f))

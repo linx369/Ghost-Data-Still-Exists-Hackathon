@@ -35,9 +35,10 @@ python code/main.py --offline                         # no API calls: replay cac
 python code/main.py --split sample                    # the 32 labelled samples -> code/evaluation/sample_predictions.csv
 python code/evaluation/main.py --pred code/evaluation/sample_predictions.csv --gold dataset/sample_output.csv --verbose
 python code/evaluation/validate.py                    # contract check of output.csv
-python -m pytest code/tests -q                        # 15 custom evaluation + stress cases
+python -m pytest code/tests -q                        # 17 custom evaluation + stress cases
 python code/evaluation/loo_timing.py                  # out-of-sample check of account linking
 python code/main.py --trace trace.jsonl               # per-case reasoning (why each step exists)
+python code/main.py --offline --explain case_63       # readable evidence chain for one request
 ```
 
 A full run takes ~1.5 min with fresh model calls (~$2.43, 25 calls) and ~2 s offline.
@@ -51,33 +52,41 @@ batch-order heuristic for anonymized analytics; see the evaluation report).
 
 ## Architecture
 
+The pipeline has a perception step and five explicit stages per request (`audit/engine.py`):
+
 ```
-dataset/ ──► evidence.py ── SQL (sqlite), JSON, 7 log formats, handover text, catalog-link events
-         └─► multimodal.py ─ 11 PNG + 4 PDF ──► Claude (vision) ──► same records    [cached]
-                     │
-                     ▼  Observation = (evidence_id, captured_at, observed_at, system, resource, attrs)
-identity.py   current + historical emails / phones / hashes per user_id
-intent.py     distinct request texts ──► Claude ──► authorizes deletion?             [cached]
-accounts.py   which account_service record is this case's (direct → window+status → timing → unresolved)
-interpret.py  observation ──► (policy category, state: PRESENT/ABSENT/CLEAN/ACTIVE/STOPPED/RETAINED)
-engine.py     per case: linked resources, state at audit_at, which evidence may be cited
-policy.py     deletion_rules.csv ──► findings / remediation / verification, ordered per the contract
-main.py       ──► output.csv, trace, usage_report.md
+PERCEIVE   evidence.py    SQL (sqlite), JSON, 7 log formats, handover text, catalog-link events ─┐
+           multimodal.py  11 PNG + 4 PDF ──► Claude (vision) ──► same records          [cached] ├─► Observations
+           intent.py      distinct request texts ──► Claude ──► authorizes deletion?   [cached]
+1 LINK        identity.py + accounts.py + timing.py   which records belong to this person
+2 RECONSTRUCT interpret.py   each record's state at audit_at, and the evidence that may be cited
+3 DECIDE      policy.py      deletion_rules.csv ──► status + ordered findings / remediation / verification
+4 BATCH       activity.py    identifier-less analytics records, from the worker's batch (uses stage-3 drafts)
+5 VERIFY      contract.py    every answer checked before it is written: output contract + grounding
+                             (each cited evidence item really mentions the record it is cited for)
+OUTPUT     main.py        output.csv, per-case trace, usage + uncertainty reports (reports.py)
 ```
 
 | Module | Role | Model? |
 |---|---|---|
-| `audit/evidence.py` | Parse every text evidence format into uniform observations; resolve trace ids so a log line's lookup key is attached to its result line | no |
+| `audit/evidence.py` | Parse every text evidence format into uniform observations; resolve trace ids so a log line's lookup key is attached to its result line; a malformed file is skipped and reported, never fatal | no |
 | `audit/multimodal.py` | Screenshots and PDFs → the same observation shape (records, identifiers, visible state, aliases such as file names) | **yes**, once per file |
-| `audit/intent.py` | Does the request authorize deletion? Batches of 40 distinct texts, any language | **yes**, once per distinct text |
+| `audit/intent.py` | Does the request authorize deletion? Distinct texts, any language | **yes**, once per distinct text |
 | `audit/identity.py` | Every identifier a person ever had, from `user_identities.csv` + `user_audit_log.csv` | no |
-| `audit/accounts.py` | Link each case to its account record | no |
+| `audit/accounts.py` | Link each request to its account record (direct → window + status → timing → unresolved tie) | no |
 | `audit/timing.py` | Learn the worker's per-action timing grid from directly evidenced links | no |
-| `audit/activity.py` | Link already-anonymized analytics profiles via the timing grid (unresolved ties labelled) | no |
-| `audit/interpret.py` | Map ~40 evidence vocabularies (404, rows=0, NOT_FOUND, enabled=false, restore_allowed=0, null PII…) to one state vocabulary | no |
-| `audit/engine.py` | Time rules, linking, state at `audit_at`, citations | no |
+| `audit/activity.py` | Link already-anonymized analytics records via the timing grid (unresolved ties labelled) | no |
+| `audit/interpret.py` | Map each evidence vocabulary (404, rows=0, NOT_FOUND, enabled=false, restore_allowed=0, null PII…) to one state vocabulary | no |
+| `audit/engine.py` | The five stages; time rules (known vs citable); verification | no |
 | `audit/policy.py` | Rules → steps and ordering | no |
+| `audit/contract.py` | The output contract as code (used in the pipeline and by `validate.py`) | no |
+| `audit/clock.py` | All timestamps normalized to one UTC form when read | no |
 | `audit/llm.py` | Claude client: JSON-only answers validated with pydantic, one repair retry, fallback model, disk cache, token accounting | — |
+| `audit/reports.py` | `usage_report.md` and `uncertainty_report.md` | no |
+
+`python code/main.py --offline --explain case_126` prints the whole chain for one request: the person, the
+account link and how it was made, every record considered with its evidence, the policy applied, the
+steps, what is uncertain, and the verification result.
 
 ## Key decisions
 
