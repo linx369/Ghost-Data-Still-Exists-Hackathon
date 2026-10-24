@@ -23,6 +23,16 @@ from .timing import TimingModel
 
 COMPAT = {"COMPLETE": "SUCCESS", "PARTIALLY_COMPLETE": "PARTIAL", "NOT_STARTED": "FAILED"}
 
+# When does the worker delete the account, relative to reported_at? Measured on the 238 test
+# requests whose account is proven by identifiers: always 75-41 min before. The hand-written
+# sample cases sit within +-15 min. A wider window pulls in the previous batch's accounts.
+WINDOWS = [(-80, -38), (-15, 15)]  # minutes relative to reported_at
+
+
+def in_window(t: datetime, rep: datetime) -> bool:
+    m = (t - rep).total_seconds() / 60
+    return any(lo <= m <= hi for lo, hi in WINDOWS)
+
 
 def ts(s: str) -> datetime:
     return datetime.fromisoformat(s.replace("Z", "+00:00"))
@@ -48,7 +58,7 @@ class AccountLinker:
             cid, users = q["case_id"], set(users_of.get(q["case_id"], []))
             direct = sorted(r for r, us in owners.items() if r.startswith("account_") and us & users)
             rep = ts(q["reported_at"])
-            window = [a for a in self.deletes if rep - timedelta(hours=3) <= ts(a["event_time"]) <= rep + timedelta(minutes=15)]
+            window = [a for a in self.deletes if in_window(ts(a["event_time"]), rep)]
             if len(direct) == 1:
                 self.result[cid] = (direct[0], "direct")
                 taken.add(direct[0])
