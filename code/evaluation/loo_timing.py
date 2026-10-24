@@ -13,7 +13,8 @@ from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[2]
 sys.path.insert(0, str(ROOT / "code"))
-from audit.accounts import COMPAT, in_window, ts  # noqa: E402
+from audit.accounts import COMPAT, in_window  # noqa: E402
+from audit.clock import parse_ts  # noqa: E402
 from audit.evidence import load_text_evidence  # noqa: E402
 from audit.identity import IdentityIndex  # noqa: E402
 from audit.timing import TimingModel  # noqa: E402
@@ -40,8 +41,8 @@ def main() -> None:
         # rebuild the model without this person's own links, so the check is out-of-sample
         held = {r: (us - users) for r, us in owners.items()}
         model = TimingModel(dels, worker, held)
-        rep = ts(q["reported_at"])
-        win = [a for a in dels if in_window(ts(a["event_time"]), rep)]
+        rep = parse_ts(q["reported_at"])
+        win = [a for a in dels if in_window(parse_ts(a["event_time"]), rep)]
         if truth not in {a["resource_id"] for a in win}:
             res["account outside window"] += 1
             continue

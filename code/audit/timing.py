@@ -14,18 +14,15 @@ every use is labelled in the trace.
 from __future__ import annotations
 
 from collections import Counter, defaultdict
-from datetime import datetime
+
+from .clock import parse_ts
 
 HORIZON_S = 4 * 3600
 MIN_SUPPORT = 2
 
 
-def _ts(s: str) -> datetime:
-    return datetime.fromisoformat(s.replace("Z", "+00:00"))
-
-
 def residue(t_action: str, t_account: str) -> int | None:
-    d = (_ts(t_action) - _ts(t_account)).total_seconds()
+    d = (parse_ts(t_action) - parse_ts(t_account)).total_seconds()
     return int(d) % 60 if 0 < d < HORIZON_S else None
 
 

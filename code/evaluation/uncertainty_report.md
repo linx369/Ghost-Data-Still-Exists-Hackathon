@@ -21,9 +21,9 @@ deterministically, and the pick is reported here as uncertain rather than presen
 | Link | Meaning | Confidence | Requests |
 |---|---|---|---:|
 | `timing-grid` | unique fit on the worker's timing grid | inferred | 111 |
-| `unresolved-tie` | several requests fit equally; deterministic pick | **uncertain (~chance)** | 9 |
+| `unresolved-tie` | several requests fit equally; deterministic pick | **uncertain (~chance)** | 6 |
 
-## Requests containing an uncertain step (31)
+## Requests containing an uncertain step (28)
 
 | Request | Uncertain resource(s) |
 |---|---|
@@ -32,9 +32,8 @@ deterministically, and the pick is reported here as uncertain rather than presen
 | case_59 | account_631 |
 | case_60 | account_5661 |
 | case_77 | analytics_5859 |
-| case_135 | analytics_7254 |
-| case_155 | analytics_6980 |
-| case_157 | analytics_7372 |
+| case_155 | analytics_7372 |
+| case_157 | analytics_8425 |
 | case_225 | account_669 |
 | case_226 | account_392 |
 | case_233 | analytics_6723 |
@@ -43,10 +42,8 @@ deterministically, and the pick is reported here as uncertain rather than presen
 | case_244 | account_4264 |
 | case_294 | account_9091 |
 | case_295 | account_6996 |
-| case_336 | analytics_1072 |
 | case_345 | account_8834 |
 | case_346 | account_5214 |
-| case_393 | analytics_8973 |
 | case_408 | account_5754 |
 | case_409 | account_7174 |
 | case_411 | account_2775 |

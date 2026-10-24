@@ -16,6 +16,7 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parent.parent
 sys.path.insert(0, str(Path(__file__).resolve().parent))
 
+from audit.clock import canon  # noqa: E402
 from audit.engine import Auditor  # noqa: E402
 from audit.evidence import SKIPPED, load_text_evidence  # noqa: E402
 from audit.intent import classify  # noqa: E402
@@ -32,7 +33,11 @@ def load_env() -> None:
 
 def read_cases(path: Path) -> list[dict]:
     with open(path, encoding="utf-8") as f:
-        return list(csv.DictReader(f))
+        rows = list(csv.DictReader(f))
+    for r in rows:  # canonical UTC timestamps, so comparisons with evidence times are safe
+        for k in ("requested_at", "reported_at", "audit_at"):
+            r[k] = canon(r[k])
+    return rows
 
 
 def write_output(path: Path, results) -> None:

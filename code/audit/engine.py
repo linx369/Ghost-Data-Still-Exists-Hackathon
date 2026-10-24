@@ -70,10 +70,9 @@ class Auditor:
         for o in self.obs:
             if o.observed_at <= q["audit_at"] and o.identifiers & ids:
                 (by_link if o.attrs.get("_link_only") else by_content).add(o.resource_id)
-        # A catalog link can conflict with what the record itself displays (case_63: the profile
-        # shows contact details of nobody in the identity table). Decision (Tom): keep the link, since
-        # it is the only grounded owner and dropping it leaves the case without a valid answer;
-        # the conflict is recorded in the trace.
+        # A catalog link can conflict with what the record itself displays. Rule (Tom's decision):
+        # drop the link only if the record shows another *known* person; if it shows nobody we know,
+        # keep the link (it is the only grounded owner) and record the conflict in the trace.
         for rid in by_link - by_content:
             shown = {i for o in self.by_resource[rid] if not o.attrs.get("_link_only")
                      for i in o.identifiers if "@" in i}

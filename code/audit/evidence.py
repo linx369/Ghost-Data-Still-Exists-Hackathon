@@ -13,6 +13,8 @@ import sqlite3
 from dataclasses import dataclass, field
 from pathlib import Path
 
+from .clock import canon
+
 EMAIL_RE = re.compile(r"[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,}")
 USER_RE = re.compile(r"\buser_\d+\b")
 HASH_RE = re.compile(r"\b[0-9a-f]{64}\b")
@@ -58,6 +60,11 @@ class Observation:
     attrs: dict = field(default_factory=dict)   # raw key/values describing the record
     source: str = ""          # parser + location, for traces
     layer: str = ""           # e.g. primary / read_replica / failover_replica
+
+    def __post_init__(self):
+        # one canonical UTC form, so later comparisons are safe whatever the source format
+        self.observed_at = canon(self.observed_at)
+        self.file_captured_at = canon(self.file_captured_at)
 
     @property
     def identifiers(self) -> set[str]:

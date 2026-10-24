@@ -2,8 +2,8 @@
 
 Evidence ladder, strongest first:
   1. direct   - an evidence record ties the account to one of the person's identifiers
-  2. window   - the deletion worker touched the account in the 3h before reported_at, the
-                account is not owned by anyone else, and the worker's result agrees with the
+  2. window   - the deletion worker deleted the account in the measured window before
+                reported_at (MAIN_WINDOW), the account is not owned by anyone else, and the worker's result agrees with the
                 workflow's reported_status (COMPLETE<->SUCCESS, PARTIALLY_COMPLETE<->PARTIAL,
                 NOT_STARTED<->FAILED); solved jointly for all cases so one account = one case
      + signature - if several candidates remain, keep the ones whose deletion time fits the
@@ -19,9 +19,10 @@ from __future__ import annotations
 
 import csv
 from collections import defaultdict
-from datetime import datetime, timedelta
+from datetime import datetime
 from pathlib import Path
 
+from .clock import parse_ts
 from .timing import TimingModel
 
 COMPAT = {"COMPLETE": "SUCCESS", "PARTIALLY_COMPLETE": "PARTIAL", "NOT_STARTED": "FAILED"}
@@ -43,12 +44,8 @@ def in_window(t: datetime, rep: datetime) -> bool:
 
 
 def window_events(events: list[dict], rep: datetime) -> list[dict]:
-    main = [a for a in events if in_window(ts(a["event_time"]), rep)]
-    return main or [a for a in events if NEAR_WINDOW[0] <= _minutes(ts(a["event_time"]), rep) <= NEAR_WINDOW[1]]
-
-
-def ts(s: str) -> datetime:
-    return datetime.fromisoformat(s.replace("Z", "+00:00"))
+    main = [a for a in events if in_window(parse_ts(a["event_time"]), rep)]
+    return main or [a for a in events if NEAR_WINDOW[0] <= _minutes(parse_ts(a["event_time"]), rep) <= NEAR_WINDOW[1]]
 
 
 class AccountLinker:
@@ -70,7 +67,7 @@ class AccountLinker:
         for q in cases:
             cid, users = q["case_id"], set(users_of.get(q["case_id"], []))
             direct = sorted(r for r, us in owners.items() if r.startswith("account_") and us & users)
-            rep = ts(q["reported_at"])
+            rep = parse_ts(q["reported_at"])
             window = window_events(self.deletes, rep)
             if len(direct) == 1:
                 self.result[cid] = (direct[0], "direct")
@@ -113,7 +110,7 @@ class AccountLinker:
                 groups[tuple(sorted(c))].append(cid)
         for c, cids in groups.items():
             events = sorted((x for x in c if x not in taken), key=lambda x: evt[x]["event_time"])
-            order = sorted(cids, key=lambda k: (-ts(qmap[k]["requested_at"]).timestamp(), k))
+            order = sorted(cids, key=lambda k: (-parse_ts(qmap[k]["requested_at"]).timestamp(), k))
             for k, acc in zip(order, events):
                 self.result[k] = (acc, "unresolved-tie")
                 taken.add(acc)

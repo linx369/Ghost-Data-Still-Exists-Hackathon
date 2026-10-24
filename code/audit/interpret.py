@@ -18,7 +18,6 @@ from .evidence import EMAIL_RE, Observation
 PII_FIELDS = ("email", "phone", "email_hash", "full_name", "name", "requester_name", "requester_email",
               "requester_phone", "owner_email", "owner_phone", "customer_email", "display_name",
               "customer_reference", "user_id")
-TRUTHY = {"true", "1", "yes", "y", True, 1}
 
 
 def _truthy(v) -> bool:
