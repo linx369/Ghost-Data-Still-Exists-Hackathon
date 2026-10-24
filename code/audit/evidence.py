@@ -67,7 +67,7 @@ class Observation:
             for s in map(str, _iter_values(v)):
                 out.update(m.lower() for m in EMAIL_RE.findall(s))
                 out.update(USER_RE.findall(s))
-                if "hash" in k:
+                if "hash" in k or k in LOOKUP_KEYS or k == "subject_reference":
                     out.update(HASH_RE.findall(s.lower()))
         for k in ("phone", "requester_phone", "owner_phone", "customer_phone"):
             if self.attrs.get(k):
@@ -232,7 +232,8 @@ def _parse_line(line: str) -> tuple[str | None, dict]:
 
 
 LOOKUP_KEYS = ("lookup_key", "match_key", "correlation_key", "subject_key", "subject_ref",
-               "subject_reference", "query")
+               "subject_reference", "query", "scan_key", "owner_key", "matched_value", "subject_selector",
+               "lookup_value")
 
 
 def parse_log(path: Path, fid: str, captured: str) -> list[Observation]:

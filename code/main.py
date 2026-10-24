@@ -18,6 +18,15 @@ sys.path.insert(0, str(Path(__file__).resolve().parent))
 
 from audit.engine import Auditor  # noqa: E402
 from audit.evidence import load_text_evidence  # noqa: E402
+from audit.llm import LLM, USAGE  # noqa: E402
+from audit.multimodal import load_multimodal_evidence  # noqa: E402
+
+
+def load_env() -> None:
+    env = ROOT / ".env"
+    if env.exists():
+        from dotenv import load_dotenv
+        load_dotenv(env)
 
 
 def read_cases(path: Path) -> list[dict]:
@@ -48,7 +57,9 @@ def main() -> None:
     sample = read_cases(ds / "sample_deletion_requests.csv")
     test = read_cases(ds / "deletion_requests.csv")
     cases = sample if a.split == "sample" else test
-    observations = load_text_evidence(ds)
+    load_env()
+    llm = LLM(offline=a.offline)
+    observations = load_text_evidence(ds) + load_multimodal_evidence(ds, llm)
     intents: dict = {}
     auditor = Auditor(ds, observations, sample + test, intents)
     results = [auditor.audit(q) for q in cases]
@@ -61,6 +72,7 @@ def main() -> None:
             for r in results:
                 f.write(json.dumps({"case_id": r.case_id, "status": r.status, **r.trace}, ensure_ascii=False) + "\n")
     print(f"wrote {len(results)} rows -> {out}")
+    print("model usage:", json.dumps(USAGE.as_dict()))
 
 
 if __name__ == "__main__":
