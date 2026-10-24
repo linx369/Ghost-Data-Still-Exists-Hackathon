@@ -87,5 +87,9 @@ class AccountLinker:
                 hit = next((by_user[u] for u in users_of.get(q["case_id"], []) if u in by_user), None)
                 self.result[q["case_id"]] = (hit, "same-user-other-case") if hit else (None, "none")
 
+    def activity_for(self, account_id: str | None) -> str:
+        """activity_id of the worker's deletion of this account (last-resort citation)."""
+        return next((a["activity_id"] for a in self.deletes if a["resource_id"] == account_id), "")
+
     def account_for(self, case_id: str) -> tuple[str | None, str]:
         return self.result[case_id]

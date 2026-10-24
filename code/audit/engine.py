@@ -130,7 +130,8 @@ class Auditor:
         prefer = sorted(set(main), key=lambda e: -main.count(e))
         for r in resources:
             if r.resource_id == acc and not r.evidence_id:
-                r.evidence_id = self._account_scope_evidence(audit_at, prefer)
+                r.evidence_id = (self._account_scope_evidence(audit_at, prefer) or (prefer[0] if prefer else "")
+                                 or self.accounts.activity_for(acc))
         status, steps, why = plan(resources, self.rules)
         trace["reasoning"] = link_notes + why
         return CaseResult(cid, status, steps, trace)
