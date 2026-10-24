@@ -128,3 +128,21 @@ def test_no_evidence_and_no_activity_does_not_crash(tmp_path):
     assert out["case_1"].status in ("COMPLETE", "INCOMPLETE")
     assert account_of(out["case_1"])["link"] == "none"
     json.dumps(out["case_1"].steps)  # always serialisable
+
+
+def test_full_run_is_identical_across_hash_seeds(tmp_path):
+    """Regression: a citation tie was once broken by set iteration order, which changes with
+    PYTHONHASHSEED. Two full offline runs under different seeds must be byte-identical."""
+    import os
+    import subprocess
+    root = CODE.parent
+    if not (root / "dataset" / "deletion_requests.csv").exists() or not (CODE / "cache").exists():
+        import pytest
+        pytest.skip("needs the dataset and the model-answer cache")
+    outs = []
+    for seed in ("1", "987"):
+        out = tmp_path / f"out_{seed}.csv"
+        subprocess.run([sys.executable, str(CODE / "main.py"), "--offline", "--out", str(out)], check=True,
+                       env={**os.environ, "PYTHONHASHSEED": seed}, capture_output=True)
+        outs.append(out.read_bytes())
+    assert outs[0] == outs[1]

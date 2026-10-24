@@ -80,7 +80,7 @@ are listed in [`uncertainty_report.md`](uncertainty_report.md).
 
 `code/tests/test_engine.py` builds a tiny synthetic dataset for each trap described in the challenge and
 asserts the engine's **exact** output; `code/tests/test_stress.py` adds unusual situations. No model
-calls (intent is injected), so they run in milliseconds. **14/14 pass.**
+calls (intent is injected); all but the full-run determinism test take milliseconds. **15/15 pass.**
 
 | # | Case | What it proves | Expected result |
 |---|---|---|---|
@@ -98,6 +98,7 @@ calls (intent is injected), so they run in milliseconds. **14/14 pass.**
 | 12 | **Timing signature needs support** | The grid must be learned from a directly evidenced person before it may break a tie. | Tie broken correctly, labelled `window+signature`. |
 | 13 | **Malformed evidence file** | One evidence file is invalid JSON. | Skipped with a warning; the rest of the audit is unaffected (previously the whole run crashed). |
 | 14 | **No evidence at all** | Nothing links the request to any record. | No crash; account link `none`; serialisable output. |
+| 15 | **Determinism across hash seeds** | Two full offline runs under different `PYTHONHASHSEED` values. | Byte-identical `output.csv` (a set-order citation tie was found and fixed this way). |
 
 ### Sanity checks on the 518 unlabelled requests
 
@@ -107,7 +108,7 @@ calls (intent is injected), so they run in milliseconds. **14/14 pass.**
   no finding without evidence, no `COMPLETE` verification without evidence, no evidence captured after
   `audit_at` — `python code/evaluation/validate.py`: 518 rows, 0 problems.
 - **Reproducibility:** a run from an *empty* cache (fresh model calls) reproduced the previous
-  `output.csv` exactly (518/518 rows, step F1 1.000 against it); `--offline` replay is byte-identical.
+  `output.csv` exactly (518/518 rows, step F1 1.000 against it); `--offline` replay is byte-identical across Python hash seeds (test 15).
 
 ## 3. Failures found and improvements made
 
@@ -127,6 +128,7 @@ calls (intent is injected), so they run in milliseconds. **14/14 pass.**
 | 12 | Tom: "make it reliable on the hidden cases, not the samples". Examined the 30 fallback accounts one by one. | The 3 h window mixed adjacent batches; true offset measured on 238 proven links is 75–41 min. | Window narrowed (±15 min kept only as a fallback). Out-of-sample unresolved 31 → 9, still 0 wrong; real fallback 30 → 23. |
 | 13 | Is "newest request first" real? | Out of sample: 74 agree / 76 disagree. | Not a rule. Remaining ties are labelled `unresolved-tie` and reported (Tom's decision A: keep a deterministic pick, report it as uncertain). |
 | 14 | A single malformed evidence file crashed the whole run. | Found while writing stress test 13. | Each file is parsed independently; failures are reported, never fatal. |
+| 15 | Two identical offline runs differed in one citation (case_393). | Evidence-citation tie broken by Python set order, which varies with the hash seed. | Stable tie-break by evidence id; 6 seeds byte-identical; regression test 15. |
 
 ## 4. Limitations and honest caveats
 

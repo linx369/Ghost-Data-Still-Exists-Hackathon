@@ -27,7 +27,7 @@ python code/main.py --offline                         # no API calls: replay cac
 python code/main.py --split sample                    # the 32 labelled samples -> code/evaluation/sample_predictions.csv
 python code/evaluation/main.py --pred code/evaluation/sample_predictions.csv --gold dataset/sample_output.csv --verbose
 python code/evaluation/validate.py                    # contract check of output.csv
-python -m pytest code/tests -q                        # 14 custom evaluation + stress cases
+python -m pytest code/tests -q                        # 15 custom evaluation + stress cases
 python code/evaluation/loo_timing.py                  # out-of-sample check of account linking
 python code/main.py --trace trace.jsonl               # per-case reasoning (why each step exists)
 ```

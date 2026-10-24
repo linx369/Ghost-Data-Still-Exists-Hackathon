@@ -137,7 +137,7 @@ class Auditor:
                                            o.evidence_id if o.file_captured_at <= audit_at else ""))
         # evidence for an account that no record mentions: reuse the case's main evidence file
         main = [r.evidence_id for r in resources if r.evidence_id]
-        prefer = sorted(set(main), key=lambda e: -main.count(e))
+        prefer = sorted(set(main), key=lambda e: (-main.count(e), e))  # stable: ties by id
         for r in resources:
             if r.resource_id == acc and not r.evidence_id:
                 r.evidence_id = (self._account_scope_evidence(audit_at, prefer) or (prefer[0] if prefer else "")
