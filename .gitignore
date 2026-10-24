@@ -3,4 +3,3 @@ __pycache__/
 .venv/
 code/.cache/
 *.zip
-log.txt
