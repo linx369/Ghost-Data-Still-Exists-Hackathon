@@ -13,24 +13,24 @@ python -m pytest code/tests -q                       # custom evaluation cases
 | Metric | Definition | Score |
 |---|---|---:|
 | **Case-level status accuracy** | `deletion_status` exact match | **1.000** (32/32) |
-| **Step precision** | predicted steps that exactly match a gold step (all fields except `step_no`) | **1.000** (183/183) |
-| **Step recall** | gold steps reproduced exactly | **0.948** (183/193) |
-| **Step F1** | | **0.973** |
-| Step F1 ignoring `evidence_id` | isolates citation errors | 0.973 |
-| **Sequence accuracy** | whole `steps_json` array exactly right, including order and numbering | **0.719** (23/32) |
+| **Step precision** | predicted steps that exactly match a gold step (all fields except `step_no`) | **0.989** (186/188) |
+| **Step recall** | gold steps reproduced exactly | **0.964** (186/193) |
+| **Step F1** | | **0.976** |
+| Step F1 ignoring `evidence_id` | isolates citation errors | 0.976 |
+| **Sequence accuracy** | whole `steps_json` array exactly right, including order and numbering | **0.781** (25/32) |
 
 **Field-level accuracy** (steps aligned by position; a missing step makes every later position in that
 case count as wrong, so this is the strictest view):
 
 | phase | system_id | resource_id | operation | state | evidence_id |
 |---:|---:|---:|---:|---:|---:|
-| 0.948 | 0.896 | 0.896 | 0.896 | 0.896 | 0.948 |
+| 0.974 | 0.927 | 0.917 | 0.927 | 0.927 | 0.969 |
 
-**Every remaining error is a missing step; there are no wrong or invented steps** (precision 1.000):
+**Remaining errors** (7 missing gold steps, 2 extra predicted steps; status is never wrong):
 
-| Missed gold step | Count | Cause |
+| Gold step not reproduced | Count | Cause |
 |---|---:|---|
-| `analytics_platform` `VERIFY_RECORD_ANONYMIZED` | 7 | The analytics profile is already anonymized: no identifier links it to the person in any evidence. The only link is the deletion worker's activity timing, which is ambiguous when several requests share a batch (see §3, experiment 1). |
+| `analytics_platform` `VERIFY_RECORD_ANONYMIZED` | 4 | The analytics profile is already anonymized, so no identifier links it to the person. It is linked heuristically through the deletion worker's batch (§3, experiment 1); 2 of these are a wrong id (the 2 extra steps), 2 are not assigned. |
 | `security_service` `VERIFY_RECORD_PRESENT` | 2 | `audit_record_6645` / `audit_record_5569` do not appear in any participant-facing file (searched all text, logs, SQL, JSON, and the extracted screenshots/PDFs). Not recoverable. |
 | `account_service` `VERIFY_RECORD_ABSENT` | 1 | case_04: hand-written case whose account id appears nowhere in the data. |
 
@@ -41,7 +41,8 @@ case count as wrong, so this is the strictest view):
 | v1 baseline | 0.938 | 0.915 | 0.406 | parser + identity + policy engine, text evidence only |
 | v2 | 1.000 | 0.956 | 0.625 | screenshots/PDFs via Claude vision; "known vs citable" time rule; hashes in lookup keys |
 | v3 | 1.000 | 0.973 | 0.719 | newest-request-first batch order; SQL scope inference; activity linking switched off |
-| v4 (final) | 1.000 | 0.973 | 0.719 | robustness for test-only patterns (catalog links, legal holds, stale evidence) — samples unchanged |
+| v4 | 1.000 | 0.973 | 0.719 | robustness for test-only patterns (catalog links, legal holds, stale evidence) — samples unchanged |
+| v5 (final) | 1.000 | 0.976 | 0.781 | anonymized analytics linked only for otherwise-COMPLETE cases, in batch order |
 
 ## 2. Custom evaluation cases (created by us)
 
@@ -74,7 +75,7 @@ asserts the engine's **exact** output. No model calls (intent is injected), so t
 
 | # | Failure / idea | Evidence | Decision |
 |---|---|---|---|
-| 1 | Anonymized analytics profiles have no identifiers. Tried linking them through the deletion worker's batch (policy actions in the 3 h before `reported_at`, handed out in batch order). | Only 3 of 9 assignments correct on samples; F1 0.973 → 0.966, precision 1.000 → 0.969. | **Rejected**, kept behind `ACTIVITY_LINK=1` for discussion; documented as the main known gap. |
+| 1 | Anonymized analytics profiles have no identifiers. First attempt: hand the worker's unowned policy actions in each batch to every case lacking that system, in batch order. | 3/9 right; F1 0.973 → 0.966, precision 1.000 → 0.969. | Rejected. Second look at the samples: every missed profile belonged to an otherwise-COMPLETE case (a failed anonymization would leave identifiers and be linked directly). Restricting to those cases and to ANONYMIZE actions: 3 right, 2 wrong ids, F1 0.973 → **0.976**, sequence 0.719 → **0.781**. Adopted; a wrong id only lands on a case that was already missing the step. `ACTIVITY_LINK=0` disables it. |
 | 2 | Account resource ids often appear only in the activity stream (no identifier). | Time window alone gives 2–6 candidates. Found that the worker's result matches the workflow claim (COMPLETE↔SUCCESS, PARTIALLY_COMPLETE↔PARTIAL, NOT_STARTED↔FAILED) on every generated sample. | Ladder: direct evidence → window + status match, solved jointly so one account = one case → flagged fallback (newest request takes earliest event; matched 4/4 sample batches). |
 | 3 | Batch order: tried ordering by each case's account-deletion time. | Swapped case_27/28. Newest-request-first matched all 4 sample batches. | Newest-request-first. |
 | 4 | "Missing from a later snapshot ⇒ deleted". | F1 0.973 → 0.931, status 1.000 → 0.969, broke 8 cases including failover-replica drift. Snapshots are partial selections, not full listings. | **Rejected and removed** (no dead code). |
@@ -91,5 +92,5 @@ asserts the engine's **exact** output. No model calls (intent is injected), so t
   over-fitting, every rule is stated as a general principle (time, identity, policy) and checked against
   test-set sanity signals rather than tuned per case.
 - About 130 test accounts rely on the flagged fallback tie-break; those account steps may be wrong.
-- Already-anonymized analytics profiles (no identifiers) are under-reported in `COMPLETE` cases.
+- Already-anonymized analytics profiles (no identifiers) are linked by a batch-order heuristic (121 test cases); on samples it is right 3 times out of 5.
 - case_63 depends on a judgement call (catalog link vs. contradicting screenshot), decided by Tom.

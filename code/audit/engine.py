@@ -49,9 +49,14 @@ class Auditor:
             self.owners[o.resource_id] |= self.idx.owners(o.identifiers)
         self.users_of = {q["case_id"]: self.idx.resolve_email(q["email"]) for q in cases}
         self.accounts = AccountLinker(dataset, self.owners, cases, self.users_of)
-        self.activity = ActivityLinker(dataset, self.owners, cases,
-                                       {c: a for c, (a, _) in self.accounts.result.items()},
-                                       self._linked_systems(cases))
+        # pass 1: audit every request without activity links, to learn which cases are otherwise
+        # COMPLETE with no analytics record; pass 2 (audit) then uses the batch assignment.
+        self.activity = ActivityLinker(dataset, self.owners)
+        if os.environ.get("ACTIVITY_LINK", "1") == "1":
+            first = {q["case_id"]: self.audit(q) for q in cases}
+            self.activity.assign(cases, {c: r.status == "COMPLETE" and
+                                         not any(s["system_id"] == "analytics_platform" for s in r.steps)
+                                         for c, r in first.items()})
 
     # ------------------------------------------------------------------ helpers
     def _ids(self, cid: str, email: str) -> set[str]:
@@ -81,9 +86,6 @@ class Auditor:
                            f"record displays {sorted(shown)}")
         return by_content | by_link
 
-    def _linked_systems(self, cases: list[dict]) -> dict[str, set[str]]:
-        return {q["case_id"]: {system_of(r) for r in self._linked(q)} for q in cases}
-
     def _account_scope_evidence(self, audit_at: str, prefer: list[str]) -> str:
         """Evidence proving the account is gone when no record mentions it: a snapshot
         whose scope includes account_service and holds no row for it."""
@@ -110,7 +112,7 @@ class Auditor:
         trace["account"] = {"resource_id": acc, "link": how}
         if acc:
             linked = {r for r in linked if not r.startswith("account_")} | {acc}
-        extra = self.activity.resources_for(cid) if os.environ.get("ACTIVITY_LINK", "0") == "1" else []
+        extra = self.activity.resources_for(cid)
         trace["activity_linked"] = extra
         linked |= {r for r, _ in extra}
 

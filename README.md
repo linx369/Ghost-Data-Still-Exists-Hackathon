@@ -35,8 +35,8 @@ A full run takes ~1.5 min with fresh model calls (~$2.43, 25 calls) and ~2 s off
 `--offline` reproduces the submitted `output.csv` byte for byte.
 
 Environment variables: `ANTHROPIC_API_KEY` (required unless `--offline`), `MODEL` (default
-`claude-fable-5-1`), `FALLBACK_MODEL` (default `claude-opus-5-5`), `ACTIVITY_LINK=1` (experimental,
-off; see the evaluation report).
+`claude-fable-5-1`), `FALLBACK_MODEL` (default `claude-opus-5-5`), `ACTIVITY_LINK=0` (turns off the
+batch-order heuristic for anonymized analytics; see the evaluation report).
 
 ## Architecture
 
@@ -61,6 +61,7 @@ main.py       ──► output.csv, trace, usage_report.md
 | `audit/intent.py` | Does the request authorize deletion? Batches of 40 distinct texts, any language | **yes**, once per distinct text |
 | `audit/identity.py` | Every identifier a person ever had, from `user_identities.csv` + `user_audit_log.csv` | no |
 | `audit/accounts.py` | Link each case to its account record | no |
+| `audit/activity.py` | Link already-anonymized analytics profiles via the worker's batch (heuristic, labelled) | no |
 | `audit/interpret.py` | Map ~40 evidence vocabularies (404, rows=0, NOT_FOUND, enabled=false, restore_allowed=0, null PII…) to one state vocabulary | no |
 | `audit/engine.py` | Time rules, linking, state at `audit_at`, citations | no |
 | `audit/policy.py` | Rules → steps and ordering | no |
@@ -101,15 +102,16 @@ main.py       ──► output.csv, trace, usage_report.md
 
 ## Results
 
-Samples (32 labelled cases): status accuracy **1.000**, step precision **1.000**, recall **0.948**,
-F1 **0.973**, sequence accuracy **0.719**. All remaining errors are *missing* steps, never wrong ones.
+Samples (32 labelled cases): status accuracy **1.000**, step precision **0.989**, recall **0.964**,
+F1 **0.976**, sequence accuracy **0.781**. Status is never wrong; remaining errors are missing or
+heuristically-linked anonymized analytics and two audit records that no participant file contains.
 Details, custom cases, failures and improvements: [`code/evaluation/evaluation_report.md`](code/evaluation/evaluation_report.md).
 Token use and cost: [`code/evaluation/usage_report.md`](code/evaluation/usage_report.md).
 
 ## Known limitations
 
-- Already-anonymized analytics profiles carry no identifier; they are only linkable through ambiguous
-  worker timing, so they are under-reported in `COMPLETE` cases.
+- Already-anonymized analytics profiles carry no identifier; they are linked through the worker's batch
+  order (`audit/activity.py`), right 3 of 5 times on samples.
 - About 130 test accounts depend on the fallback tie-break.
 - No hold-out split: the 32 samples were all used for development.
 
