@@ -1,6 +1,6 @@
 # Ghost Data Still Exists — deletion-audit agent
 
-HackerRank Orchestrate, October 2026. The challenge brief is in [`problem_statement.md`](./problem_statement.md).
+HackerRank Orchestrate, October 2026 — **final rank #34 of 4,094.** The challenge brief is in [`problem_statement.md`](./problem_statement.md).
 
 For each of the 518 requests in `dataset/deletion_requests.csv` the agent decides whether deletion was
 actually requested, reconstructs every copy of the person's data at the case's `audit_at`, applies
@@ -159,7 +159,7 @@ Token use and cost: [`code/evaluation/usage_report.md`](code/evaluation/usage_re
 ## How AI tools were used
 
 Built by Tom with Claude (claude.ai agent session, model `claude-opus-5-5`) as the coding agent;
-the full conversation is in `log.txt`. Tom chose the architecture (deterministic engine plus AI for
+Tom chose the architecture (deterministic engine plus AI for
 language and vision, reviewer only if the samples showed a need), the order of work, and the time-box
 for the account tie-breaker, and approved each checkpoint. Claude wrote the code, ran the experiments
 and reported their numbers; rejected ideas are documented in the evaluation report.
