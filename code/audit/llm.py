@@ -88,7 +88,7 @@ class LLM:
             if self.offline:
                 continue
             messages = [{"role": "user", "content": content}]
-            for attempt in range(2):
+            for _attempt in range(2):
                 try:
                     r = self.client.messages.create(model=model, max_tokens=max_tokens, system=system,
                                                     messages=messages)

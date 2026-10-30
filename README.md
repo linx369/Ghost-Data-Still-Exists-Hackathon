@@ -48,7 +48,7 @@ Every full run also writes `code/evaluation/usage_report.md` and `code/evaluatio
 
 Environment variables: `ANTHROPIC_API_KEY` (required unless `--offline`), `MODEL` (default
 `claude-fable-5-1`), `FALLBACK_MODEL` (default `claude-opus-5-5`), `ACTIVITY_LINK=0` (turns off the
-batch-order heuristic for anonymized analytics; see the evaluation report).
+timing-based linking of already-anonymized analytics records; see the evaluation report).
 
 ## Architecture
 
@@ -104,7 +104,8 @@ steps, what is uncertain, and the verification result.
 - **Replication drift.** Same-time conflicting readings resolve to the riskier one (a replica holding the
   row beats a primary that lost it).
 - **Account linking ladder.** (1) evidence ties the account to the person; (2) the worker deleted it in the
-  measured window (75–41 min before `reported_at`, from 238 proven links), nobody else owns it, and its
+  measured window (deletions fall 75–41 min before `reported_at` on 238 proven links; the code uses
+  80–38 min as a small margin), nobody else owns it, and its
   result matches the workflow claim (COMPLETE↔SUCCESS, PARTIALLY_COMPLETE↔PARTIAL, NOT_STARTED↔FAILED),
   solved jointly so one account = one case; remaining ties are broken by the worker's **timing signature**
   (each request's actions sit on a type-specific grid relative to its account deletion, learned from
